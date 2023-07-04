@@ -1,5 +1,12 @@
-import { Accessor, Component, createSignal, Setter } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  Setter,
+} from "solid-js";
 import { createDraggable } from "@neodrag/solid";
+import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 
 export const Draggable: Component<{
   index: Accessor<number>;
@@ -7,27 +14,50 @@ export const Draggable: Component<{
   setZOrder: Setter<number>;
 }> = ({ index, zOrder, setZOrder }) => {
   const { draggable } = createDraggable();
-  const [zIndex, setZIndex] = createSignal(zOrder());
+  const [position, setPosition] = createSignal({
+    x: 0,
+    y: 100 * index(),
+    z: zOrder(),
+  });
+
+  let el: HTMLDivElement | undefined;
+  const visible = createVisibilityObserver({ threshold: 0.8 })(() => el);
+
+  createEffect(() => {
+    if (!visible()) {
+      setPosition({
+        x: 0,
+        y: 100 * index(),
+        z: zOrder(),
+      });
+    }
+  });
 
   return (
     <div
+      ref={el}
       use:draggable={{
         bounds: "body",
         onDragStart: () => {
           setZOrder((prev) => ++prev);
-          setZIndex(zOrder());
+          setPosition((prev) => ({ ...prev, z: zOrder() }));
         },
-        position: {
-          x: 0 * index(),
-          y: 100 * index(),
+        onDrag: ({ offsetX, offsetY }) => {
+          setPosition((prev) => ({ ...prev, x: offsetX, y: offsetY }));
         },
+        position: position(),
+        cancel: ".cancel",
       }}
-      class="absolute h-20 w-96 rounded-lg border border-zinc-200 bg-white"
+      class="absolute h-20 w-96 cursor-move rounded-lg border border-zinc-200 bg-white"
       style={{
-        "z-index": zIndex(),
+        /* Neodrag can't update the z-index on drag, so we have to do it manually */
+        "z-index": position().z,
       }}
     >
-      Dragbox with index: {zIndex()}
+      <div class="cancel w-fit cursor-auto bg-zinc-200">
+        <span class="text-xs font-light">Not draggable</span>
+        <p>Dragbox</p>
+      </div>
     </div>
   );
 };
