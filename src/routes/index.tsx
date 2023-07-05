@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
-import { LofiGirl } from "~/components/backgrounds/LofiGirl";
+import { LofiGirl } from "~/components/Backgrounds";
 import { Draggable } from "~/components/Draggable";
+import { GlassBox } from "~/design/GlassBox";
 
 export default function Home() {
   const [zOrder, setZOrder] = createSignal(0);
@@ -9,22 +10,14 @@ export default function Home() {
     <main class="h-screen w-screen overflow-hidden relative text-stone-100">
       <LofiGirl />
       <Draggable
-        initialKey={0}
-        initialPosition={{ x: 100, y: 100 }}
-        zOrder={zOrder}
-        setZOrder={setZOrder}
-      >
-        <h1 class="font-semibold text-lg">Todos</h1>
-      </Draggable>
-      <Draggable
         initialKey={1}
         initialPosition={{ x: 100, y: 100 }}
         zOrder={zOrder}
         setZOrder={setZOrder}
       >
-        <h1 class="font-semibold text-lg">
-          <div class="w-60 h-60">Notes</div>
-        </h1>
+        <GlassBox direction="flex-col">
+          <div>Notes</div>
+        </GlassBox>
       </Draggable>
     </main>
   );

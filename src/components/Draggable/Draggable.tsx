@@ -11,7 +11,6 @@ import { createDraggable } from "@neodrag/solid";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { makePersisted } from "@solid-primitives/storage";
 import { Coordinates } from "~/types";
-import { GlassBox } from "~/design/GlassBox";
 
 interface DraggableProps {
   initialKey: number; // Unique key for local storage
@@ -64,7 +63,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
       class="absolute cursor-move"
       classList={{ hidden: !mounted() }}
     >
-      <GlassBox>{props.children}</GlassBox>
+      {props.children}
     </div>
   );
 };
