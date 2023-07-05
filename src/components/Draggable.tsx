@@ -19,13 +19,14 @@ export const Draggable: Component<{
   zOrder: Accessor<number>;
   setZOrder: Setter<number>;
   children: JSXElement;
-}> = ({ index, initialPosition, zOrder, setZOrder, children }) => {
+}> = (props) => {
   const { draggable } = createDraggable();
   const [mounted, setMounted] = createSignal(false);
 
-  const [position, setPosition] = makePersisted(createSignal(initialPosition), {
-    name: `draggable-${index}`,
-  });
+  const [position, setPosition] = makePersisted(
+    // eslint-disable-next-line solid/reactivity
+    createSignal(props.initialPosition)
+  );
 
   let el: HTMLDivElement | undefined;
   const visible = createVisibilityObserver({
@@ -38,7 +39,7 @@ export const Draggable: Component<{
   /* Handle bounds when resizing */
   createEffect(() => {
     if (!visible()) {
-      setPosition({ ...initialPosition, z: zOrder() });
+      setPosition({ ...props.initialPosition, z: props.zOrder() });
     }
   });
 
@@ -49,8 +50,8 @@ export const Draggable: Component<{
         use:draggable={{
           bounds: "body",
           onDragStart: () => {
-            setZOrder((prev) => ++prev);
-            setPosition((prev) => ({ ...prev, z: zOrder() }));
+            props.setZOrder((prev) => ++prev);
+            setPosition((prev) => ({ ...prev, z: props.zOrder() }));
           },
           onDrag: ({ offsetX, offsetY }) => {
             setPosition((prev) => ({ ...prev, x: offsetX, y: offsetY }));
@@ -64,7 +65,7 @@ export const Draggable: Component<{
           "z-index": position().z,
         }}
       >
-        {children}
+        {props.children}
       </div>
     </Show>
   );
