@@ -10,20 +10,22 @@ export default function Home() {
       <LofiGirl />
       <Suspense>
         <Draggable
-          index={0}
-          initialPosition={{ x: 100, y: 100, z: zOrder() }}
+          initialKey={0}
+          initialPosition={{ x: 100, y: 100 }}
           zOrder={zOrder}
           setZOrder={setZOrder}
         >
           <h1 class="font-semibold text-lg">Todos</h1>
         </Draggable>
         <Draggable
-          index={1}
-          initialPosition={{ x: 100, y: 100, z: zOrder() }}
+          initialKey={1}
+          initialPosition={{ x: 100, y: 100 }}
           zOrder={zOrder}
           setZOrder={setZOrder}
         >
-          <h1 class="font-semibold text-lg">Notes</h1>
+          <h1 class="font-semibold text-lg">
+            <div class="w-20 h-10">Notes</div>
+          </h1>
         </Draggable>
       </Suspense>
     </main>
