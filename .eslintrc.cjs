@@ -21,9 +21,5 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  rules: {
-    "solid/reactivity": "warn",
-    "solid/no-destructure": "warn",
-    "solid/jsx-no-undef": "warn",
-  },
+  rules: {},
 };
