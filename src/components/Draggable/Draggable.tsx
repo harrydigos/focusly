@@ -1,33 +1,34 @@
 import {
-  Accessor,
   Component,
   createEffect,
   createSignal,
   JSXElement,
   onMount,
-  Setter,
+  useContext,
 } from "solid-js";
 import { createDraggable } from "@neodrag/solid";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { makePersisted } from "@solid-primitives/storage";
 import { Coordinates } from "~/types";
+import { ZOrderContext } from "~/providers";
 
 interface DraggableProps {
-  initialKey: number; // Unique key for local storage
-  initialPosition: Coordinates;
-  zOrder: Accessor<number>;
-  setZOrder: Setter<number>;
   children: JSXElement;
+  initialPosition?: Coordinates;
 }
 
+let key = 0;
+
 export const Draggable: Component<DraggableProps> = (props) => {
-  const { draggable } = createDraggable(); // use:draggable
+  const { zOrder, incrementZ } = useContext(ZOrderContext);
   const [mounted, setMounted] = createSignal(false);
+
+  const { draggable } = createDraggable(); // use:draggable
 
   const [position, setPosition] = makePersisted(
     // eslint-disable-next-line solid/reactivity
-    createSignal(props.initialPosition),
-    { name: `draggable-${props.initialKey}` }
+    createSignal(props?.initialPosition || { x: 0, y: 0 }),
+    { name: `draggable-${key++}` }
   );
 
   let el: HTMLDivElement | undefined;
@@ -41,7 +42,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
   /* Handle element's position when not visible */
   createEffect(() => {
     if (!visible()) {
-      setPosition({ ...props.initialPosition });
+      setPosition({ x: 0, y: 0, ...props?.initialPosition });
     }
   });
 
@@ -51,8 +52,8 @@ export const Draggable: Component<DraggableProps> = (props) => {
       use:draggable={{
         bounds: "body",
         onDragStart: (data) => {
-          props.setZOrder((prev) => ++prev);
-          data.rootNode.style.zIndex = props.zOrder().toString();
+          incrementZ();
+          data.rootNode.style.zIndex = zOrder().toString();
         },
         onDrag: ({ offsetX, offsetY }) => {
           /* To store the position to local storage */
