@@ -13,11 +13,10 @@ import { Coordinates } from "~/types";
 import { ZOrderContext } from "~/providers";
 
 interface DraggableProps {
+  initialKey: string;
   children: JSXElement;
   initialPosition?: Coordinates;
 }
-
-let key = 0;
 
 export const Draggable: Component<DraggableProps> = (props) => {
   const { zOrder, incrementZ } = useContext(ZOrderContext);
@@ -28,7 +27,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
   const [position, setPosition] = makePersisted(
     // eslint-disable-next-line solid/reactivity
     createSignal(props?.initialPosition || { x: 0, y: 0 }),
-    { name: `draggable-${key++}` }
+    { name: `draggable-${props.initialKey}` }
   );
 
   let el: HTMLDivElement | undefined;
@@ -41,6 +40,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
 
   /* Handle element's position when not visible */
   createEffect(() => {
+    /* Visible works only for this component, toggling the display of the parent doesn't affect this */
     if (!visible()) {
       setPosition({ x: 0, y: 0, ...props?.initialPosition });
     }
