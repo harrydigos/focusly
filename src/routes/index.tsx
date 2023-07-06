@@ -1,5 +1,6 @@
 import { LofiGirl } from "~/components/Backgrounds";
 import { Draggable } from "~/components/Draggable";
+import { Menu } from "~/components/Menu";
 import { GlassBox } from "~/design/GlassBox";
 import { ZOrderProvider } from "~/providers";
 
@@ -7,20 +8,22 @@ export default function Home() {
   return (
     <main class="h-screen w-screen overflow-hidden relative text-stone-100">
       <LofiGirl />
+      <Menu />
+
       <ZOrderProvider>
         <Draggable>
           <GlassBox direction="flex-col">
-            <div>Tasks</div>
+            <div>Todos</div>
+          </GlassBox>
+        </Draggable>
+        <Draggable>
+          <GlassBox direction="flex-col">
+            <div>Music</div>
           </GlassBox>
         </Draggable>
         <Draggable>
           <GlassBox direction="flex-col">
             <div>Notes</div>
-          </GlassBox>
-        </Draggable>
-        <Draggable>
-          <GlassBox direction="flex-col">
-            <div>Pomo</div>
           </GlassBox>
         </Draggable>
       </ZOrderProvider>
