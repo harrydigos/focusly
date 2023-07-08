@@ -1,37 +1,15 @@
-import { IconTypes } from "solid-icons";
 import { createStore } from "solid-js/store";
-import { TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
+import { makePersisted } from "@solid-primitives/storage";
 
-export type MenuTabs = "todos" | "music" | "notes";
+import { MenuKey, MenuTab } from "~/types";
+import { initialMenu } from "~/config/menu";
 
-export interface MenuTabsStore {
-  label: string;
-  isOpen: boolean;
-  icon: IconTypes;
-}
+export const [menuTabs, setMenuTabs] = makePersisted(
+  // eslint-disable-next-line solid/reactivity
+  createStore<Record<MenuKey, MenuTab>>(initialMenu)
+);
 
-const [menuTabsStore, setMenuTabsStore] = createStore<
-  Record<MenuTabs, MenuTabsStore>
->({
-  todos: {
-    label: "todos",
-    isOpen: false,
-    icon: TbListCheck,
-  },
-  music: {
-    label: "music",
-    isOpen: false,
-    icon: TbMusic,
-  },
-  notes: {
-    label: "notes",
-    isOpen: false,
-    icon: TbNote,
-  },
-});
-
-const toggleTab = (tab: MenuTabs) => {
-  setMenuTabsStore([tab], (prev) => ({ ...prev, isOpen: !prev.isOpen }));
+export const getBiggestZ = () => {
+  const zValues = Object.values(menuTabs).map((tab) => tab.position.z);
+  return Math.max(...zValues);
 };
-
-export { menuTabsStore, toggleTab };
