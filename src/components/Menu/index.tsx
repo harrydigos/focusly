@@ -32,19 +32,20 @@ const MenuItem: Component<{ key: MenuKey } & MenuTab> = (props) => {
   return (
     <button
       type="button"
-      class="group flex items-center gap-1 p-2 transition-all border border-transparent text-white rounded-full ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+      class="group w-fit inline-flex gap-1 items-center p-2 transition-all transform-gpu border border-transparent text-white rounded-full ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95"
       classList={{
-        "bg-stone-900 bg-opacity-30 hover:border-white/30": props.isOpen,
-        "hover:opacity-75": !props.isOpen,
+        "bg-stone-900/30 hover:border-white/30": props.isOpen,
       }}
       onClick={() => setMenuTabs(props.key, "isOpen", (prev) => !prev)}
     >
       <MenuIcon icon={menuIcons[props.key]} />
-      <div class="capitalize font-semibold text-sm">{props.key}</div>
+      <div class="capitalize font-medium text-sm group-hover:opacity-75">
+        {props.key}
+      </div>
     </button>
   );
 };
 
 const MenuIcon: Component<{ icon: IconTypes }> = (props) => {
-  return <props.icon size={20} />;
+  return <props.icon size={20} class="group-hover:opacity-75" />;
 };
