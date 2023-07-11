@@ -25,6 +25,7 @@
     "vite": "^4.1.4"
   },
   "dependencies": {
+    "@modular-forms/solid": "^0.18.1",
     "@neodrag/solid": "^2.0.3",
     "@solid-primitives/intersection-observer": "^2.1.2",
     "@solid-primitives/storage": "^2.0.0",
