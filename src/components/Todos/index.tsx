@@ -6,6 +6,7 @@ import {
   reset,
 } from "@modular-forms/solid";
 import { Component, For, Show, createMemo, createSignal } from "solid-js";
+import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
 import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
@@ -71,6 +72,13 @@ export const Todos: Component = () => {
       <For each={menuTabs.todos.todosList}>
         {(todo) => <TodoRow {...todo} />}
       </For>
+      <Modal
+        trigger={() => (
+          <button onClick={() => console.log("hehe")}>Click</button>
+        )}
+      >
+        <div>Content</div>
+      </Modal>
     </Stack>
   );
 };
@@ -102,6 +110,7 @@ const TodoRow: Component<Todo> = (todo) => {
       </button>
       <Show when={!isEditing()}>
         <span
+          class="w-64"
           onDblClick={() => setIsEditing(true)}
           classList={{
             "line-through opacity-50": todo.completed,
@@ -113,7 +122,7 @@ const TodoRow: Component<Todo> = (todo) => {
       <Show when={isEditing()}>
         {/* Handle constraints when editing */}
         <input
-          class="bg-stone-900"
+          class="bg-stone-900 w-64"
           autofocus={true}
           onBlur={() => setIsEditing(false)}
           value={todo.value}
