@@ -34,7 +34,7 @@ export default function Root() {
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Body class="bg-black font-manrope">
+      <Body class="bg-black text-white font-lexend">
         <Suspense>
           <ErrorBoundary>
             <Routes>

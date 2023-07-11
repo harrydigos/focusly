@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        manrope: ["var(--primary-font)"],
+        lexend: ["var(--primary-font)"],
       },
     },
   },

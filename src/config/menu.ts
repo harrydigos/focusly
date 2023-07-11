@@ -1,4 +1,6 @@
-export const initialMenu = {
+import { MenuKey, MenuTab } from "~/types";
+
+export const initialMenu: Record<MenuKey, MenuTab> = {
   todos: {
     position: {
       x: 0,
@@ -6,6 +8,7 @@ export const initialMenu = {
       z: 0,
     },
     isOpen: false,
+    todosList: [],
   },
   music: {
     position: {
@@ -14,6 +17,7 @@ export const initialMenu = {
       z: 0,
     },
     isOpen: false,
+    song: "",
   },
   notes: {
     position: {
@@ -22,5 +26,6 @@ export const initialMenu = {
       z: 0,
     },
     isOpen: false,
+    notes: [],
   },
 };

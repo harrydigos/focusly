@@ -8,7 +8,7 @@ const Panels = lazy(() =>
 
 export default function Home() {
   return (
-    <main class="h-screen w-screen overflow-hidden relative text-stone-100">
+    <main class="h-screen w-screen overflow-hidden relative">
       <LofiGirl />
       <Menu />
       <Panels />
