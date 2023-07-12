@@ -39,7 +39,7 @@ export const CreateTodoModal: Component = () => {
   return (
     <Modal
       trigger={() => (
-        <button class="bg-white text-stone-900 rounded-lg inline-flex items-center h-10 px-3">
+        <button class="inline-flex h-10 items-center rounded-lg bg-white px-3 text-stone-900">
           New
         </button>
       )}

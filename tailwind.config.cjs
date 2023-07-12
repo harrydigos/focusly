@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+/* eslint-disable no-undef */
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
@@ -8,5 +8,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("prettier-plugin-tailwindcss"),
+  ],
 };
