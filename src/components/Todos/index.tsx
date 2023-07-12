@@ -6,6 +6,7 @@ import {
   createEffect,
   createMemo,
   createSignal,
+  onMount,
 } from "solid-js";
 import { Stack } from "~/design/Stack";
 import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
@@ -76,7 +77,6 @@ const TodoRow: Component<Todo> = (todo) => {
             </label>
           </Show>
           <Show when={isEditing()}>
-            {/* Handle constraints when editing */}
             <input
               ref={el}
               class="w-full bg-stone-900 break-words"
@@ -87,6 +87,9 @@ const TodoRow: Component<Todo> = (todo) => {
               autofocus
               value={todo.value}
               onInput={(e) => {
+                const inputLength = e.target.value.length;
+                if (inputLength === 0 || inputLength > 150) return; // range of todo length
+
                 setMenuTabs("todos", "todosList", todoIndex(), (prev) => ({
                   ...prev,
                   value: e.target.value,
