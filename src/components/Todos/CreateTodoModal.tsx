@@ -38,8 +38,12 @@ export const CreateTodoModal: Component = () => {
 
   return (
     <Modal
+      title="Create todo"
       trigger={() => (
-        <button class="inline-flex h-10 items-center rounded-lg bg-white px-3 text-stone-900">
+        <button
+          type="button"
+          class="inline-flex h-10 items-center rounded-lg bg-white px-3 text-stone-900"
+        >
           New
         </button>
       )}
@@ -53,21 +57,24 @@ export const CreateTodoModal: Component = () => {
           ]}
         >
           {(field, props) => (
-            <Stack direction="flex-col">
-              <Stack direction="flex-row">
-                <input
-                  spellcheck={false}
-                  placeholder="Create todo"
-                  autocomplete="off"
-                  type="text"
-                  value={field.value}
-                  class="text-stone-900"
-                  required
-                  {...props}
-                />
-                <button type="submit">Add</button>
+            <Stack direction="flex-col" class="mt-4 w-72 gap-4">
+              <Stack direction="flex-col">
+                <Stack direction="flex-row">
+                  <input
+                    {...props}
+                    spellcheck={false}
+                    placeholder="e.g. Pretend you are studying"
+                    autocomplete="off"
+                    type="text"
+                    value={field.value}
+                    class="w-full text-sm text-stone-900"
+                  />
+                </Stack>
+                <span>{field.error && <div>{field.error}</div>}</span>
               </Stack>
-              {field.error && <div>{field.error}</div>}
+              <button type="submit" class="bg-white text-stone-900">
+                Add
+              </button>
             </Stack>
           )}
         </Field>

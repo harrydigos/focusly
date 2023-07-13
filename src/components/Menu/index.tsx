@@ -8,7 +8,7 @@ import { MenuKey, MenuTab } from "~/types";
 
 export const Menu: Component = () => {
   return (
-    <header class="w-full flex justify-center mt-4">
+    <header class="mt-4 flex w-full justify-center">
       <GlassBox
         direction="flex-row"
         class="w-fit gap-1"
@@ -32,14 +32,14 @@ const MenuItem: Component<{ key: MenuKey } & MenuTab> = (props) => {
   return (
     <button
       type="button"
-      class="group w-fit inline-flex gap-1 items-center p-2 transition-all transform-gpu border border-transparent text-white rounded-full ring-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95"
+      class="group inline-flex w-fit transform-gpu items-center gap-1 rounded-full border border-transparent p-2 text-white ring-transparent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95"
       classList={{
         "bg-stone-900/30 hover:border-white/30": props.isOpen,
       }}
       onClick={() => setMenuTabs(props.key, "isOpen", (prev) => !prev)}
     >
       <MenuIcon icon={menuIcons[props.key]} />
-      <div class="capitalize font-medium text-sm group-hover:opacity-75">
+      <div class="text-sm font-medium capitalize group-hover:opacity-75">
         {props.key}
       </div>
     </button>
