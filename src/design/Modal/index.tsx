@@ -10,8 +10,11 @@ import { Component, JSX, Show, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Motion, Presence } from "@motionone/solid";
 import { getBiggestZ } from "~/stores/MenuTabsStore";
+import { Stack } from "../Stack";
+import { TbSquareX, TbX } from "solid-icons/tb";
 
 interface ModalProps {
+  title: string;
   trigger: () => JSX.Element;
   children: JSX.Element;
 }
@@ -72,11 +75,19 @@ export const Modal: Component<ModalProps> = (modalProps) => {
                     }}
                   >
                     <DialogContainer class="flex h-full w-full items-center justify-center">
-                      <DialogContent class="bg-white text-black">
+                      <DialogContent class="flex flex-col rounded-3xl border border-stone-200 border-opacity-10 bg-stone-900 bg-opacity-90 p-6 text-white backdrop-blur-xl backdrop-filter">
+                        <Stack
+                          direction="flex-row"
+                          class="items-center justify-between"
+                        >
+                          <h1 class="text-lg font-medium">
+                            {modalProps.title}
+                          </h1>
+                          <DialogCloseTrigger>
+                            <TbX class="h-6 w-6 cursor-pointer" />
+                          </DialogCloseTrigger>
+                        </Stack>
                         {modalProps.children}
-                        <DialogCloseTrigger>
-                          <button>Close</button>
-                        </DialogCloseTrigger>
                       </DialogContent>
                     </DialogContainer>
                   </Motion.div>
