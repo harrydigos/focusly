@@ -7,6 +7,7 @@ import {
 } from "@modular-forms/solid";
 import { Component } from "solid-js";
 
+import { Input } from "~/design/Input";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
 import { setMenuTabs } from "~/stores/MenuTabsStore";
@@ -52,25 +53,26 @@ export const CreateTodoModal: Component = () => {
         <Field
           name={"todo"}
           validate={[
-            required("Please type a todo."),
-            maxLength(150, "Too long todo."),
+            required("Don't be lazy. Write something."),
+            maxLength(150, "Too long. Try to break it down."),
           ]}
         >
           {(field, props) => (
             <Stack direction="flex-col" class="mt-4 w-72 gap-4">
               <Stack direction="flex-col">
                 <Stack direction="flex-row">
-                  <input
+                  <Input
                     {...props}
                     spellcheck={false}
                     placeholder="e.g. Pretend you are studying"
                     autocomplete="off"
                     type="text"
                     value={field.value}
-                    class="w-full text-sm text-stone-900"
                   />
                 </Stack>
-                <span>{field.error && <div>{field.error}</div>}</span>
+                <span class="mt-1 text-sm font-light text-stone-200">
+                  {field.error && <div>{field.error}</div>}
+                </span>
               </Stack>
               <button type="submit" class="bg-white text-stone-900">
                 Add

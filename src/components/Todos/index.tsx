@@ -6,7 +6,6 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  onMount,
 } from "solid-js";
 import { Stack } from "~/design/Stack";
 import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
@@ -15,7 +14,7 @@ import { CreateTodoModal } from "./CreateTodoModal";
 
 export const Todos: Component = () => {
   return (
-    <Stack direction="flex-col" class="w-72 overflow-hidden gap-2">
+    <Stack direction="flex-col" class="w-72 gap-2 overflow-hidden">
       <Stack direction="flex-row" class="justify-between">
         <h1 class="text-lg font-semibold">Todos</h1>
         <CreateTodoModal />
@@ -68,7 +67,7 @@ const TodoRow: Component<Todo> = (todo) => {
           <Show when={!isEditing()}>
             <label
               for={todo.id}
-              class="w-full break-words cursor-pointer"
+              class="w-full cursor-pointer break-words"
               classList={{
                 "line-through opacity-50": todo.completed,
               }}
@@ -79,7 +78,7 @@ const TodoRow: Component<Todo> = (todo) => {
           <Show when={isEditing()}>
             <input
               ref={el}
-              class="w-full bg-stone-900 break-words"
+              class="w-full break-words bg-stone-900"
               classList={{
                 "line-through": todo.completed,
               }}
