@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "@ark-ui/solid": "^0.8.1",
+    "@klass/core": "^1.2.0",
+    "@klass/solid": "^1.2.0",
     "@modular-forms/solid": "^0.18.1",
     "@motionone/solid": "^10.16.2",
     "@neodrag/solid": "^2.0.3",
