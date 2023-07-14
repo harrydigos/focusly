@@ -3,7 +3,7 @@ import { TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
 import { Component, For } from "solid-js";
 
 import { GlassBox } from "~/design/GlassBox";
-import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
+import { getBiggestZ, menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
 import { MenuKey, MenuTab } from "~/types";
 
 export const Menu: Component = () => {
@@ -36,7 +36,10 @@ const MenuItem: Component<{ key: MenuKey } & MenuTab> = (props) => {
       classList={{
         "bg-stone-900/30 hover:border-white/30": props.isOpen,
       }}
-      onClick={() => setMenuTabs(props.key, "isOpen", (prev) => !prev)}
+      onClick={() => {
+        setMenuTabs(props.key, "isOpen", (prev) => !prev);
+        setMenuTabs(props.key, "position", "z", () => getBiggestZ() + 1);
+      }}
     >
       <MenuIcon icon={menuIcons[props.key]} />
       <div class="text-sm font-medium capitalize group-hover:opacity-75">
