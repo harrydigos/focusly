@@ -1,3 +1,4 @@
+import { Dialog } from "@ark-ui/solid";
 import {
   SubmitHandler,
   createForm,
@@ -5,8 +6,7 @@ import {
   required,
   reset,
 } from "@modular-forms/solid";
-import { TbPlus } from "solid-icons/tb";
-import { Component } from "solid-js";
+import { Accessor, Component, Setter } from "solid-js";
 
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
@@ -19,7 +19,12 @@ type TodoForm = {
   todo: string;
 };
 
-export const CreateTodoModal: Component = () => {
+interface CreateTodoModalProps {
+  isOpen: Accessor<boolean>;
+  setIsOpen: Setter<boolean>;
+}
+
+export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
   const [form, { Form, Field }] = createForm<TodoForm>({
     initialValues: {
       todo: "",
@@ -40,52 +45,54 @@ export const CreateTodoModal: Component = () => {
   };
 
   return (
-    <Modal
-      title="Create todo"
-      trigger={() => (
-        <button
-          type="button"
-          class="inline-flex h-10 items-center rounded-lg bg-white px-3 text-stone-900"
-        >
-          New
-        </button>
-      )}
-    >
-      <Form onSubmit={handleSubmit}>
-        <Field
-          name={"todo"}
-          validate={[
-            required("Don't be lazy. Write something."),
-            maxLength(150, "Too long. Try to break it down."),
-          ]}
-        >
-          {(field, props) => (
-            <Stack direction="flex-col" class="mt-4 w-72 gap-4">
-              <Stack direction="flex-col">
-                <Stack direction="flex-row">
-                  <Input
-                    {...props}
-                    spellcheck={false}
-                    placeholder="e.g. Pretend you are studying"
-                    autocomplete="off"
-                    type="text"
-                    value={field.value}
-                  />
+    <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
+      <Modal isOpen={props.isOpen}>
+        <Form onSubmit={handleSubmit}>
+          <Field
+            name={"todo"}
+            validate={[
+              required("Don't be lazy. Write something."),
+              maxLength(150, "Too long. Try to break it down."),
+            ]}
+          >
+            {(field, fieldProps) => (
+              <Stack direction="flex-col" class="gap-4">
+                <h1 class="text-lg font-semibold">New Todo</h1>
+                <Stack direction="flex-col">
+                  <Stack direction="flex-row">
+                    <Input
+                      {...fieldProps}
+                      spellcheck={false}
+                      placeholder="e.g. Pretend you are studying"
+                      autocomplete="off"
+                      type="text"
+                      value={field.value}
+                    />
+                  </Stack>
+                  {field.error && (
+                    <span class="mt-1 text-sm font-light text-white">
+                      {field.error}
+                    </span>
+                  )}
                 </Stack>
-                {field.error && (
-                  <span class="mt-1 text-sm font-light text-white">
-                    {field.error}
-                  </span>
-                )}
+
+                <Stack direction="flex-row" class="w-full gap-2">
+                  <Button
+                    variant="outline"
+                    class="w-full"
+                    onClick={() => props.setIsOpen(false)}
+                  >
+                    Close
+                  </Button>
+                  <Button type="submit" class="w-full">
+                    Create
+                  </Button>
+                </Stack>
               </Stack>
-              <Button type="submit">
-                <TbPlus size={20} class="text-stone-900" />
-                Add
-              </Button>
-            </Stack>
-          )}
-        </Field>
-      </Form>
-    </Modal>
+            )}
+          </Field>
+        </Form>
+      </Modal>
+    </Dialog>
   );
 };

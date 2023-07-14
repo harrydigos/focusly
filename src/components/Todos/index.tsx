@@ -1,4 +1,4 @@
-import { TbEdit, TbEditOff, TbTrash } from "solid-icons/tb";
+import { TbEdit, TbEditOff, TbPlus, TbTrash } from "solid-icons/tb";
 import {
   Component,
   For,
@@ -11,18 +11,27 @@ import { Stack } from "~/design/Stack";
 import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
 import { CreateTodoModal } from "./CreateTodoModal";
+import { Button } from "~/design/Button";
 
 export const Todos: Component = () => {
+  const [isOpen, setIsOpen] = createSignal(false);
+
   return (
-    <Stack direction="flex-col" class="w-72 gap-2 overflow-hidden">
-      <Stack direction="flex-row" class="justify-between">
-        <h1 class="text-lg font-semibold">Todos</h1>
-        <CreateTodoModal />
+    <>
+      <Stack direction="flex-col" class="w-72 gap-2 overflow-hidden">
+        <Stack direction="flex-row" class="justify-between">
+          <h1 class="text-lg font-semibold">Todos</h1>
+          <Button onClick={() => setIsOpen(true)}>
+            <TbPlus size={20} class="stroke-stone-900" />
+            Add
+          </Button>
+        </Stack>
+        <For each={menuTabs.todos.todosList}>
+          {(todo) => <TodoRow {...todo} />}
+        </For>
       </Stack>
-      <For each={menuTabs.todos.todosList}>
-        {(todo) => <TodoRow {...todo} />}
-      </For>
-    </Stack>
+      <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+    </>
   );
 };
 
