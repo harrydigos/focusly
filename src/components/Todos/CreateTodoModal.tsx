@@ -5,8 +5,10 @@ import {
   required,
   reset,
 } from "@modular-forms/solid";
+import { TbPlus } from "solid-icons/tb";
 import { Component } from "solid-js";
 
+import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
@@ -70,13 +72,16 @@ export const CreateTodoModal: Component = () => {
                     value={field.value}
                   />
                 </Stack>
-                <span class="mt-1 text-sm font-light text-stone-200">
-                  {field.error && <div>{field.error}</div>}
-                </span>
+                {field.error && (
+                  <span class="mt-1 text-sm font-light text-white">
+                    {field.error}
+                  </span>
+                )}
               </Stack>
-              <button type="submit" class="bg-white text-stone-900">
+              <Button type="submit">
+                <TbPlus size={20} class="text-stone-900" />
                 Add
-              </button>
+              </Button>
             </Stack>
           )}
         </Field>

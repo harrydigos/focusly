@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogBackdrop,
-  DialogCloseTrigger,
   DialogContainer,
   DialogContent,
   DialogTrigger,
@@ -11,7 +10,8 @@ import { Portal } from "solid-js/web";
 import { Motion, Presence } from "@motionone/solid";
 import { getBiggestZ } from "~/stores/MenuTabsStore";
 import { Stack } from "../Stack";
-import { TbSquareX, TbX } from "solid-icons/tb";
+import { TbX } from "solid-icons/tb";
+import { Button } from "../Button";
 
 interface ModalProps {
   title: string;
@@ -83,9 +83,13 @@ export const Modal: Component<ModalProps> = (modalProps) => {
                           <h1 class="text-lg font-medium">
                             {modalProps.title}
                           </h1>
-                          <DialogCloseTrigger>
-                            <TbX class="h-6 w-6 cursor-pointer" />
-                          </DialogCloseTrigger>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => props().close()}
+                          >
+                            <TbX size={20} class="stroke-white" />
+                          </Button>
                         </Stack>
                         {modalProps.children}
                       </DialogContent>
