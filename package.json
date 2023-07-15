@@ -1,5 +1,5 @@
 {
-  "name": "4focus",
+  "name": "focusly",
   "scripts": {
     "dev": "solid-start dev",
     "build": "solid-start build",
@@ -20,7 +20,7 @@
     "postcss": "^8.4.21",
     "prettier": "2.8.8",
     "prettier-plugin-tailwindcss": "^0.4.0",
-    "solid-start-node": "^0.2.19",
+    "solid-start-vercel": "^0.2.26",
     "tailwindcss": "^3.2.4",
     "tailwindcss-animate": "^1.0.6",
     "typescript": "^5.1.6",
