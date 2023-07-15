@@ -1,4 +1,3 @@
-import { TbEdit, TbEditOff, TbPlus, TbTrash } from "solid-icons/tb";
 import {
   Component,
   For,
@@ -7,12 +6,21 @@ import {
   createMemo,
   createSignal,
 } from "solid-js";
+import {
+  Checkbox,
+  CheckboxLabel,
+  CheckboxInput,
+  CheckboxControl,
+} from "@ark-ui/solid";
+import { TbCheck, TbEdit, TbPlus, TbTrash } from "solid-icons/tb";
+
+import { Button } from "~/design/Button";
+import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
 import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
+
 import { CreateTodoModal } from "./CreateTodoModal";
-import { Button } from "~/design/Button";
-import { Input } from "~/design/Input";
 
 export const Todos: Component = () => {
   const [isOpen, setIsOpen] = createSignal(false);
@@ -27,7 +35,7 @@ export const Todos: Component = () => {
             Add
           </Button>
         </Stack>
-        <Stack direction="flex-col" class="gap-1 overflow-auto">
+        <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
           <For each={menuTabs.todos.todosList}>
             {(todo) => <TodoRow {...todo} />}
           </For>
@@ -40,24 +48,6 @@ export const Todos: Component = () => {
 
 const TodoRow: Component<Todo> = (todo) => {
   const [isEditing, setIsEditing] = createSignal(false);
-
-  const todoIndex = createMemo(
-    () => menuTabs.todos.todosList!.findIndex((t) => t.id === todo.id) // todosList is always defined in todos
-  );
-
-  const completeTodo = () => {
-    setMenuTabs("todos", "todosList", todoIndex(), (prev) => ({
-      ...prev,
-      completed: !prev.completed,
-    }));
-  };
-
-  const deleteTodo = () => {
-    setMenuTabs("todos", "todosList", (prev) =>
-      prev?.filter((t) => t.id !== todo.id)
-    );
-  };
-
   let el: HTMLInputElement | undefined;
 
   createEffect(() => {
@@ -66,48 +56,64 @@ const TodoRow: Component<Todo> = (todo) => {
     }
   });
 
+  const todoIndex = createMemo(
+    () => menuTabs.todos.todosList!.findIndex((t) => t.id === todo.id) // todosList is always defined in todos
+  );
+
+  const toggleTodo = () => {
+    setMenuTabs(
+      "todos",
+      "todosList",
+      todoIndex(),
+      "completed",
+      (prev) => !prev
+    );
+  };
+
+  const deleteTodo = () => {
+    setMenuTabs("todos", "todosList", (prev) =>
+      prev?.filter((t) => t.id !== todo.id)
+    );
+  };
+
+  const updateTodo = (value: string) => {
+    const isInRange = value.length > 0 && value.length <= 150;
+    if (!isInRange) return;
+    setMenuTabs("todos", "todosList", todoIndex(), "value", () => value);
+  };
+
   return (
     <Stack direction="flex-row" class="justify-between">
-      <Stack direction="flex-row" class="items-start gap-2">
-        <input
-          id={todo.id}
-          type="checkbox"
-          checked={todo.completed}
-          onChange={completeTodo}
-          class="mt-2 h-4 w-4"
-        />
+      <Checkbox
+        class="flex cursor-pointer flex-row gap-2"
+        checked={todo.completed}
+        onChange={toggleTodo}
+      >
+        <CheckboxInput />
+        <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
+          {todo.completed && <TbCheck size={16} class="stroke-white" />}
+        </CheckboxControl>
         <Show
           when={isEditing()}
           fallback={
-            <label
-              for={todo.id}
-              class="flex h-full min-h-[32px] max-w-[280px] cursor-pointer items-center overflow-hidden break-words text-sm"
+            <CheckboxLabel
+              class="flex h-full min-h-[32px] max-w-[190px] cursor-pointer items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
               classList={{
                 "line-through opacity-50": todo.completed,
               }}
             >
               {todo.value}
-            </label>
+            </CheckboxLabel>
           }
         >
           <Input
             ref={el}
-            class="h-8 w-[280px] break-words bg-stone-900"
-            classList={{
-              "line-through": todo.completed,
-            }}
+            class="h-8 sm:w-[280px]"
             onBlur={() => setIsEditing(false)}
             autofocus
+            spellcheck={false}
             value={todo.value}
-            onInput={(e) => {
-              const inputLength = e.target.value.length;
-              if (inputLength === 0 || inputLength > 150) return; // range of todo length
-
-              setMenuTabs("todos", "todosList", todoIndex(), (prev) => ({
-                ...prev,
-                value: e.target.value,
-              }));
-            }}
+            onInput={(e) => updateTodo(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === "Escape") {
                 setIsEditing(false);
@@ -115,13 +121,17 @@ const TodoRow: Component<Todo> = (todo) => {
             }}
           />
         </Show>
-      </Stack>
+      </Checkbox>
       <Stack direction="flex-row" class="gap-1">
-        <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
-          <Show when={!isEditing()} fallback={<TbEditOff size={20} />}>
+        <Show when={!isEditing()}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsEditing(true)}
+          >
             <TbEdit size={20} />
-          </Show>
-        </Button>
+          </Button>
+        </Show>
         <Button variant="ghost" size="icon" onClick={deleteTodo}>
           <TbTrash size={20} class="stroke-red-500" />
         </Button>
