@@ -15,7 +15,7 @@ export const Button = klassed(
       },
       size: {
         default: "h-10 px-4 py-2 gap-1",
-        icon: "h-10 w-10",
+        icon: "h-8 w-8",
       },
     },
     defaultVariants: {

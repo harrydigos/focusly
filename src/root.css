@@ -5,3 +5,16 @@
 :root {
   --primary-font: "Lexend", sans-serif;
 }
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1c1917;
+  border-radius: 20px;
+}
