@@ -8,7 +8,13 @@ export const initialMenu: Record<MenuKey, MenuTab> = {
       z: 0,
     },
     isOpen: false,
-    todosList: [],
+    todosList: [
+      {
+        id: Date.now().toString(),
+        value: "Click on me to mark me as completed",
+        completed: false,
+      },
+    ],
   },
   music: {
     position: {

@@ -36,7 +36,14 @@ export const Todos: Component = () => {
           </Button>
         </Stack>
         <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
-          <For each={menuTabs.todos.todosList}>
+          <For
+            each={menuTabs.todos.todosList}
+            fallback={
+              <span class="text-center text-sm text-stone-200">
+                No todos yet. Add one by clicking the button above.
+              </span>
+            }
+          >
             {(todo) => <TodoRow {...todo} />}
           </For>
         </Stack>
