@@ -12,23 +12,26 @@ import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
 import { CreateTodoModal } from "./CreateTodoModal";
 import { Button } from "~/design/Button";
+import { Input } from "~/design/Input";
 
 export const Todos: Component = () => {
   const [isOpen, setIsOpen] = createSignal(false);
 
   return (
     <>
-      <Stack direction="flex-col" class="w-72 gap-2 overflow-hidden">
-        <Stack direction="flex-row" class="justify-between">
-          <h1 class="text-lg font-semibold">Todos</h1>
+      <Stack direction="flex-col" class="max-h-[500px] w-72 gap-4 sm:w-96">
+        <Stack direction="flex-row" class="items-center justify-between">
+          <h1 class="text-xl font-semibold">Todos</h1>
           <Button onClick={() => setIsOpen(true)}>
             <TbPlus size={20} class="stroke-stone-900" />
             Add
           </Button>
         </Stack>
-        <For each={menuTabs.todos.todosList}>
-          {(todo) => <TodoRow {...todo} />}
-        </For>
+        <Stack direction="flex-col" class="gap-1 overflow-auto">
+          <For each={menuTabs.todos.todosList}>
+            {(todo) => <TodoRow {...todo} />}
+          </For>
+        </Stack>
       </Stack>
       <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
@@ -65,61 +68,64 @@ const TodoRow: Component<Todo> = (todo) => {
 
   return (
     <Stack direction="flex-row" class="justify-between">
-      <Stack direction="flex-row" class="gap-1">
+      <Stack direction="flex-row" class="items-start gap-2">
         <input
           id={todo.id}
           type="checkbox"
           checked={todo.completed}
           onChange={completeTodo}
+          class="mt-2 h-4 w-4"
         />
-        <div class="w-52">
-          <Show when={!isEditing()}>
+        <Show
+          when={isEditing()}
+          fallback={
             <label
               for={todo.id}
-              class="w-full cursor-pointer break-words"
+              class="flex h-full min-h-[32px] max-w-[280px] cursor-pointer items-center overflow-hidden break-words text-sm"
               classList={{
                 "line-through opacity-50": todo.completed,
               }}
             >
               {todo.value}
             </label>
-          </Show>
-          <Show when={isEditing()}>
-            <input
-              ref={el}
-              class="w-full break-words bg-stone-900"
-              classList={{
-                "line-through": todo.completed,
-              }}
-              onBlur={() => setIsEditing(false)}
-              autofocus
-              value={todo.value}
-              onInput={(e) => {
-                const inputLength = e.target.value.length;
-                if (inputLength === 0 || inputLength > 150) return; // range of todo length
+          }
+        >
+          <Input
+            ref={el}
+            class="h-8 w-[280px] break-words bg-stone-900"
+            classList={{
+              "line-through": todo.completed,
+            }}
+            onBlur={() => setIsEditing(false)}
+            autofocus
+            value={todo.value}
+            onInput={(e) => {
+              const inputLength = e.target.value.length;
+              if (inputLength === 0 || inputLength > 150) return; // range of todo length
 
-                setMenuTabs("todos", "todosList", todoIndex(), (prev) => ({
-                  ...prev,
-                  value: e.target.value,
-                }));
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === "Escape") {
-                  setIsEditing(false);
-                }
-              }}
-            />
-          </Show>
-        </div>
-      </Stack>
-      <button onClick={() => setIsEditing(true)}>
-        <Show when={!isEditing()} fallback={<TbEditOff size={20} />}>
-          <TbEdit size={20} />
+              setMenuTabs("todos", "todosList", todoIndex(), (prev) => ({
+                ...prev,
+                value: e.target.value,
+              }));
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === "Escape") {
+                setIsEditing(false);
+              }
+            }}
+          />
         </Show>
-      </button>
-      <button onClick={deleteTodo}>
-        <TbTrash size={20} />
-      </button>
+      </Stack>
+      <Stack direction="flex-row" class="gap-1">
+        <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
+          <Show when={!isEditing()} fallback={<TbEditOff size={20} />}>
+            <TbEdit size={20} />
+          </Show>
+        </Button>
+        <Button variant="ghost" size="icon" onClick={deleteTodo}>
+          <TbTrash size={20} class="stroke-red-500" />
+        </Button>
+      </Stack>
     </Stack>
   );
 };
