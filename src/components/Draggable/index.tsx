@@ -1,16 +1,30 @@
-import { Component, createEffect, createSignal, JSXElement } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  JSXElement,
+} from "solid-js";
 import { createDraggable } from "@neodrag/solid";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { SetStoreFunction } from "solid-js/store";
 
 import { getBiggestZ } from "~/stores/MenuTabsStore";
-import { Tab } from "~/types";
+import { Note, Tab, XOR } from "~/types";
 
-interface DraggableProps {
-  tab: Tab;
-  setTab: SetStoreFunction<Tab>;
-  children: JSXElement;
-}
+type DraggableProps = XOR<
+  {
+    tab: Tab;
+    children: JSXElement;
+    setTab: SetStoreFunction<Tab>;
+  },
+  {
+    tab: Tab;
+    children: JSXElement;
+    setNotes: SetStoreFunction<Note[]>;
+    index: Accessor<number>;
+  }
+>;
 
 export const Draggable: Component<DraggableProps> = (props) => {
   const { draggable } = createDraggable(); // use:draggable
@@ -27,8 +41,13 @@ export const Draggable: Component<DraggableProps> = (props) => {
     /* Visible works only for this component, toggling the display of the parent doesn't affect this */
     if (!visible()) {
       // isOpen: false, // TODO: Fix visibility when resizing. (Issue: On mobile, when focusing input using Brave, the vh changes)
-      props.setTab("position", "x", 0);
-      props.setTab("position", "y", 0);
+      if (props.setTab) {
+        props.setTab("position", "x", 0);
+        props.setTab("position", "y", 0);
+      } else {
+        props.setNotes(props.index(), "position", "x", 0);
+        props.setNotes(props.index(), "position", "y", 0);
+      }
     }
   });
 
@@ -39,12 +58,26 @@ export const Draggable: Component<DraggableProps> = (props) => {
         bounds: "body",
         onDragStart: () => {
           setIsDragging(true);
-          props.setTab("position", "z", () => getBiggestZ() + 1);
+          if (props.setTab) {
+            props.setTab("position", "z", () => getBiggestZ() + 1);
+          } else {
+            props.setNotes(
+              props.index(),
+              "position",
+              "z",
+              () => getBiggestZ() + 1
+            );
+          }
         },
         onDrag: ({ offsetX, offsetY }) => {
           /* To store the position to local storage */
-          props.setTab("position", "x", offsetX);
-          props.setTab("position", "y", offsetY);
+          if (props.setTab) {
+            props.setTab("position", "x", offsetX);
+            props.setTab("position", "y", offsetY);
+          } else {
+            props.setNotes(props.index(), "position", "x", offsetX);
+            props.setNotes(props.index(), "position", "y", offsetY);
+          }
         },
         onDragEnd: () => {
           setIsDragging(false);

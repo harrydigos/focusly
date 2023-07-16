@@ -4,7 +4,13 @@ import { Component } from "solid-js";
 import { SetStoreFunction } from "solid-js/store";
 
 import { GlassBox } from "~/design/GlassBox";
-import { getBiggestZ, setTodos, todos } from "~/stores/MenuTabsStore";
+import {
+  getBiggestZ,
+  todos,
+  setTodos,
+  notePanel,
+  setNotePanel,
+} from "~/stores/MenuTabsStore";
 import { MenuKey, Tab } from "~/types";
 
 export const Menu: Component = () => {
@@ -16,6 +22,7 @@ export const Menu: Component = () => {
         style={{ padding: "0.25rem 0.5rem" }}
       >
         <MenuItem key="todos" tab={todos} setTab={setTodos} />
+        <MenuItem key="notes" tab={notePanel} setTab={setNotePanel} />
       </GlassBox>
     </header>
   );
