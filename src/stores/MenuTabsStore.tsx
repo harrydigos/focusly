@@ -1,14 +1,18 @@
 import { createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
+import { initialTodos } from "~/config";
 
-import { initialMenu } from "~/config/menu";
-
-export const [menuTabs, setMenuTabs] = makePersisted(
+export const [todos, setTodos] = makePersisted(
   // eslint-disable-next-line solid/reactivity
-  createStore(initialMenu)
+  createStore(initialTodos)
 );
 
+// export const getBiggestZ = () => {
+//   const zValues = Object.values(menuTabs).map((tab) => tab.position.z);
+//   return Math.max(...zValues);
+// };
+
 export const getBiggestZ = () => {
-  const zValues = Object.values(menuTabs).map((tab) => tab.position.z);
-  return Math.max(...zValues);
+  const zValues = todos.position.z;
+  return zValues;
 };

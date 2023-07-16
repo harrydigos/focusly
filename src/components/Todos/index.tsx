@@ -17,7 +17,7 @@ import { TbCheck, TbEdit, TbPlus, TbTrash } from "solid-icons/tb";
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
-import { menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
+import { setTodos, todos } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
 
 import { CreateTodoModal } from "./CreateTodoModal";
@@ -32,12 +32,12 @@ export const Todos: Component = () => {
           <h1 class="text-xl font-semibold">Todos</h1>
           <Button onClick={() => setIsOpen(true)}>
             <TbPlus size={20} class="stroke-stone-900" />
-            Add
+            New todo
           </Button>
         </Stack>
         <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
           <For
-            each={menuTabs.todos.todosList}
+            each={todos.todosList}
             fallback={
               <span class="text-center text-sm text-stone-200">
                 No todos yet. Add one by clicking the button above.
@@ -63,30 +63,22 @@ const TodoRow: Component<Todo> = (todo) => {
     }
   });
 
-  const todoIndex = createMemo(
-    () => menuTabs.todos.todosList!.findIndex((t) => t.id === todo.id) // todosList is always defined in todos
+  const todoIndex = createMemo(() =>
+    todos.todosList.findIndex((t) => t.id === todo.id)
   );
 
   const toggleTodo = () => {
-    setMenuTabs(
-      "todos",
-      "todosList",
-      todoIndex(),
-      "completed",
-      (prev) => !prev
-    );
+    setTodos("todosList", todoIndex(), "completed", (prev) => !prev);
   };
 
   const deleteTodo = () => {
-    setMenuTabs("todos", "todosList", (prev) =>
-      prev?.filter((t) => t.id !== todo.id)
-    );
+    setTodos("todosList", (prev) => prev.filter((t) => t.id !== todo.id));
   };
 
   const updateTodo = (value: string) => {
     const isInRange = value.length > 0 && value.length <= 150;
     if (!isInRange) return;
-    setMenuTabs("todos", "todosList", todoIndex(), "value", () => value);
+    setTodos("todosList", todoIndex(), "value", () => value);
   };
 
   return (
