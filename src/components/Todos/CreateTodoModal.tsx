@@ -62,6 +62,7 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
                   <Stack direction="flex-row">
                     <Input
                       {...fieldProps}
+                      autofocus={true}
                       spellcheck={false}
                       placeholder="e.g. Pretend you are studying"
                       autocomplete="off"

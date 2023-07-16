@@ -25,7 +25,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
     /* Visible works only for this component, toggling the display of the parent doesn't affect this */
     if (!visible()) {
       setMenuTabs(props.key, (prev) => ({
-        isOpen: false,
+        // isOpen: false, // TODO: Fix visibility when resizing. (Issue: On mobile, when focusing input using Brave, the vh changes)
         position: {
           x: 0,
           y: 0,

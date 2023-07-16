@@ -6,6 +6,18 @@
   --primary-font: "Lexend", sans-serif;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+main {
+  position: relative;
+  width: 100vw;
+  height: 100vh; /* Works as fallback if svh is not supported */
+  height: 100svh;
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   width: 3px;
 }
