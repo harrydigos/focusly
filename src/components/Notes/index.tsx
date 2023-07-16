@@ -1,8 +1,9 @@
-import { Component, For } from "solid-js";
-import { TbPlus } from "solid-icons/tb";
+import { Component, For, Show } from "solid-js";
+import { TbEye, TbEyeOff, TbPlus } from "solid-icons/tb";
 
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
+import { notes, setNotes } from "~/stores/MenuTabsStore";
 
 export const Notes: Component = () => {
   return (
@@ -15,16 +16,28 @@ export const Notes: Component = () => {
         </Button>
       </Stack>
       <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
-        {/*<For
-          each={menuTabs.notes.notesList}
+        <For
+          each={notes}
           fallback={
             <span class="text-center text-sm text-stone-200">
               No notes yet. Add one by clicking the button above.
             </span>
           }
         >
-          {(note) => <div>{note}</div>}
-        </For> */}
+          {(note, i) => (
+            <Stack direction="flex-row">
+              <Button
+                size="icon"
+                onClick={() => setNotes(i(), "isOpen", (prev) => !prev)}
+              >
+                <Show when={note.isOpen} fallback={<TbEyeOff />}>
+                  <TbEye />
+                </Show>
+              </Button>
+              <div>{note.value}</div>
+            </Stack>
+          )}
+        </For>
       </Stack>
     </Stack>
   );

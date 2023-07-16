@@ -1,8 +1,4 @@
-import { XOR } from "~/types";
-
-export type MenuKey = "todos" | "notes"; // | "music"
-
-export type MenuTab = Tab & XOR<Todos, Notes>; // , Music>;
+export type MenuKey = "todos" | "notes";
 
 export interface Tab {
   isOpen: boolean;
@@ -25,15 +21,7 @@ export interface Todo {
   completed: boolean;
 }
 
-// export interface Music {
-//   song: string;
-// }
-
-export interface Notes {
-  notesList: string[];
-}
-
-export interface Note {
+export interface Note extends Tab {
   id: string;
   value: string;
 }
