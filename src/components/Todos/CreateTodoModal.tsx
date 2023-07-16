@@ -12,7 +12,7 @@ import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
-import { setMenuTabs } from "~/stores/MenuTabsStore";
+import { setTodos } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
 
 type TodoForm = {
@@ -38,9 +38,7 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
       completed: false,
     };
 
-    setMenuTabs("todos", "todosList", (prev) =>
-      prev ? [...prev, newTodo] : [newTodo]
-    );
+    setTodos("todosList", (prev) => (prev ? [...prev, newTodo] : [newTodo]));
     reset(form);
   };
 

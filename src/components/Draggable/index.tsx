@@ -1,18 +1,20 @@
-import { Component, createEffect, JSXElement } from "solid-js";
+import { Component, createEffect, createSignal, JSXElement } from "solid-js";
 import { createDraggable } from "@neodrag/solid";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
+import { SetStoreFunction } from "solid-js/store";
 
-import { getBiggestZ, setMenuTabs } from "~/stores/MenuTabsStore";
-import { MenuKey, Position } from "~/types";
+import { getBiggestZ } from "~/stores/MenuTabsStore";
+import { Tab } from "~/types";
 
 interface DraggableProps {
-  key: MenuKey;
-  position: Position;
+  tab: Tab;
+  setTab: SetStoreFunction<Tab>;
   children: JSXElement;
 }
 
 export const Draggable: Component<DraggableProps> = (props) => {
   const { draggable } = createDraggable(); // use:draggable
+  const [isDragging, setIsDragging] = createSignal(false);
 
   let el: HTMLDivElement | undefined;
   const visible = createVisibilityObserver({
@@ -24,14 +26,9 @@ export const Draggable: Component<DraggableProps> = (props) => {
   createEffect(() => {
     /* Visible works only for this component, toggling the display of the parent doesn't affect this */
     if (!visible()) {
-      setMenuTabs(props.key, (prev) => ({
-        // isOpen: false, // TODO: Fix visibility when resizing. (Issue: On mobile, when focusing input using Brave, the vh changes)
-        position: {
-          x: 0,
-          y: 0,
-          z: prev.position.z,
-        },
-      }));
+      // isOpen: false, // TODO: Fix visibility when resizing. (Issue: On mobile, when focusing input using Brave, the vh changes)
+      props.setTab("position", "x", 0);
+      props.setTab("position", "y", 0);
     }
   });
 
@@ -41,21 +38,26 @@ export const Draggable: Component<DraggableProps> = (props) => {
       use:draggable={{
         bounds: "body",
         onDragStart: () => {
-          setMenuTabs(props.key, "position", "z", () => getBiggestZ() + 1);
+          setIsDragging(true);
+          props.setTab("position", "z", () => getBiggestZ() + 1);
         },
         onDrag: ({ offsetX, offsetY }) => {
           /* To store the position to local storage */
-          setMenuTabs(props.key, "position", (prev) => ({
-            ...prev,
-            x: offsetX,
-            y: offsetY,
-          }));
+          props.setTab("position", "x", offsetX);
+          props.setTab("position", "y", offsetY);
         },
-        position: props.position,
+        onDragEnd: () => {
+          setIsDragging(false);
+        },
+        position: props.tab.position,
       }}
-      class="absolute cursor-move"
+      class="absolute"
+      classList={{
+        "cursor-grab": !isDragging(),
+        "cursor-grabbing": isDragging(),
+      }}
       style={{
-        "z-index": props.position.z,
+        "z-index": props.tab.position.z,
       }}
     >
       {props.children}

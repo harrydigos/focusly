@@ -1,10 +1,11 @@
 import { IconTypes } from "solid-icons";
-import { TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
-import { Component, For } from "solid-js";
+import { TbListCheck, TbNote } from "solid-icons/tb";
+import { Component } from "solid-js";
+import { SetStoreFunction } from "solid-js/store";
 
 import { GlassBox } from "~/design/GlassBox";
-import { getBiggestZ, menuTabs, setMenuTabs } from "~/stores/MenuTabsStore";
-import { MenuKey, MenuTab } from "~/types";
+import { getBiggestZ, setTodos, todos } from "~/stores/MenuTabsStore";
+import { MenuKey, Tab } from "~/types";
 
 export const Menu: Component = () => {
   return (
@@ -14,9 +15,7 @@ export const Menu: Component = () => {
         class="w-fit gap-1"
         style={{ padding: "0.25rem 0.5rem" }}
       >
-        <For each={Object.entries(menuTabs)}>
-          {([key, value]) => <MenuItem key={key as MenuKey} {...value} />}
-        </For>
+        <MenuItem key="todos" tab={todos} setTab={setTodos} />
       </GlassBox>
     </header>
   );
@@ -24,25 +23,31 @@ export const Menu: Component = () => {
 
 const menuIcons: Record<MenuKey, IconTypes> = {
   todos: TbListCheck,
-  music: TbMusic,
+  // music: TbMusic,
   notes: TbNote,
 };
 
-const MenuItem: Component<{ key: MenuKey } & MenuTab> = (props) => {
+interface MenuItemProps {
+  key: MenuKey;
+  tab: Tab;
+  setTab: SetStoreFunction<Tab>;
+}
+
+const MenuItem: Component<MenuItemProps> = (props) => {
   return (
     <button
       type="button"
       class="group inline-flex w-fit transform-gpu items-center gap-1 rounded-full border border-transparent p-2 text-white ring-transparent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95"
       classList={{
-        "bg-stone-900/30 hover:border-white/30": props.isOpen,
+        "bg-stone-900/30 hover:border-white/30": props.tab.isOpen,
       }}
       onClick={() => {
-        setMenuTabs(props.key, "isOpen", (prev) => !prev);
-        setMenuTabs(props.key, "position", "z", () => getBiggestZ() + 1);
+        props.setTab("isOpen", (prev) => !prev);
+        props.setTab("position", "z", () => getBiggestZ() + 1);
       }}
     >
       <MenuIcon icon={menuIcons[props.key]} />
-      <div class="text-sm font-medium capitalize group-hover:opacity-75">
+      <div class="select-none text-sm font-medium capitalize group-hover:opacity-75">
         {props.key}
       </div>
     </button>
