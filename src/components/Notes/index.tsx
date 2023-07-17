@@ -1,16 +1,36 @@
-import { Component, For, Show } from "solid-js";
-import { TbEye, TbEyeOff, TbPlus } from "solid-icons/tb";
+import { Accessor, Component, For, Show, createMemo } from "solid-js";
+import { TbEye, TbEyeOff, TbPlus, TbTrash } from "solid-icons/tb";
 
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
-import { notes, setNotes } from "~/stores/MenuTabsStore";
+import {
+  getBiggestZ,
+  notePanel,
+  notes,
+  setNotes,
+} from "~/stores/MenuTabsStore";
+import { Note } from "~/types";
 
 export const Notes: Component = () => {
+  const createNote = () => {
+    const newNote: Note = {
+      id: Date.now().toString(),
+      value: "New note",
+      isOpen: true,
+      position: {
+        x: notePanel.position.x,
+        y: notePanel.position.y,
+        z: getBiggestZ() + 1,
+      },
+    };
+    setNotes((prev) => [...prev, newNote]);
+  };
+
   return (
     <Stack direction="flex-col" class="max-h-[500px] w-72 gap-4 sm:w-96">
       <Stack direction="flex-row" class="items-center justify-between">
         <h1 class="text-xl font-semibold">Notes</h1>
-        <Button>
+        <Button onClick={createNote}>
           <TbPlus size={20} class="stroke-stone-900" />
           New note
         </Button>
@@ -24,21 +44,62 @@ export const Notes: Component = () => {
             </span>
           }
         >
-          {(note, i) => (
-            <Stack direction="flex-row">
-              <Button
-                size="icon"
-                onClick={() => setNotes(i(), "isOpen", (prev) => !prev)}
-              >
-                <Show when={note.isOpen} fallback={<TbEyeOff />}>
-                  <TbEye />
-                </Show>
-              </Button>
-              <div>{note.value}</div>
-            </Stack>
-          )}
+          {(note, i) => <NoteRow note={note} index={i} />}
         </For>
       </Stack>
+    </Stack>
+  );
+};
+
+const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
+  const toggleNote = () => {
+    setNotes(props.index(), "position", "z", () => getBiggestZ() + 1);
+    setNotes(props.index(), "isOpen", (prev) => !prev);
+  };
+
+  const deleteNote = () => {
+    setNotes(notes.filter((n) => n.id !== props.note.id));
+  };
+
+  const updatedAt = createMemo(() => {
+    const date = new Date(parseInt(props.note.id));
+    return new Intl.DateTimeFormat("en-UK", {
+      weekday: "short",
+      day: "numeric",
+      hour: "numeric",
+      hour12: false,
+      minute: "numeric",
+    }).format(date);
+  });
+
+  return (
+    <Stack
+      direction="flex-row"
+      class="cursor-pointer items-center justify-between gap-1 rounded-lg border border-transparent bg-stone-900/50 p-2 text-white hover:bg-stone-800/50"
+      onClick={toggleNote}
+    >
+      <Stack direction="flex-col">
+        <Stack direction="flex-row" class="items-center gap-2">
+          <h2 class="text-sm">{props.note.value}</h2>
+          <Show
+            when={props.note.isOpen}
+            fallback={<TbEyeOff class="opacity-50" />}
+          >
+            <TbEye class="opacity-50" />
+          </Show>
+        </Stack>
+        <span class="text-xs font-light text-stone-300">{updatedAt()}</span>
+      </Stack>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={(e: MouseEvent) => {
+          e.stopPropagation();
+          deleteNote();
+        }}
+      >
+        <TbTrash size={20} class="stroke-red-500" />
+      </Button>
     </Stack>
   );
 };
