@@ -11,7 +11,7 @@ import {
 } from "~/stores/MenuTabsStore";
 import { Note } from "~/types";
 
-export const Notes: Component = () => {
+export const NoteControl: Component = () => {
   const createNote = () => {
     const newNote: Note = {
       id: Date.now().toString(),
@@ -72,6 +72,21 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
     }).format(date);
   });
 
+  const noteValue = createMemo(() => {
+    if (props.note.value.match(/\n/g)) {
+      const lines = props.note.value.split(/\n/g);
+      const firstWrittenLine = lines.findIndex((l) => l.length > 0);
+      return {
+        title: lines[firstWrittenLine],
+        text: lines.slice(firstWrittenLine + 1).join("\n"),
+      };
+    }
+    return {
+      title: props.note.value,
+      text: "",
+    };
+  });
+
   return (
     <Stack
       direction="flex-row"
@@ -80,7 +95,9 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
     >
       <Stack direction="flex-col">
         <Stack direction="flex-row" class="items-center gap-2">
-          <h2 class="text-sm">{props.note.value}</h2>
+          <h2 class="max-w-[205px] truncate text-sm sm:max-w-[300px]">
+            {noteValue().title}
+          </h2>
           <Show
             when={props.note.isOpen}
             fallback={<TbEyeOff class="opacity-50" />}
@@ -88,7 +105,15 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
             <TbEye class="opacity-50" />
           </Show>
         </Stack>
-        <span class="text-xs font-light text-stone-300">{updatedAt()}</span>
+        <Stack
+          direction="flex-row"
+          class=" gap-2 text-xs font-light text-stone-300"
+        >
+          <span>{updatedAt()}</span>
+          <div class="max-w-[140px] truncate sm:max-w-[240px]">
+            {noteValue().text}
+          </div>
+        </Stack>
       </Stack>
       <Button
         variant="ghost"
