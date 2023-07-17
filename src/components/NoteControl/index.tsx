@@ -77,7 +77,9 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
       const lines = props.note.value.split(/\n/g);
       const firstWrittenLine = lines.findIndex((l) => l.length > 0);
       return {
-        title: lines[firstWrittenLine],
+        title: lines[firstWrittenLine]?.includes(" ")
+          ? "New note"
+          : lines[firstWrittenLine],
         text: lines.slice(firstWrittenLine + 1).join("\n"),
       };
     }
