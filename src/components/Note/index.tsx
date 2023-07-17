@@ -1,9 +1,10 @@
-import { Accessor, Component, For, Show, createSignal } from "solid-js";
-import { Draggable } from "../Draggable";
+import { Accessor, Component, For, Show } from "solid-js";
+
+import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
-import { Note } from "~/types";
-import { notes, setNotes } from "~/stores/MenuTabsStore";
 import { Textarea } from "~/design/Textarea";
+import { notes, setNotes } from "~/stores/MenuTabsStore";
+import { Note } from "~/types";
 
 export const Notes: Component = () => {
   return (
@@ -14,39 +15,31 @@ export const Notes: Component = () => {
 export const StickyNote: Component<{ note: Note; index: Accessor<number> }> = (
   props
 ) => {
-  // const [isEditing, setIsEditing] = createSignal(false);
-
   return (
     <Show when={props.note.isOpen}>
       <Draggable tab={props.note} setNotes={setNotes} index={props.index}>
         <GlassBox direction="flex-col" class="h-[250px] max-h-[500px]">
-          {/* <Show
-            when={isEditing()}
-            // fallback={
-            //   <div class="max-w-xs" onDblClick={() => setIsEditing(true)}>
-            //     {props.note.value}
-            //   </div>
-            // }
-          > */}
           <Textarea
-            class="h-full w-full"
+            class="h-full w-full resize-none rounded-none border-transparent bg-transparent px-0 py-0 transition-none focus-visible:border-transparent focus-visible:ring-transparent"
             value={props.note.value}
             onInput={(e) => {
-              // console.log(e.currentTarget.value);
-              // t.replace(/\n\r?/g, '<br />')
-              // const regex = /(\r\n|\n|\r)/gm;
-              // if (e.currentTarget.value.match(regex)) {
-              //   console.log("new line");
-              // }
               setNotes(props.index(), "value", e.currentTarget.value);
             }}
             onChange={(e) => {
-              /* TODO: What should happen when is has no letters? */
-              if (e.currentTarget.value === "") {
-                setNotes(notes.filter((n) => n.id !== props.note.id));
+              const lines = e.currentTarget.value.split(/[\n\s]/g);
+              const hasLetters = lines.some((line) => line.length > 0);
+              if (!hasLetters) {
+                setNotes(props.index(), "value", "New note");
+              }
+              setNotes(props.index(), "id", Date.now().toString()); // use updated_at
+            }}
+            spellcheck={false}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                e.preventDefault();
+                e.currentTarget.blur();
               }
             }}
-            // onBlur={() => setIsEditing(false)}
             autocomplete="off"
           />
         </GlassBox>
