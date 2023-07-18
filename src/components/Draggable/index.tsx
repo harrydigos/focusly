@@ -12,15 +12,15 @@ import { SetStoreFunction } from "solid-js/store";
 import { getBiggestZ } from "~/stores/MenuTabsStore";
 import { Note, Tab, XOR } from "~/types";
 
-type DraggableProps = XOR<
+type DraggableProps = {
+  tab: Tab;
+  children: JSXElement;
+  disabled?: boolean;
+} & XOR<
   {
-    tab: Tab;
-    children: JSXElement;
     setTab: SetStoreFunction<Tab>;
   },
   {
-    tab: Tab;
-    children: JSXElement;
     setNotes: SetStoreFunction<Note[]>;
     index: Accessor<number>;
   }
@@ -83,11 +83,13 @@ export const Draggable: Component<DraggableProps> = (props) => {
           setIsDragging(false);
         },
         position: props.tab.position,
+        disabled: props.disabled,
       }}
       class="absolute"
       classList={{
         "cursor-grab": !isDragging(),
         "cursor-grabbing": isDragging(),
+        "cursor-default": props.disabled,
       }}
       style={{
         "z-index": props.tab.position.z,
