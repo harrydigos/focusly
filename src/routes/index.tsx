@@ -1,5 +1,6 @@
 import { lazy } from "solid-js";
 import { LofiGirl } from "~/components/Backgrounds";
+import { ConstructionMessage } from "~/components/ConstructionMessage";
 import { Menu } from "~/components/Menu";
 
 const Panels = lazy(() =>
@@ -12,6 +13,7 @@ export default function Home() {
       <LofiGirl />
       <Menu />
       <Panels />
+      <ConstructionMessage />
     </main>
   );
 }
