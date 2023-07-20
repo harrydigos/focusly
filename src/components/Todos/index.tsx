@@ -17,6 +17,7 @@ import { TbCheck, TbEdit, TbPlus, TbTrash } from "solid-icons/tb";
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
+import { GlassBox } from "~/design/GlassBox";
 import { setTodos, todos } from "~/stores/MenuTabsStore";
 import { Todo } from "~/types";
 
@@ -27,7 +28,11 @@ export const Todos: Component = () => {
 
   return (
     <>
-      <Stack direction="flex-col" class="max-h-[500px] w-72 gap-4 sm:w-96">
+      <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <GlassBox
+        direction="flex-col"
+        class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
+      >
         <Stack direction="flex-row" class="items-center justify-between">
           <h1 class="text-xl font-semibold">Todos</h1>
           <Button onClick={() => setIsOpen(true)}>
@@ -47,8 +52,7 @@ export const Todos: Component = () => {
             {(todo) => <TodoRow {...todo} />}
           </For>
         </Stack>
-      </Stack>
-      <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      </GlassBox>
     </>
   );
 };

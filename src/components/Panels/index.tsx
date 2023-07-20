@@ -1,6 +1,5 @@
 import { Component, Show, createSignal, onMount } from "solid-js";
 
-import { GlassBox } from "~/design/GlassBox";
 import { Draggable } from "~/components/Draggable";
 import {
   notePanel,
@@ -21,16 +20,12 @@ export const Panels: Component = () => {
     <Show when={isMounted()}>
       <Show when={todos.isOpen}>
         <Draggable tab={todos} setTab={setTodos}>
-          <GlassBox direction="flex-col">
-            <Todos />
-          </GlassBox>
+          <Todos />
         </Draggable>
       </Show>
       <Show when={notePanel.isOpen}>
         <Draggable tab={notePanel} setTab={setNotePanel}>
-          <GlassBox direction="flex-col">
-            <NoteControl />
-          </GlassBox>
+          <NoteControl />
         </Draggable>
       </Show>
       <Notes />

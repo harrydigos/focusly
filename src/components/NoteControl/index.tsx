@@ -2,6 +2,7 @@ import { Accessor, Component, For, Show, createMemo } from "solid-js";
 import { TbEye, TbEyeOff, TbPlus, TbTrash } from "solid-icons/tb";
 
 import { Button } from "~/design/Button";
+import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
 import {
   getBiggestZ,
@@ -27,7 +28,10 @@ export const NoteControl: Component = () => {
   };
 
   return (
-    <Stack direction="flex-col" class="max-h-[500px] w-72 gap-4 sm:w-96">
+    <GlassBox
+      direction="flex-col"
+      class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
+    >
       <Stack direction="flex-row" class="items-center justify-between">
         <h1 class="text-xl font-semibold">Notes</h1>
         <Button onClick={createNote}>
@@ -47,7 +51,7 @@ export const NoteControl: Component = () => {
           {(note, i) => <NoteRow note={note} index={i} />}
         </For>
       </Stack>
-    </Stack>
+    </GlassBox>
   );
 };
 
