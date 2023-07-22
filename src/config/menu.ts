@@ -16,7 +16,7 @@ export const initialTodos: Tab & Todos = {
   ],
 };
 
-export const initialNotePanel: Tab = {
+export const initialNoteControl: Tab = {
   position: {
     x: 0,
     y: 0,

@@ -1,18 +1,26 @@
-import { lazy } from "solid-js";
+import { Suspense, lazy } from "solid-js";
 import { LofiGirl } from "~/components/Backgrounds";
 import { ConstructionMessage } from "~/components/ConstructionMessage";
-import { Menu } from "~/components/Menu";
+import { PanelProvider } from "~/providers";
+
+const Menu = lazy(() =>
+  import("~/components/Menu").then((m) => ({ default: m.Menu }))
+);
 
 const Panels = lazy(() =>
   import("~/components/Panels").then((m) => ({ default: m.Panels }))
 );
 
-export default function Home() {
+export default function App() {
   return (
     <main>
       <LofiGirl />
-      <Menu />
-      <Panels />
+      <PanelProvider>
+        <Suspense>
+          <Menu />
+          <Panels />
+        </Suspense>
+      </PanelProvider>
       <ConstructionMessage />
     </main>
   );
