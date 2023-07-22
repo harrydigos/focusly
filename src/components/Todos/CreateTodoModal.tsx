@@ -12,7 +12,7 @@ import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
-import { setTodos } from "~/stores/MenuTabsStore";
+import { usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 
 type TodoForm = {
@@ -25,6 +25,7 @@ interface CreateTodoModalProps {
 }
 
 export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
+  const { setTodos } = usePanelContext();
   const [form, { Form, Field }] = createForm<TodoForm>({
     initialValues: {
       todo: "",

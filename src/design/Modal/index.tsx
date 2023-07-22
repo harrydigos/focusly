@@ -2,7 +2,7 @@ import { DialogBackdrop, DialogContainer, DialogContent } from "@ark-ui/solid";
 import { Accessor, Component, JSX, Show, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Motion, Presence } from "@motionone/solid";
-import { getBiggestZ } from "~/stores/MenuTabsStore";
+import { usePanelContext } from "~/providers";
 
 interface ModalProps {
   isOpen: Accessor<boolean>;
@@ -10,6 +10,7 @@ interface ModalProps {
 }
 
 export const Modal: Component<ModalProps> = (props) => {
+  const { getBiggestZ } = usePanelContext();
   const zIndex = createMemo(() => getBiggestZ() + 1000); // You never know
 
   return (

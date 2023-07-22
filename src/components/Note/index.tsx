@@ -3,10 +3,12 @@ import { Accessor, Component, For, Show, createSignal } from "solid-js";
 import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
 import { Textarea } from "~/design/Textarea";
-import { notes, setNotes } from "~/stores/MenuTabsStore";
+import { usePanelContext } from "~/providers";
 import { Note } from "~/types";
 
 export const Notes: Component = () => {
+  const { notes } = usePanelContext();
+
   return (
     <For each={notes}>{(note, i) => <StickyNote note={note} index={i} />}</For>
   );
@@ -15,6 +17,7 @@ export const Notes: Component = () => {
 export const StickyNote: Component<{ note: Note; index: Accessor<number> }> = (
   props
 ) => {
+  const { setNotes } = usePanelContext();
   const [disableDrag, setDisableDrag] = createSignal(false);
 
   return (

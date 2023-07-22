@@ -4,23 +4,20 @@ import { TbEye, TbEyeOff, TbPlus, TbTrash } from "solid-icons/tb";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
-import {
-  getBiggestZ,
-  notePanel,
-  notes,
-  setNotes,
-} from "~/stores/MenuTabsStore";
 import { Note } from "~/types";
+import { usePanelContext } from "~/providers";
 
 export const NoteControl: Component = () => {
+  const { noteControl, notes, setNotes, getBiggestZ } = usePanelContext();
+
   const createNote = () => {
     const newNote: Note = {
       id: Date.now().toString(),
       value: "New note",
       isOpen: true,
       position: {
-        x: notePanel.position.x,
-        y: notePanel.position.y,
+        x: noteControl.position.x,
+        y: noteControl.position.y,
         z: getBiggestZ() + 1,
       },
     };
@@ -56,6 +53,8 @@ export const NoteControl: Component = () => {
 };
 
 const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
+  const { notes, setNotes, getBiggestZ } = usePanelContext();
+
   const toggleNote = () => {
     setNotes(props.index(), "position", "z", () => getBiggestZ() + 1);
     setNotes(props.index(), "isOpen", (prev) => !prev);

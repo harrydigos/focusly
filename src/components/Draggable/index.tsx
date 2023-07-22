@@ -9,8 +9,8 @@ import { createDraggable } from "@neodrag/solid";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { SetStoreFunction } from "solid-js/store";
 
-import { getBiggestZ } from "~/stores/MenuTabsStore";
 import { Note, Tab, XOR } from "~/types";
+import { usePanelContext } from "~/providers";
 
 type DraggableProps = {
   tab: Tab;
@@ -27,6 +27,7 @@ type DraggableProps = {
 >;
 
 export const Draggable: Component<DraggableProps> = (props) => {
+  const { getBiggestZ } = usePanelContext();
   const { draggable } = createDraggable(); // use:draggable
   const [isDragging, setIsDragging] = createSignal(false);
 

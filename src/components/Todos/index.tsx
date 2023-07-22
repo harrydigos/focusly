@@ -18,12 +18,13 @@ import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
 import { GlassBox } from "~/design/GlassBox";
-import { setTodos, todos } from "~/stores/MenuTabsStore";
+import { usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 
 import { CreateTodoModal } from "./CreateTodoModal";
 
 export const Todos: Component = () => {
+  const { todos } = usePanelContext();
   const [isOpen, setIsOpen] = createSignal(false);
 
   return (
@@ -58,6 +59,7 @@ export const Todos: Component = () => {
 };
 
 const TodoRow: Component<Todo> = (todo) => {
+  const { todos, setTodos } = usePanelContext();
   const [isEditing, setIsEditing] = createSignal(false);
   let el: HTMLInputElement | undefined;
 

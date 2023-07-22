@@ -1,30 +1,31 @@
 import { IconTypes } from "solid-icons";
 import { TbListCheck, TbNote } from "solid-icons/tb";
-import { Component } from "solid-js";
+import { Component, Show, createSignal, onMount } from "solid-js";
 import { SetStoreFunction } from "solid-js/store";
 
 import { GlassBox } from "~/design/GlassBox";
-import {
-  getBiggestZ,
-  todos,
-  setTodos,
-  notePanel,
-  setNotePanel,
-} from "~/stores/MenuTabsStore";
+import { usePanelContext } from "~/providers";
 import { MenuKey, Tab } from "~/types";
 
 export const Menu: Component = () => {
+  const { todos, setTodos, noteControl, setNoteControl } = usePanelContext();
+  const [isMounted, setIsMounted] = createSignal(false);
+
+  onMount(() => setIsMounted(true));
+
   return (
-    <header class="mt-4 flex w-full justify-center">
-      <GlassBox
-        direction="flex-row"
-        class="w-fit gap-1"
-        style={{ padding: "0.25rem 0.5rem" }}
-      >
-        <MenuItem key="todos" tab={todos} setTab={setTodos} />
-        <MenuItem key="notes" tab={notePanel} setTab={setNotePanel} />
-      </GlassBox>
-    </header>
+    <Show when={isMounted()}>
+      <header class="mt-4 flex w-full justify-center">
+        <GlassBox
+          direction="flex-row"
+          class="w-fit gap-1"
+          style={{ padding: "0.25rem 0.5rem" }}
+        >
+          <MenuItem key="todos" tab={todos} setTab={setTodos} />
+          <MenuItem key="notes" tab={noteControl} setTab={setNoteControl} />
+        </GlassBox>
+      </header>
+    </Show>
   );
 };
 
@@ -41,6 +42,8 @@ interface MenuItemProps {
 }
 
 const MenuItem: Component<MenuItemProps> = (props) => {
+  const { getBiggestZ } = usePanelContext();
+
   return (
     <button
       type="button"
