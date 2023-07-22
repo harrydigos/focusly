@@ -17,8 +17,8 @@ export default function App() {
       <LofiGirl />
       <PanelProvider>
         <Suspense>
-          <Menu />
           <Panels />
+          <Menu />
         </Suspense>
       </PanelProvider>
       <ConstructionMessage />

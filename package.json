@@ -34,6 +34,7 @@
     "@motionone/solid": "^10.16.2",
     "@neodrag/solid": "^2.0.3",
     "@solid-primitives/intersection-observer": "^2.1.2",
+    "@solid-primitives/resize-observer": "^2.0.18",
     "@solid-primitives/storage": "^2.0.0",
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "^0.8.2",

@@ -21,8 +21,8 @@ export const Menu: Component = () => {
           class="w-fit gap-1"
           style={{ padding: "0.25rem 0.5rem" }}
         >
-          <MenuItem key="todos" tab={todos} setTab={setTodos} />
           <MenuItem key="notes" tab={noteControl} setTab={setNoteControl} />
+          <MenuItem key="todos" tab={todos} setTab={setTodos} />
         </GlassBox>
       </header>
     </Show>
