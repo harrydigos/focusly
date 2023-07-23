@@ -6,11 +6,12 @@ import {
   JSXElement,
 } from "solid-js";
 import { createDraggable } from "@neodrag/solid";
-import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
 import { SetStoreFunction } from "solid-js/store";
+import { createElementBounds } from "@solid-primitives/bounds";
 
 import { Note, Tab, XOR } from "~/types";
 import { usePanelContext } from "~/providers";
+import { useScreenBounds } from "~/stores";
 
 type DraggableProps = {
   tab: Tab;
@@ -27,34 +28,40 @@ type DraggableProps = {
 >;
 
 export const Draggable: Component<DraggableProps> = (props) => {
+  const screenBounds = useScreenBounds();
   const { getBiggestZ } = usePanelContext();
+
   const { draggable } = createDraggable(); // use:draggable
+  const [target, setTarget] = createSignal<HTMLElement>();
+  const bounds = createElementBounds(target);
   const [isDragging, setIsDragging] = createSignal(false);
 
-  let el: HTMLDivElement | undefined;
-  const visible = createVisibilityObserver({
-    threshold: 0.8,
-    initialValue: true,
-  })(() => el);
-
-  /* Handle element's position when not visible */
   createEffect(() => {
-    /* Visible works only for this component, toggling the display of the parent doesn't affect this */
-    if (!visible()) {
-      // isOpen: false, // TODO: Fix visibility when resizing. (Issue: On mobile, when focusing input using Brave, the vh changes)
+    const isOutOfBoundsRight = bounds.right! > screenBounds.width!;
+    const isOutOfBoundsBottom = bounds.bottom! > screenBounds.height!;
+
+    if (isOutOfBoundsRight) {
+      const newPosX = screenBounds.width! - bounds.width!;
       if (props.setTab) {
-        props.setTab("position", "x", 0);
-        props.setTab("position", "y", 0);
+        props.setTab("position", "x", newPosX);
       } else {
-        props.setNotes(props.index(), "position", "x", 0);
-        props.setNotes(props.index(), "position", "y", 0);
+        props.setNotes(props.index(), "position", "x", newPosX);
+      }
+    }
+
+    if (isOutOfBoundsBottom) {
+      const newPosY = screenBounds.height! - bounds.height!;
+      if (props.setTab) {
+        props.setTab("position", "y", newPosY);
+      } else {
+        props.setNotes(props.index(), "position", "y", newPosY);
       }
     }
   });
 
   return (
     <div
-      ref={el}
+      ref={setTarget}
       use:draggable={{
         bounds: "body",
         onDragStart: () => {
