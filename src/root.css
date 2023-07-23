@@ -10,7 +10,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-main {
+main.screen {
   position: relative;
   width: 100vw;
   height: 100vh; /* Works as fallback if svh is not supported */
