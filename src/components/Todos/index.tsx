@@ -14,6 +14,7 @@ import {
 } from "@ark-ui/solid";
 import { TbCheck, TbEdit, TbPlus, TbTrash } from "solid-icons/tb";
 
+import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
@@ -24,37 +25,39 @@ import { Todo } from "~/types";
 import { CreateTodoModal } from "./CreateTodoModal";
 
 export const Todos: Component = () => {
-  const { todos } = usePanelContext();
+  const { todos, setTodos } = usePanelContext();
   const [isOpen, setIsOpen] = createSignal(false);
 
   return (
-    <>
-      <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      <GlassBox
-        direction="flex-col"
-        class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
-      >
-        <Stack direction="flex-row" class="items-center justify-between">
-          <h1 class="text-xl font-semibold">Todos</h1>
-          <Button onClick={() => setIsOpen(true)}>
-            <TbPlus size={20} class="stroke-stone-900" />
-            New todo
-          </Button>
-        </Stack>
-        <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
-          <For
-            each={todos.todosList}
-            fallback={
-              <span class="text-center text-sm text-stone-200">
-                No todos yet. Add one by clicking the button above.
-              </span>
-            }
-          >
-            {(todo) => <TodoRow {...todo} />}
-          </For>
-        </Stack>
-      </GlassBox>
-    </>
+    <Show when={todos.isOpen}>
+      <Draggable tab={todos} setTab={setTodos}>
+        <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        <GlassBox
+          direction="flex-col"
+          class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
+        >
+          <Stack direction="flex-row" class="items-center justify-between">
+            <h1 class="text-xl font-semibold">Todos</h1>
+            <Button onClick={() => setIsOpen(true)}>
+              <TbPlus size={20} class="stroke-stone-900" />
+              New todo
+            </Button>
+          </Stack>
+          <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
+            <For
+              each={todos.todosList}
+              fallback={
+                <span class="text-center text-sm text-stone-200">
+                  No todos yet. Add one by clicking the button above.
+                </span>
+              }
+            >
+              {(todo) => <TodoRow {...todo} />}
+            </For>
+          </Stack>
+        </GlassBox>
+      </Draggable>
+    </Show>
   );
 };
 

@@ -1,6 +1,7 @@
 import { Accessor, Component, For, Show, createMemo } from "solid-js";
 import { TbEye, TbEyeOff, TbPlus, TbTrash } from "solid-icons/tb";
 
+import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
@@ -8,7 +9,8 @@ import { Note } from "~/types";
 import { usePanelContext } from "~/providers";
 
 export const NoteControl: Component = () => {
-  const { noteControl, notes, setNotes, getBiggestZ } = usePanelContext();
+  const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
+    usePanelContext();
 
   const createNote = () => {
     const newNote: Note = {
@@ -25,30 +27,34 @@ export const NoteControl: Component = () => {
   };
 
   return (
-    <GlassBox
-      direction="flex-col"
-      class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
-    >
-      <Stack direction="flex-row" class="items-center justify-between">
-        <h1 class="text-xl font-semibold">Notes</h1>
-        <Button onClick={createNote}>
-          <TbPlus size={20} class="stroke-stone-900" />
-          New note
-        </Button>
-      </Stack>
-      <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
-        <For
-          each={notes}
-          fallback={
-            <span class="text-center text-sm text-stone-200">
-              No notes yet. Add one by clicking the button above.
-            </span>
-          }
+    <Show when={noteControl.isOpen}>
+      <Draggable tab={noteControl} setTab={setNoteControl}>
+        <GlassBox
+          direction="flex-col"
+          class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
         >
-          {(note, i) => <NoteRow note={note} index={i} />}
-        </For>
-      </Stack>
-    </GlassBox>
+          <Stack direction="flex-row" class="items-center justify-between">
+            <h1 class="text-xl font-semibold">Notes</h1>
+            <Button onClick={createNote}>
+              <TbPlus size={20} class="stroke-stone-900" />
+              New note
+            </Button>
+          </Stack>
+          <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
+            <For
+              each={notes}
+              fallback={
+                <span class="text-center text-sm text-stone-200">
+                  No notes yet. Add one by clicking the button above.
+                </span>
+              }
+            >
+              {(note, i) => <NoteRow note={note} index={i} />}
+            </For>
+          </Stack>
+        </GlassBox>
+      </Draggable>
+    </Show>
   );
 };
 
