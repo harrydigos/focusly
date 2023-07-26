@@ -85,10 +85,7 @@ export const Todos: Component = () => {
             <DragDropSensors />
             <Stack
               direction="flex-col"
-              class="overflow-y-auto px-6"
-              classList={{
-                "cursor-move": reorder(),
-              }}
+              class="overflow-y-auto"
               onMouseEnter={() => setReorder(true)}
               onMouseLeave={() => setReorder(false)}
             >
@@ -156,24 +153,25 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
       use:sortable
       classList={{
         "opacity-30": sortable.isActiveDraggable,
-        "transition-transform": !!ctx?.[0].active.draggable,
+        "transition-transform cursor-grabbing": !!ctx?.[0].active.draggable,
+        "cursor-grab": !ctx?.[0].active.draggable,
       }}
     >
       <Stack
         direction="flex-row"
-        class="group relative cursor-default justify-between py-0.5"
+        class="group relative justify-between px-6 py-0.5"
       >
         {/* Both Shows are needed, cuz to reorder, you need to place the cursor above another TodoRow */}
         <Show when={ctx?.[0].active.draggable?.id === props.todo.id}>
           <TbGripVertical
             size={16}
-            class="absolute -left-5 top-1/2 -translate-y-1/2 cursor-move stroke-white/80"
+            class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/80"
           />
         </Show>
         <Show when={!ctx?.[0].active.draggable}>
           <TbGripVertical
             size={16}
-            class="absolute -left-5 top-1/2 -translate-y-1/2 cursor-move stroke-white/40 opacity-0 group-hover:opacity-100"
+            class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/40 opacity-0 group-hover:opacity-100"
           />
         </Show>
 
@@ -190,7 +188,7 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
             when={isEditing()}
             fallback={
               <CheckboxLabel
-                class="flex h-full min-h-[32px] max-w-[190px] cursor-pointer select-none items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
+                class="flex h-full min-h-[32px] max-w-[190px] select-none items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
                 classList={{
                   "line-through opacity-50": props.todo.completed,
                 }}
