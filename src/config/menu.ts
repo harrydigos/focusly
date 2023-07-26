@@ -10,7 +10,12 @@ export const initialTodos: Tab & Todos = {
   todosList: [
     {
       id: Date.now().toString(),
-      value: "Click on me to mark me as completed",
+      value: "Click me to mark me as completed",
+      completed: false,
+    },
+    {
+      id: (Date.now() + 1).toString(),
+      value: "Drag me to reorder me",
       completed: false,
     },
   ],
