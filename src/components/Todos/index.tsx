@@ -12,7 +12,22 @@ import {
   CheckboxInput,
   CheckboxControl,
 } from "@ark-ui/solid";
-import { TbCheck, TbEdit, TbPlus, TbTrash } from "solid-icons/tb";
+import {
+  TbCheck,
+  TbEdit,
+  TbGripVertical,
+  TbPlus,
+  TbTrash,
+} from "solid-icons/tb";
+import {
+  closestCenter,
+  createSortable,
+  DragDropProvider,
+  DragDropSensors,
+  DragOverlay,
+  SortableProvider,
+  useDragDropContext,
+} from "@thisbeyond/solid-dnd";
 
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
@@ -28,40 +43,85 @@ export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
   const [isOpen, setIsOpen] = createSignal(false);
 
+  const [reorder, setReorder] = createSignal(false);
+  const ids = () => todos.todosList.map((t) => t.id);
+
+  const onDragEnd = (obj: any) => {
+    if (obj.draggable && obj.droppable) {
+      const fromIndex = ids().indexOf(obj.draggable.id);
+      const toIndex = ids().indexOf(obj.droppable.id);
+
+      if (fromIndex !== toIndex) {
+        const updatedItems = ids().slice();
+        updatedItems.splice(toIndex, 0, ...updatedItems.splice(fromIndex, 1));
+        setTodos("todosList", () =>
+          updatedItems
+            .map((id) => todos.todosList.find((t) => t.id === id)!)
+            .filter((t) => t !== null)
+        );
+      }
+    }
+  };
+
   return (
     <Show when={todos.isOpen}>
-      <Draggable tab={todos} setTab={setTodos}>
+      <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
         <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
         <GlassBox
           direction="flex-col"
-          class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
+          class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
         >
-          <Stack direction="flex-row" class="items-center justify-between">
+          <Stack direction="flex-row" class="items-center justify-between px-6">
             <h1 class="text-xl font-semibold">Todos</h1>
             <Button onClick={() => setIsOpen(true)}>
               <TbPlus size={20} class="stroke-stone-900" />
               New todo
             </Button>
           </Stack>
-          <Stack direction="flex-col" class="gap-1 overflow-y-auto py-1">
-            <For
-              each={todos.todosList}
-              fallback={
-                <span class="text-center text-sm text-stone-200">
-                  No todos yet. Add one by clicking the button above.
-                </span>
-              }
+          <DragDropProvider
+            onDragEnd={onDragEnd}
+            collisionDetector={closestCenter}
+          >
+            <DragDropSensors />
+            <Stack
+              direction="flex-col"
+              class="overflow-y-auto px-6"
+              classList={{
+                "cursor-move": reorder(),
+              }}
+              onMouseEnter={() => setReorder(true)}
+              onMouseLeave={() => setReorder(false)}
             >
-              {(todo) => <TodoRow {...todo} />}
-            </For>
-          </Stack>
+              <SortableProvider ids={ids()}>
+                <For
+                  each={todos.todosList}
+                  fallback={
+                    <span class="text-center text-sm text-stone-200">
+                      No todos yet. Add one by clicking the button above.
+                    </span>
+                  }
+                >
+                  {(todo) => <TodoRow todo={todo} />}
+                </For>
+              </SortableProvider>
+            </Stack>
+
+            {/* This is necessary */}
+            <DragOverlay>
+              <div class="hidden" />
+            </DragOverlay>
+          </DragDropProvider>
         </GlassBox>
       </Draggable>
     </Show>
   );
 };
 
-const TodoRow: Component<Todo> = (todo) => {
+const TodoRow: Component<{ todo: Todo }> = (props) => {
+  // eslint-disable-next-line solid/reactivity
+  const sortable = createSortable(props.todo.id);
+  const ctx = useDragDropContext();
+
   const { todos, setTodos } = usePanelContext();
   const [isEditing, setIsEditing] = createSignal(false);
   let el: HTMLInputElement | undefined;
@@ -73,7 +133,7 @@ const TodoRow: Component<Todo> = (todo) => {
   });
 
   const todoIndex = createMemo(() =>
-    todos.todosList.findIndex((t) => t.id === todo.id)
+    todos.todosList.findIndex((t) => t.id === props.todo.id)
   );
 
   const toggleTodo = () => {
@@ -81,7 +141,8 @@ const TodoRow: Component<Todo> = (todo) => {
   };
 
   const deleteTodo = () => {
-    setTodos("todosList", (prev) => prev.filter((t) => t.id !== todo.id));
+    // eslint-disable-next-line solid/reactivity
+    setTodos("todosList", (prev) => prev.filter((t) => t.id !== props.todo.id));
   };
 
   const updateTodo = (value: string) => {
@@ -91,59 +152,84 @@ const TodoRow: Component<Todo> = (todo) => {
   };
 
   return (
-    <Stack direction="flex-row" class="justify-between">
-      <Checkbox
-        class="flex cursor-pointer flex-row gap-2"
-        checked={todo.completed}
-        onChange={toggleTodo}
+    <div
+      use:sortable
+      classList={{
+        "opacity-30": sortable.isActiveDraggable,
+        "transition-transform": !!ctx?.[0].active.draggable,
+      }}
+    >
+      <Stack
+        direction="flex-row"
+        class="group relative cursor-default justify-between py-0.5"
       >
-        <CheckboxInput />
-        <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
-          {todo.completed && <TbCheck size={16} class="stroke-white" />}
-        </CheckboxControl>
-        <Show
-          when={isEditing()}
-          fallback={
-            <CheckboxLabel
-              class="flex h-full min-h-[32px] max-w-[190px] cursor-pointer items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
-              classList={{
-                "line-through opacity-50": todo.completed,
-              }}
-            >
-              {todo.value}
-            </CheckboxLabel>
-          }
-        >
-          <Input
-            ref={el}
-            class="h-8 sm:w-[280px]"
-            onBlur={() => setIsEditing(false)}
-            autofocus
-            spellcheck={false}
-            value={todo.value}
-            onInput={(e) => updateTodo(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === "Escape") {
-                setIsEditing(false);
-              }
-            }}
+        {/* Both Shows are needed, cuz to reorder, you need to place the cursor above another TodoRow */}
+        <Show when={ctx?.[0].active.draggable?.id === props.todo.id}>
+          <TbGripVertical
+            size={16}
+            class="absolute -left-5 top-1/2 -translate-y-1/2 cursor-move stroke-white/80"
           />
         </Show>
-      </Checkbox>
-      <Stack direction="flex-row" class="gap-1">
-        <Show when={!isEditing()}>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsEditing(true)}
-          >
-            <TbEdit size={20} />
-          </Button>
+        <Show when={!ctx?.[0].active.draggable}>
+          <TbGripVertical
+            size={16}
+            class="absolute -left-5 top-1/2 -translate-y-1/2 cursor-move stroke-white/40 opacity-0 group-hover:opacity-100"
+          />
         </Show>
-        <Button variant="ghost" size="icon" onClick={deleteTodo}>
-          <TbTrash size={20} class="stroke-red-500" />
-        </Button>
+
+        <Checkbox
+          class="flex cursor-pointer flex-row gap-2"
+          checked={props.todo.completed}
+          onChange={toggleTodo}
+        >
+          <CheckboxInput />
+          <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
+            {props.todo.completed && <TbCheck size={16} class="stroke-white" />}
+          </CheckboxControl>
+          <Show
+            when={isEditing()}
+            fallback={
+              <CheckboxLabel
+                class="flex h-full min-h-[32px] max-w-[190px] cursor-pointer select-none items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
+                classList={{
+                  "line-through opacity-50": props.todo.completed,
+                }}
+              >
+                {props.todo.value}
+              </CheckboxLabel>
+            }
+          >
+            <Input
+              ref={el}
+              class="h-8 sm:w-[280px]"
+              onBlur={() => setIsEditing(false)}
+              autofocus
+              spellcheck={false}
+              value={props.todo.value}
+              onInput={(e) => updateTodo(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === "Escape") {
+                  setIsEditing(false);
+                }
+              }}
+            />
+          </Show>
+        </Checkbox>
+        <Stack direction="flex-row" class="gap-1">
+          <Show when={!isEditing()}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsEditing(true)}
+            >
+              <TbEdit size={20} />
+            </Button>
+          </Show>
+          <Button variant="ghost" size="icon" onClick={deleteTodo}>
+            <TbTrash size={20} class="stroke-red-500" />
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
+    </div>
   );
 };
