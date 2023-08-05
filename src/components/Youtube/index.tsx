@@ -1,31 +1,83 @@
-import { Component, JSX, onMount, splitProps } from "solid-js";
+import { Component, Show, createEffect, createSignal, onMount } from "solid-js";
 import YoutubeFactory from "youtube-player";
-import type { YouTubePlayer, Options } from "youtube-player/dist/types";
-import type { WithRequired } from "~/types";
+import type { YouTubePlayer } from "youtube-player/dist/types";
 
-export interface YoutubeOptions
-  extends WithRequired<Options, "videoId">,
-    JSX.HTMLAttributes<HTMLDivElement> {}
+import { usePanelContext } from "~/providers";
+import { Draggable } from "../Draggable";
+import { GlassBox } from "~/design/GlassBox";
+import { Stack } from "~/design/Stack";
+import PlayerStates from "youtube-player/dist/constants/PlayerStates";
+import { TbPlayerPause, TbPlayerPlay } from "solid-icons/tb";
+import { Button } from "~/design/Button";
 
-export const Youtube: Component<YoutubeOptions> = (props) => {
+export const YoutubePlayer: Component = () => {
+  const { music, setMusic } = usePanelContext();
+
   let container: HTMLDivElement;
   let player: YouTubePlayer;
 
-  const [options, elProps] = splitProps(props, [
-    "width",
-    "height",
-    "videoId",
-    "host",
-    "playerVars",
-    "events",
-  ]);
+  const [isPlaying, setIsPlaying] = createSignal(false);
 
   onMount(() => {
-    player = YoutubeFactory(container, options);
+    /**
+     * Experiment if it's better to initialize the player once and keep it running in the background on it's own
+     * without considering if the panel is closed or not, or to destroy and reinitialize it every time
+     */
+    player = YoutubeFactory(container, {
+      videoId: "jfKfPfyJRdk",
+    });
 
     /* Default settings when player is initialized */
-    player.setVolume(10);
+    player.stopVideo();
+    player.setVolume(0);
+
+    player.on("stateChange", ({ data }) => {
+      setIsPlaying(data === PlayerStates.PLAYING);
+    });
   });
 
-  return <div class={elProps.class} ref={container!} />;
+  createEffect(() => {
+    if (music.isOpen) {
+      player.unMute();
+    } else {
+      player.mute();
+    }
+  });
+
+  return (
+    <Draggable tab={music} setTab={setMusic}>
+      <GlassBox
+        direction="flex-col"
+        class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
+        classList={{
+          hidden: !music.isOpen,
+        }}
+      >
+        <Stack direction="flex-row" class="items-center justify-between px-6">
+          <h1 class="text-xl font-semibold">Music</h1>
+        </Stack>
+        <div ref={container!} class="h-36 w-full px-6" />
+        <Show
+          when={isPlaying()}
+          fallback={
+            <Button
+              variant="ghost"
+              class="w-fit"
+              onClick={() => player.playVideo()}
+            >
+              <TbPlayerPlay />
+            </Button>
+          }
+        >
+          <Button
+            variant="ghost"
+            class="w-fit"
+            onClick={() => player.pauseVideo()}
+          >
+            <TbPlayerPause />
+          </Button>
+        </Show>
+      </GlassBox>
+    </Draggable>
+  );
 };

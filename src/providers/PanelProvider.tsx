@@ -3,7 +3,7 @@
 import { Component, JSX, createContext, useContext } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
-import { initialNoteControl, initialNotes, initialTodos } from "~/config";
+import { initialMusic, initialNoteControl, initialNotes, initialTodos } from "~/config";
 import { Note, Tab, Todos } from "~/types";
 
 export interface PanelContextProps {
@@ -13,6 +13,8 @@ export interface PanelContextProps {
   setNoteControl: SetStoreFunction<Tab>;
   notes: Note[];
   setNotes: SetStoreFunction<Note[]>;
+  music: Tab;
+  setMusic: SetStoreFunction<Tab>;
   getBiggestZ: () => number;
 }
 
@@ -28,6 +30,8 @@ export const PanelProvider: Component<{
   );
 
   const [notes, setNotes] = makePersisted(createStore(initialNotes));
+
+  const [music, setMusic] = makePersisted(createStore(initialMusic));
 
   const getBiggestZ = () => {
     const zValues = [
@@ -47,6 +51,8 @@ export const PanelProvider: Component<{
         setNoteControl,
         notes,
         setNotes,
+        music,
+        setMusic,
         getBiggestZ,
       }}
     >

@@ -4,8 +4,8 @@ import { useWindowSize } from "@solid-primitives/resize-observer";
 import { Todos } from "~/components/Todos";
 import { NoteControl } from "~/components/NoteControl";
 import { Notes } from "~/components/Note";
+import { YoutubePlayer } from "~/components/Youtube";
 import { usePanelContext } from "~/providers";
-import { Youtube } from "../Youtube";
 
 export const Panels: Component = () => {
   const { noteControl, setNoteControl, setTodos, todos } = usePanelContext();
@@ -30,7 +30,7 @@ export const Panels: Component = () => {
       <Todos />
       <NoteControl />
       <Notes />
-      <Youtube class="absolute inset-0" videoId="jfKfPfyJRdk" />
+      <YoutubePlayer />
     </>
   );
 };
