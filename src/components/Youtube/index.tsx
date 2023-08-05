@@ -1,83 +1,96 @@
-import { Component, Show, createEffect, createSignal, onMount } from "solid-js";
+import { Component, Match, Switch, createSignal, onMount } from "solid-js";
+import {
+  TbLoader,
+  TbPlayerPauseFilled,
+  TbPlayerPlayFilled,
+} from "solid-icons/tb";
 import YoutubeFactory from "youtube-player";
 import type { YouTubePlayer } from "youtube-player/dist/types";
+import PlayerStates from "youtube-player/dist/constants/PlayerStates";
 
 import { usePanelContext } from "~/providers";
-import { Draggable } from "../Draggable";
+import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
-import { Stack } from "~/design/Stack";
-import PlayerStates from "youtube-player/dist/constants/PlayerStates";
-import { TbPlayerPause, TbPlayerPlay } from "solid-icons/tb";
 import { Button } from "~/design/Button";
+import { Stack } from "~/design/Stack";
 
 export const YoutubePlayer: Component = () => {
   const { music, setMusic } = usePanelContext();
 
-  let container: HTMLDivElement;
-  let player: YouTubePlayer;
+  const [container, setContainer] = createSignal<HTMLDivElement>();
+  const [player, setPlayer] = createSignal<YouTubePlayer>();
 
-  const [isPlaying, setIsPlaying] = createSignal(false);
+  const [playerState, setPlayerState] = createSignal<PlayerStates>(
+    PlayerStates.UNSTARTED
+  );
 
   onMount(() => {
-    /**
-     * Experiment if it's better to initialize the player once and keep it running in the background on it's own
-     * without considering if the panel is closed or not, or to destroy and reinitialize it every time
-     */
-    player = YoutubeFactory(container, {
-      videoId: "jfKfPfyJRdk",
-    });
+    setPlayer(
+      YoutubeFactory(container()!, {
+        playerVars: {
+          disablekb: 1,
+          origin: "https://www.focusly.space",
+        },
+      })
+    );
+
+    /* TODO: Give the option to select a space */
+    player()?.loadVideoById("jfKfPfyJRdk");
 
     /* Default settings when player is initialized */
-    player.stopVideo();
-    player.setVolume(0);
+    player()?.stopVideo();
+    player()?.setVolume(25);
 
-    player.on("stateChange", ({ data }) => {
-      setIsPlaying(data === PlayerStates.PLAYING);
-    });
-  });
-
-  createEffect(() => {
-    if (music.isOpen) {
-      player.unMute();
-    } else {
-      player.mute();
-    }
+    player()?.on("stateChange", ({ data }) => setPlayerState(data));
   });
 
   return (
     <Draggable tab={music} setTab={setMusic}>
       <GlassBox
         direction="flex-col"
-        class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
+        class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
         classList={{
+          /* Hidding element to let audio play when panel is closed */
           hidden: !music.isOpen,
         }}
       >
-        <Stack direction="flex-row" class="items-center justify-between px-6">
+        <Stack direction="flex-row" class="items-center justify-between">
           <h1 class="text-xl font-semibold">Music</h1>
         </Stack>
-        <div ref={container!} class="h-36 w-full px-6" />
-        <Show
-          when={isPlaying()}
-          fallback={
-            <Button
-              variant="ghost"
-              class="w-fit"
-              onClick={() => player.playVideo()}
-            >
-              <TbPlayerPlay />
-            </Button>
-          }
-        >
-          <Button
-            variant="ghost"
-            class="w-fit"
-            onClick={() => player.pauseVideo()}
-          >
-            <TbPlayerPause />
-          </Button>
-        </Show>
+        <div ref={setContainer} class="hidden" />
+        <PlayButton player={player()} state={playerState()} />
       </GlassBox>
     </Draggable>
+  );
+};
+
+const PlayButton: Component<{
+  player?: YouTubePlayer;
+  state: PlayerStates;
+}> = (props) => {
+  return (
+    <Switch
+      fallback={
+        <Button size="icon" disabled>
+          <TbLoader class="animate-spin" />
+        </Button>
+      }
+    >
+      <Match
+        when={
+          props.state === PlayerStates.VIDEO_CUED ||
+          props.state === PlayerStates.PAUSED
+        }
+      >
+        <Button size="icon" onClick={() => props.player?.playVideo()}>
+          <TbPlayerPlayFilled />
+        </Button>
+      </Match>
+      <Match when={props.state === PlayerStates.PLAYING}>
+        <Button size="icon" onClick={() => props.player?.pauseVideo()}>
+          <TbPlayerPauseFilled />
+        </Button>
+      </Match>
+    </Switch>
   );
 };
