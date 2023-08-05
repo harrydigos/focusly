@@ -10,7 +10,7 @@ export const initialTodos: Tab & Todos = {
   todosList: [
     {
       id: Date.now().toString(),
-      value: "Click me to mark me as completed",
+      value: "Click me to complete",
       completed: false,
     },
     {
@@ -46,7 +46,7 @@ export const initialNotes: Note[] = [
 export const initialMusic: Tab = {
   position: {
     x: 0,
-    y: 0,
+    y: 453,
     z: 0,
   },
   isOpen: true,

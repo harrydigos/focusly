@@ -8,7 +8,8 @@ import { YoutubePlayer } from "~/components/Youtube";
 import { usePanelContext } from "~/providers";
 
 export const Panels: Component = () => {
-  const { noteControl, setNoteControl, setTodos, todos } = usePanelContext();
+  const { noteControl, setNoteControl, setTodos, todos, music, setMusic } =
+    usePanelContext();
   const winSize = useWindowSize();
 
   onMount(() => {
@@ -22,6 +23,9 @@ export const Panels: Component = () => {
     }
     if (noteControl.position.z === 0) {
       setNoteControl("position", "x", () => winSize.width / 2 - pxFromCenter);
+    }
+    if (music.position.z === 0) {
+      setMusic("position", "x", () => winSize.width / 2 - pxFromCenter);
     }
   });
 
