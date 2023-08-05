@@ -30,7 +30,7 @@ export const Panels: Component = () => {
       <Todos />
       <NoteControl />
       <Notes />
-      <Youtube />
+      <Youtube class="absolute inset-0" videoId="jfKfPfyJRdk" />
     </>
   );
 };
