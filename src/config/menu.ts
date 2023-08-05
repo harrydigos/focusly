@@ -42,3 +42,12 @@ export const initialNotes: Note[] = [
     isOpen: false,
   },
 ];
+
+export const initialMusic: Tab = {
+  position: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+  isOpen: true,
+};

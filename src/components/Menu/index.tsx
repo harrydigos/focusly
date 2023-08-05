@@ -1,5 +1,5 @@
 import { IconTypes } from "solid-icons";
-import { TbListCheck, TbNote } from "solid-icons/tb";
+import { TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
 import { Component } from "solid-js";
 import { SetStoreFunction } from "solid-js/store";
 
@@ -8,7 +8,8 @@ import { usePanelContext } from "~/providers";
 import { MenuKey, Tab } from "~/types";
 
 export const Menu: Component = () => {
-  const { todos, setTodos, noteControl, setNoteControl } = usePanelContext();
+  const { todos, setTodos, noteControl, setNoteControl, music, setMusic } =
+    usePanelContext();
 
   return (
     <header class="mt-4 flex w-full justify-center">
@@ -19,6 +20,7 @@ export const Menu: Component = () => {
       >
         <MenuItem key="notes" tab={noteControl} setTab={setNoteControl} />
         <MenuItem key="todos" tab={todos} setTab={setTodos} />
+        <MenuItem key="music" tab={music} setTab={setMusic} />
       </GlassBox>
     </header>
   );
@@ -26,7 +28,7 @@ export const Menu: Component = () => {
 
 const menuIcons: Record<MenuKey, IconTypes> = {
   todos: TbListCheck,
-  // music: TbMusic,
+  music: TbMusic,
   notes: TbNote,
 };
 
