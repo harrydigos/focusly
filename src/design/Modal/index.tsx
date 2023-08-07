@@ -1,8 +1,7 @@
 import { DialogBackdrop, DialogContainer, DialogContent } from "@ark-ui/solid";
-import { Accessor, Component, JSX, Show, createMemo } from "solid-js";
+import { Accessor, Component, JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Motion, Presence } from "@motionone/solid";
-import { usePanelContext } from "~/providers";
 
 interface ModalProps {
   isOpen: Accessor<boolean>;
@@ -10,9 +9,6 @@ interface ModalProps {
 }
 
 export const Modal: Component<ModalProps> = (props) => {
-  const { getBiggestZ } = usePanelContext();
-  const zIndex = createMemo(() => getBiggestZ() + 1000); // You never know
-
   return (
     <Portal>
       <Presence exitBeforeEnter>
@@ -31,13 +27,13 @@ export const Modal: Component<ModalProps> = (props) => {
             <DialogBackdrop
               class="fixed inset-0 bg-black/50 backdrop-blur-sm backdrop-filter"
               style={{
-                "z-index": zIndex(),
+                "z-index": 2147483647,
               }}
             />
             <Motion.div
               class="fixed inset-0"
               style={{
-                "z-index": zIndex(),
+                "z-index": 2147483647,
               }}
               animate={{
                 transform: [
