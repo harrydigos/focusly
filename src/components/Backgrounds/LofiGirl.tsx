@@ -7,7 +7,8 @@ export const LofiGirl: Component = () => {
       autoplay
       muted
       loop
-      class="absolute inset-0 object-cover w-full h-full"
+      class="absolute inset-0 h-full w-full object-cover"
+      onContextMenu={(e) => e.preventDefault()}
     >
       <source src={lofiGirlVideo} type="video/mp4" />
     </video>
