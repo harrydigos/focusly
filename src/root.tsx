@@ -37,7 +37,7 @@ export default function Root() {
         />
       </Head>
 
-      <Body class="bg-black font-lexend text-white">
+      <Body class="overflow-hidden bg-black font-lexend text-white">
         <Suspense>
           <ErrorBoundary>
             <Routes>

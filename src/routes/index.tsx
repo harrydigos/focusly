@@ -1,5 +1,5 @@
 import { Suspense, createSignal, lazy, Show, onMount } from "solid-js";
-import { LofiGirl } from "~/components/Backgrounds";
+import { Background } from "~/components/Background";
 import { ConstructionMessage } from "~/components/ConstructionMessage";
 import { PanelProvider } from "~/providers";
 
@@ -18,7 +18,7 @@ export default function App() {
 
   return (
     <main class="screen">
-      <LofiGirl />
+      <Background />
       <ConstructionMessage />
       <Show when={isMounted()}>
         <PanelProvider>
