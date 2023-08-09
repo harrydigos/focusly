@@ -7,6 +7,7 @@ export const initialTodos: Tab & Todos = {
     z: 0,
   },
   isOpen: true,
+  isLocked: false,
   todosList: [
     {
       id: Date.now().toString(),
@@ -28,6 +29,7 @@ export const initialNoteControl: Tab = {
     z: 0,
   },
   isOpen: true,
+  isLocked: false,
 };
 
 export const initialNotes: Note[] = [
@@ -40,6 +42,7 @@ export const initialNotes: Note[] = [
       z: 0,
     },
     isOpen: false,
+    isLocked: false,
   },
 ];
 
@@ -50,4 +53,5 @@ export const initialMusic: Tab = {
     z: 0,
   },
   isOpen: true,
+  isLocked: false,
 };

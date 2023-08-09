@@ -18,10 +18,10 @@ export default function App() {
 
   return (
     <main class="screen">
-      <Background />
       <ConstructionMessage />
       <Show when={isMounted()}>
         <PanelProvider>
+          <Background />
           <Suspense>
             <Panels />
             <Menu />

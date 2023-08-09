@@ -59,6 +59,7 @@ export const NoteControl: Component = () => {
       id: Date.now().toString(),
       value: "New note",
       isOpen: true,
+      isLocked: false,
       position: {
         x: noteControl.position.x,
         y: noteControl.position.y,

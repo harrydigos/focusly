@@ -2,6 +2,7 @@ export type MenuKey = "todos" | "notes" | "music";
 
 export interface Tab {
   isOpen: boolean;
+  isLocked: boolean;
   position: Position;
 }
 
