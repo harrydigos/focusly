@@ -1,0 +1,16 @@
+.sector {
+  position: absolute;
+  transform-origin: 100% 100%;
+  background: #ccc;
+  width: 80px;
+  height: 80px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid #999;
+  margin-top: -80px;
+  margin-left: -80px;
+}
+
+.sector:hover {
+  background: black;
+}
