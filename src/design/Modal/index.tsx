@@ -24,16 +24,17 @@ export const Modal: Component<ModalProps> = (props) => {
               duration: 0.15,
             }}
           >
+            {/* Max zIndex ends in 47, Modal ends in 46 to display Toasts in front */}
             <DialogBackdrop
               class="fixed inset-0 bg-black/50 backdrop-blur-sm backdrop-filter"
               style={{
-                "z-index": 2147483647,
+                "z-index": 2147483646,
               }}
             />
             <Motion.div
               class="fixed inset-0"
               style={{
-                "z-index": 2147483647,
+                "z-index": 2147483646,
               }}
               animate={{
                 transform: [

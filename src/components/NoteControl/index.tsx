@@ -29,6 +29,8 @@ import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
 import { Note } from "~/types";
 import { usePanelContext } from "~/providers";
+import { ToastStyle } from "~/utils";
+import toast from "solid-toast";
 
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
@@ -66,6 +68,11 @@ export const NoteControl: Component = () => {
       },
     };
     setNotes((prev) => [...prev, newNote]);
+
+    toast.success("Note created!", {
+      style: ToastStyle,
+      duration: 3000,
+    });
   };
 
   return (
@@ -130,6 +137,10 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
 
   const deleteNote = () => {
     setNotes(notes.filter((n) => n.id !== props.note.id));
+    toast.success("Note deleted!", {
+      style: ToastStyle,
+      duration: 3000,
+    });
   };
 
   const updatedAt = createMemo(() => {

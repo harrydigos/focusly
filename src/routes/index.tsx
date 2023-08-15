@@ -1,4 +1,5 @@
 import { Suspense, createSignal, lazy, Show, onMount } from "solid-js";
+import { Toaster } from "solid-toast";
 import { LofiGirl } from "~/components/Backgrounds";
 import { ConstructionMessage } from "~/components/ConstructionMessage";
 import { PanelProvider } from "~/providers";
@@ -18,6 +19,12 @@ export default function App() {
 
   return (
     <main class="screen">
+      <Toaster
+        position="bottom-right"
+        containerStyle={{
+          "z-index": "2147483647",
+        }}
+      />
       <LofiGirl />
       <ConstructionMessage />
       <Show when={isMounted()}>

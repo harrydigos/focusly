@@ -7,6 +7,7 @@ import {
   reset,
 } from "@modular-forms/solid";
 import { Accessor, Component, Setter } from "solid-js";
+import toast from "solid-toast";
 
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
@@ -14,6 +15,7 @@ import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
 import { usePanelContext } from "~/providers";
 import { Todo } from "~/types";
+import { ToastStyle } from "~/utils";
 
 type TodoForm = {
   todo: string;
@@ -41,6 +43,10 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
 
     setTodos("todosList", (prev) => (prev ? [...prev, newTodo] : [newTodo]));
     reset(form);
+    toast.success("Todo created!", {
+      style: ToastStyle,
+      duration: 3000,
+    });
   };
 
   return (
