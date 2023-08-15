@@ -38,6 +38,8 @@ import { usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 
 import { CreateTodoModal } from "./CreateTodoModal";
+import toast from "solid-toast";
+import { ToastStyle } from "~/utils";
 
 export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
@@ -140,6 +142,10 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
   const deleteTodo = () => {
     // eslint-disable-next-line solid/reactivity
     setTodos("todosList", (prev) => prev.filter((t) => t.id !== props.todo.id));
+    toast.success("Todo deleted!", {
+      style: ToastStyle,
+      duration: 3000,
+    });
   };
 
   const updateTodo = (value: string) => {
