@@ -25,3 +25,9 @@ export interface Note extends Tab {
   id: string;
   value: string;
 }
+
+export interface Timer extends Tab {
+  currentTime: number /* In seconds */;
+  currentPomo: number;
+  onBreak: boolean;
+}
