@@ -1,4 +1,4 @@
-import { Note, Tab, Todos } from "~/types";
+import { Note, Tab, Timer, Todos } from "~/types";
 
 export const initialTodos: Tab & Todos = {
   position: {
@@ -52,7 +52,14 @@ export const initialMusic: Tab = {
   isOpen: true,
 };
 
-export const initialTimer: Tab = {
+/**
+ * A pomo is always 25 minutes.
+ * A short break is 5 minutes while a long (happens every 4 pomos) is 15 minutes.
+ */
+export const initialTimer: Timer = {
+  currentTime: 25 * 60,
+  currentPomo: 0,
+  onBreak: false,
   position: {
     x: 0,
     y: 0,

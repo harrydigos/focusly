@@ -10,7 +10,7 @@ import {
   initialTimer,
   initialTodos,
 } from "~/config";
-import { Note, Tab, Todos } from "~/types";
+import { Note, Tab, Timer, Todos } from "~/types";
 
 export interface PanelContextProps {
   todos: Tab & Todos;
@@ -21,8 +21,8 @@ export interface PanelContextProps {
   setNotes: SetStoreFunction<Note[]>;
   music: Tab;
   setMusic: SetStoreFunction<Tab>;
-  timer: Tab;
-  setTimer: SetStoreFunction<Tab>;
+  timer: Timer;
+  setTimer: SetStoreFunction<Timer>;
   getBiggestZ: () => number;
 }
 
