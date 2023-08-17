@@ -51,3 +51,12 @@ export const initialMusic: Tab = {
   },
   isOpen: true,
 };
+
+export const initialTimer: Tab = {
+  position: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+  isOpen: true,
+};

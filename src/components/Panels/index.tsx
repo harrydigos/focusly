@@ -6,10 +6,19 @@ import { NoteControl } from "~/components/NoteControl";
 import { Notes } from "~/components/Note";
 import { YoutubePlayer } from "~/components/Youtube";
 import { usePanelContext } from "~/providers";
+import { Timer } from "../Timer";
 
 export const Panels: Component = () => {
-  const { noteControl, setNoteControl, setTodos, todos, music, setMusic } =
-    usePanelContext();
+  const {
+    noteControl,
+    setNoteControl,
+    setTodos,
+    todos,
+    music,
+    setMusic,
+    timer,
+    setTimer,
+  } = usePanelContext();
   const winSize = useWindowSize();
 
   onMount(() => {
@@ -27,6 +36,9 @@ export const Panels: Component = () => {
     if (music.position.z === 0) {
       setMusic("position", "x", () => winSize.width / 2 - pxFromCenter);
     }
+    if (timer.position.z === 0) {
+      setTimer("position", "x", () => winSize.width / 2 - pxFromCenter);
+    }
   });
 
   return (
@@ -35,6 +47,7 @@ export const Panels: Component = () => {
       <NoteControl />
       <Notes />
       <YoutubePlayer />
+      <Timer />
     </>
   );
 };
