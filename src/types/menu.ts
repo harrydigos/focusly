@@ -1,4 +1,4 @@
-export type MenuKey = "todos" | "notes" | "music";
+export type MenuKey = "todos" | "notes" | "music" | "timer";
 
 export interface Tab {
   isOpen: boolean;

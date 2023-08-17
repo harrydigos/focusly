@@ -1,5 +1,5 @@
 import { IconTypes } from "solid-icons";
-import { TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
+import { TbAlarm, TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
 import { Component } from "solid-js";
 import { SetStoreFunction } from "solid-js/store";
 
@@ -8,8 +8,16 @@ import { usePanelContext } from "~/providers";
 import { MenuKey, Tab } from "~/types";
 
 export const Menu: Component = () => {
-  const { todos, setTodos, noteControl, setNoteControl, music, setMusic } =
-    usePanelContext();
+  const {
+    todos,
+    setTodos,
+    noteControl,
+    setNoteControl,
+    music,
+    setMusic,
+    timer,
+    setTimer,
+  } = usePanelContext();
 
   return (
     <header class="mt-4 flex w-full justify-center">
@@ -21,6 +29,7 @@ export const Menu: Component = () => {
         <MenuItem key="notes" tab={noteControl} setTab={setNoteControl} />
         <MenuItem key="todos" tab={todos} setTab={setTodos} />
         <MenuItem key="music" tab={music} setTab={setMusic} />
+        <MenuItem key="timer" tab={timer} setTab={setTimer} />
       </GlassBox>
     </header>
   );
@@ -30,6 +39,7 @@ const menuIcons: Record<MenuKey, IconTypes> = {
   todos: TbListCheck,
   music: TbMusic,
   notes: TbNote,
+  timer: TbAlarm,
 };
 
 interface MenuItemProps {
@@ -54,7 +64,7 @@ const MenuItem: Component<MenuItemProps> = (props) => {
       }}
     >
       <MenuIcon icon={menuIcons[props.key]} />
-      <div class="select-none text-sm font-medium capitalize group-hover:opacity-75">
+      <div class="select-none hidden sm:block text-sm font-medium capitalize group-hover:opacity-75">
         {props.key}
       </div>
     </button>
