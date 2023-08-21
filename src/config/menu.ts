@@ -3,7 +3,7 @@ import { Note, Tab, Timer, Todos } from "~/types";
 export const initialTodos: Tab & Todos = {
   position: {
     x: 0,
-    y: 264,
+    y: 256,
     z: 0,
   },
   isOpen: true,
@@ -46,7 +46,7 @@ export const initialNotes: Note[] = [
 export const initialMusic: Tab = {
   position: {
     x: 0,
-    y: 453,
+    y: 437,
     z: 0,
   },
   isOpen: true,
@@ -59,10 +59,10 @@ export const initialMusic: Tab = {
 export const initialTimer: Timer = {
   currentTime: 25 * 60,
   currentPomo: 0,
-  onBreak: false,
+  isOnBreak: false,
   position: {
     x: 0,
-    y: 0,
+    y: 566,
     z: 0,
   },
   isOpen: true,
