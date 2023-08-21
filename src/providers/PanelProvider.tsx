@@ -45,6 +45,7 @@ export const PanelProvider: Component<{
       noteControl.position.z,
       ...notes.map((note) => note.position.z),
       music.position.z,
+      timer.position.z,
     ];
     return Math.max(...zValues);
   };
