@@ -37,11 +37,13 @@ export const Draggable: Component<DraggableProps> = (props) => {
   const [isDragging, setIsDragging] = createSignal(false);
 
   createEffect(() => {
-    const isOutOfBoundsRight = bounds.right! > screenBounds.width!;
-    const isOutOfBoundsBottom = bounds.bottom! > screenBounds.height!;
+    const isOutOfBoundsRight =
+      Math.floor(bounds.right!) > Math.floor(screenBounds.width!);
+    const isOutOfBoundsBottom =
+      Math.floor(bounds.bottom!) > Math.floor(screenBounds.height!);
 
     if (isOutOfBoundsRight) {
-      const newPosX = screenBounds.width! - bounds.width!;
+      const newPosX = Math.floor(screenBounds.width! - bounds.width!);
       if (props.setTab) {
         props.setTab("position", "x", newPosX);
       } else {
@@ -50,7 +52,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
     }
 
     if (isOutOfBoundsBottom) {
-      const newPosY = screenBounds.height! - bounds.height!;
+      const newPosY = Math.floor(screenBounds.height! - bounds.height!);
       if (props.setTab) {
         props.setTab("position", "y", newPosY);
       } else {
