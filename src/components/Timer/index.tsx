@@ -1,44 +1,65 @@
 import { TbRotateClockwise } from "solid-icons/tb";
-import { Component, For, Show, createEffect, createSignal } from "solid-js";
+import {
+  Component,
+  For,
+  Show,
+  createEffect,
+  createSignal,
+  onCleanup,
+} from "solid-js";
 
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
 import { usePanelContext } from "~/providers";
+import { Timer as TimerType } from "~/types";
+
+type WorkerReceiveMsg = Pick<TimerType, "currentTime"> &
+  Partial<Pick<TimerType, "currentPomo" | "isOnBreak">>;
+
+const displayTime = (time: number) => {
+  const minutes = Math.floor(time / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (time % 60).toString().padStart(2, "0");
+
+  return `${minutes}:${seconds}`;
+};
 
 export const Timer: Component = () => {
   const { timer, setTimer } = usePanelContext();
   const [isRunning, setIsRunning] = createSignal(false);
-
-  let timerInterval: number;
+  const timerWorker = new Worker(new URL("./timer.worker.ts", import.meta.url));
 
   createEffect(() => {
-    if (isRunning()) {
-      timerInterval = setInterval(
-        () => setTimer("currentTime", timer.currentTime - 1),
-        1000
-      );
-    } else {
-      clearInterval(timerInterval);
+    if (window.Worker) {
+      timerWorker.postMessage({
+        isRunning: isRunning(),
+        currentTime: timer.currentTime,
+        currentPomo: timer.currentPomo,
+        isOnBreak: timer.isOnBreak,
+      });
     }
   });
 
   createEffect(() => {
-    if (timer.currentTime !== 0) {
-      return;
-    }
+    timerWorker.onmessage = (e: MessageEvent<WorkerReceiveMsg>) => {
+      const time = e.data.currentTime;
+      const pomo = e.data.currentPomo;
+      const isBreak = e.data.isOnBreak;
 
-    if (timer.isOnBreak) {
-      /* Break ended, starting new pomo session */
-      setTimer("currentPomo", (prev) => (prev === 3 ? 0 : prev + 1));
-      setTimer("currentTime", 25 * 60);
-    } else {
-      setTimer("currentTime", (timer.currentPomo + 1) % 4 ? 5 * 60 : 15 * 60);
-    }
+      setTimer("currentTime", time);
+      if (typeof pomo !== "undefined") setTimer("currentPomo", pomo);
+      if (typeof isBreak !== "undefined") setTimer("isOnBreak", isBreak);
 
-    setTimer("isOnBreak", !timer.isOnBreak);
+      document.title = `${"Focusly"}${
+        isRunning() ? ` | ${displayTime(time)}` : ""
+      }`;
+    };
   });
+
+  onCleanup(() => timerWorker.terminate());
 
   const resetTimer = () => {
     setIsRunning(false);
@@ -84,10 +105,7 @@ export const Timer: Component = () => {
             direction="flex-row"
             class="items-center justify-between text-4xl font-semibold"
           >
-            {Math.floor(timer.currentTime / 60)
-              .toString()
-              .padStart(2, "0")}
-            :{(timer.currentTime % 60).toString().padStart(2, "0")}
+            <div>{displayTime(timer.currentTime)}</div>
             <Stack direction="flex-row" class="gap-2">
               <Button
                 variant="outline"
