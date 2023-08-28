@@ -95,14 +95,19 @@ export const YoutubePlayer: Component = () => {
           hidden: !music.isOpen,
         }}
       >
-        <Stack direction="flex-row" class="items-center justify-between">
+        <Stack
+          direction="flex-row"
+          class="select-none items-center justify-between"
+        >
           <h1 class="text-xl font-semibold">Music</h1>
         </Stack>
         <Stack direction="flex-row" class="items-center justify-between gap-2">
           <Stack direction="flex-row" class="items-center gap-2">
             <PlayButton player={player()} state={playerState()} />
             <Stack direction="flex-row" class="h-8 items-center gap-1">
-              <h3 class="relative text-sm font-normal">Lofi Hip Hop</h3>
+              <h3 class="relative select-none text-sm font-normal">
+                Lofi Hip Hop
+              </h3>
               <TbAccessPoint class="stroke-red-500" />
             </Stack>
           </Stack>
