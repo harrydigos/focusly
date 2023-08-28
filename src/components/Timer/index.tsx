@@ -14,6 +14,7 @@ import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
 import { usePanelContext } from "~/providers";
 import { Timer as TimerType } from "~/types";
+import bells from "/bells.wav";
 
 type WorkerReceiveMsg = Pick<TimerType, "currentTime"> &
   Partial<Pick<TimerType, "currentPomo" | "isOnBreak">>;
@@ -33,6 +34,10 @@ export const Timer: Component = () => {
   const timerWorker = new Worker(new URL("./timer.worker.ts", import.meta.url));
 
   createEffect(() => {
+    if (timer.currentTime === 0) {
+      new Audio(bells).play();
+    }
+
     if (window.Worker) {
       timerWorker.postMessage({
         isRunning: isRunning(),
