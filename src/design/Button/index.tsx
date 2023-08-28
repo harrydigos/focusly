@@ -10,6 +10,7 @@ export const Button = klassed(
     variants: {
       variant: {
         default: ["bg-stone-50 text-stone-900", "hover:bg-stone-50/90"],
+        secondary: ["bg-stone-900 text-stone-50", "hover:bg-stone-900/90"],
         outline: ["border border-stone-600 bg-transparent", "hover:opacity-90"],
         ghost: "hover:bg-stone-800",
       },
