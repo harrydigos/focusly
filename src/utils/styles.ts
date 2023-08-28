@@ -10,4 +10,5 @@ export const ToastStyle: JSX.CSSProperties = {
   "border-radius": "12px",
   border: "1px solid rgb(231, 229, 228, 0.1)",
   "font-size": "14px",
+  "user-select": "none",
 };

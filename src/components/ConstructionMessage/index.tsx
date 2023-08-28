@@ -3,7 +3,7 @@ import { A } from "solid-start";
 
 export const ConstructionMessage: Component = () => {
   return (
-    <p class="absolute bottom-0 h-fit w-full bg-stone-900/50 text-center text-sm font-extralight text-white">
+    <p class="absolute bottom-0 h-fit w-full select-none bg-stone-900/50 text-center text-sm font-extralight text-white">
       🚧 This is a work in progress. If something doesn't work, press{" "}
       <button
         class="underline"

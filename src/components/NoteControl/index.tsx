@@ -82,7 +82,10 @@ export const NoteControl: Component = () => {
           direction="flex-col"
           class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
         >
-          <Stack direction="flex-row" class="items-center justify-between px-6">
+          <Stack
+            direction="flex-row"
+            class="select-none items-center justify-between px-6"
+          >
             <h1 class="text-xl font-semibold">Notes</h1>
             <Button onClick={createNote}>
               <TbPlus size={20} class="stroke-stone-900" />
@@ -104,7 +107,7 @@ export const NoteControl: Component = () => {
                 <For
                   each={notes}
                   fallback={
-                    <span class="text-center text-sm text-stone-200">
+                    <span class="select-none text-center text-sm text-stone-200">
                       No notes yet. Add one by clicking the button above.
                     </span>
                   }

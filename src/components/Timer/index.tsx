@@ -85,7 +85,7 @@ export const Timer: Component = () => {
         >
           <Stack direction="flex-row" class="items-center justify-between">
             <Stack direction="flex-row" class="items-center gap-4">
-              <h1 class="text-xl font-semibold">Timer</h1>
+              <h1 class="select-none text-xl font-semibold">Timer</h1>
               <Stack direction="flex-row" class="gap-1 self-center">
                 <For each={[0, 1, 2, 3]}>
                   {(i) => (
@@ -101,7 +101,7 @@ export const Timer: Component = () => {
               </Stack>
             </Stack>
             <Show when={timer.isOnBreak}>
-              <div class="inline-flex items-center rounded-lg border border-transparent bg-stone-900 px-2.5 py-0.5 text-xs text-white">
+              <div class="inline-flex select-none items-center rounded-lg border border-transparent bg-stone-900 px-2.5 py-0.5 text-xs text-white">
                 {(timer.currentPomo + 1) % 4 ? "Short Break" : "Long Break"}
               </div>
             </Show>
@@ -110,7 +110,7 @@ export const Timer: Component = () => {
             direction="flex-row"
             class="items-center justify-between text-4xl font-semibold"
           >
-            <div>{displayTime(timer.currentTime)}</div>
+            <div class="select-none">{displayTime(timer.currentTime)}</div>
             <Stack direction="flex-row" class="gap-2">
               <Button
                 variant="outline"
@@ -121,7 +121,7 @@ export const Timer: Component = () => {
                 <TbRotateClockwise />
               </Button>
               <Button
-                class="w-[122px]"
+                class="w-[122px] select-none"
                 onClick={() => setIsRunning((prev) => !prev)}
               >
                 {isRunning() ? "Pause" : "Start"}
