@@ -2,6 +2,7 @@ import { TbSettings } from "solid-icons/tb";
 import { Suspense, createSignal, lazy, Show, onMount } from "solid-js";
 import { Toaster } from "solid-toast";
 import { LofiGirl } from "~/components/Backgrounds";
+import { ConstructionMessage } from "~/components/ConstructionMessage";
 import { Button } from "~/design/Button";
 import { PanelProvider } from "~/providers";
 
@@ -32,6 +33,7 @@ export default function App() {
         }}
       />
       <LofiGirl />
+      <ConstructionMessage />
       <Show when={isMounted()}>
         <PanelProvider>
           <Suspense>
