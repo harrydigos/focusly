@@ -93,13 +93,13 @@ export const Draggable: Component<DraggableProps> = (props) => {
           setIsDragging(false);
         },
         position: props.tab.position,
-        disabled: props.disabled,
+        disabled: props.disabled || props.tab.isLocked,
       }}
       class="absolute"
       classList={{
-        "cursor-grab": !isDragging(),
-        "cursor-grabbing": isDragging(),
         "cursor-default": props.disabled,
+        "cursor-grab": !isDragging() && !props.disabled,
+        "cursor-grabbing": isDragging(),
       }}
       style={{
         "z-index": props.tab.position.z,
