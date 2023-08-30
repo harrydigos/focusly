@@ -1,6 +1,11 @@
-/* eslint-disable solid/reactivity */
-
-import { Component, JSX, createContext, useContext } from "solid-js";
+import {
+  Accessor,
+  Component,
+  JSX,
+  createContext,
+  createMemo,
+  useContext,
+} from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
 import {
@@ -23,7 +28,9 @@ export interface PanelContextProps {
   setMusic: SetStoreFunction<Tab>;
   timer: Timer;
   setTimer: SetStoreFunction<Timer>;
+  isLocked: Accessor<boolean>;
   getBiggestZ: () => number;
+  toggleLock: () => void;
 }
 
 export const PanelContext = createContext<PanelContextProps>();
@@ -31,6 +38,7 @@ export const PanelContext = createContext<PanelContextProps>();
 export const PanelProvider: Component<{
   children: JSX.Element;
 }> = (props) => {
+  /* eslint-disable solid/reactivity */
   const [todos, setTodos] = makePersisted(createStore(initialTodos));
   const [noteControl, setNoteControl] = makePersisted(
     createStore(initialNoteControl)
@@ -38,6 +46,8 @@ export const PanelProvider: Component<{
   const [notes, setNotes] = makePersisted(createStore(initialNotes));
   const [music, setMusic] = makePersisted(createStore(initialMusic));
   const [timer, setTimer] = makePersisted(createStore(initialTimer));
+
+  const isLocked = createMemo(() => todos.isLocked);
 
   const getBiggestZ = () => {
     const zValues = [
@@ -48,6 +58,18 @@ export const PanelProvider: Component<{
       timer.position.z,
     ];
     return Math.max(...zValues);
+  };
+
+  const toggleLock = () => {
+    let isLocked = false;
+    setTodos("isLocked", (prev) => {
+      isLocked = !prev;
+      return isLocked;
+    });
+    setNoteControl("isLocked", isLocked);
+    setNotes(notes.map((note) => ({ ...note, isLocked })));
+    setMusic("isLocked", isLocked);
+    setTimer("isLocked", isLocked);
   };
 
   return (
@@ -63,7 +85,9 @@ export const PanelProvider: Component<{
         setMusic,
         timer,
         setTimer,
+        isLocked,
         getBiggestZ,
+        toggleLock,
       }}
     >
       {props.children}

@@ -1,9 +1,18 @@
+import { Accessor, Component, For, Setter, Show } from "solid-js";
 import { Dialog } from "@ark-ui/solid";
-import { TbAlertCircle, TbBrush, TbPalette, TbTool, TbX } from "solid-icons/tb";
-import { Accessor, Component, For, Setter } from "solid-js";
+import {
+  TbAlertCircle,
+  TbBrush,
+  TbLock,
+  TbLockOpen,
+  TbTool,
+  TbX,
+} from "solid-icons/tb";
+
 import { Button } from "~/design/Button";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
+import { usePanelContext } from "~/providers";
 
 interface SettingsModalProps {
   isOpen: Accessor<boolean>;
@@ -11,6 +20,8 @@ interface SettingsModalProps {
 }
 
 export const SettingsModal: Component<SettingsModalProps> = (props) => {
+  const { isLocked, toggleLock } = usePanelContext();
+
   return (
     <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
       <Modal isOpen={props.isOpen}>
@@ -41,11 +52,22 @@ export const SettingsModal: Component<SettingsModalProps> = (props) => {
               class="w-full items-center justify-between"
             >
               <h2 class="text-sm">Lock panels</h2>
-              {/* TODO: make this a switch */}
-              <Button variant="outline">Lock</Button>
+              <Button variant="outline" onClick={toggleLock}>
+                <Show
+                  when={isLocked()}
+                  fallback={
+                    <>
+                      <TbLock class="h-4 w-4" />
+                      <span>Lock</span>
+                    </>
+                  }
+                >
+                  <TbLockOpen class="h-4 w-4" />
+                  <span>Unlock</span>
+                </Show>
+              </Button>
             </Stack>
           </Stack>
-
           <Stack direction="flex-col" class="gap-2">
             <Stack direction="flex-col" class="gap-0.5">
               <Stack direction="flex-row" class="gap-0.5 text-stone-400">
