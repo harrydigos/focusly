@@ -13,6 +13,7 @@ import {
   TbAtom,
   TbBell,
   TbBrush,
+  TbCheck,
   TbLock,
   TbLockOpen,
   TbTool,
@@ -24,7 +25,8 @@ import { Piano } from "~/design/icons";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
 import { usePanelContext } from "~/providers";
-import { ALARMS, useAlarmSound } from "~/stores";
+import { ALARMS, BG_COLORS, useAlarmSound, useBgColor } from "~/stores";
+import { classNames } from "~/utils";
 
 interface SettingsModalProps {
   isOpen: Accessor<boolean>;
@@ -33,6 +35,7 @@ interface SettingsModalProps {
 
 export const SettingsModal: Component<SettingsModalProps> = (props) => {
   const { isLocked, toggleLock } = usePanelContext();
+  const { color, updateBgColor } = useBgColor();
   const { sound, updateSound } = useAlarmSound();
   const alarmAudio = new Audio();
 
@@ -97,9 +100,29 @@ export const SettingsModal: Component<SettingsModalProps> = (props) => {
               <h2 class="text-sm">Panel color</h2>
 
               <div class="grid grid-cols-5 gap-1">
-                <For each={Array(10).fill(0)}>
-                  {() => (
-                    <div class="aspect-square h-6 rounded-md bg-stone-600" />
+                <For each={BG_COLORS}>
+                  {(opt) => (
+                    <label
+                      class={classNames(
+                        "relative aspect-square h-6 rounded-lg border transition-colors",
+                        opt.class
+                      )}
+                      classList={{
+                        "border-stone-50": color.value === opt.value,
+                        "border-stone-600/50": color.value !== opt.value,
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        class="absolute -z-[1] opacity-0"
+                        value={opt.value}
+                        checked={color.value === opt.value}
+                        onChange={() => updateBgColor(opt)}
+                      />
+                      <Show when={color.value === opt.value}>
+                        <TbCheck class="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2" />
+                      </Show>
+                    </label>
                   )}
                 </For>
               </div>

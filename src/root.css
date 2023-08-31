@@ -4,6 +4,7 @@
 
 :root {
   --primary-font: "Lexend", sans-serif;
+  --bg-color: ##0c0a09; /* Stone-950 */
 }
 
 * {
