@@ -1,7 +1,17 @@
-import { Accessor, Component, For, Setter, Show } from "solid-js";
+import {
+  Accessor,
+  Component,
+  For,
+  Match,
+  Setter,
+  Show,
+  Switch,
+} from "solid-js";
 import { Dialog } from "@ark-ui/solid";
 import {
   TbAlertCircle,
+  TbAtom,
+  TbBell,
   TbBrush,
   TbLock,
   TbLockOpen,
@@ -10,9 +20,11 @@ import {
 } from "solid-icons/tb";
 
 import { Button } from "~/design/Button";
+import { Piano } from "~/design/icons";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
 import { usePanelContext } from "~/providers";
+import { ALARMS, useAlarmSound } from "~/stores";
 
 interface SettingsModalProps {
   isOpen: Accessor<boolean>;
@@ -21,6 +33,8 @@ interface SettingsModalProps {
 
 export const SettingsModal: Component<SettingsModalProps> = (props) => {
   const { isLocked, toggleLock } = usePanelContext();
+  const { sound, updateSound } = useAlarmSound();
+  const alarmAudio = new Audio();
 
   return (
     <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
@@ -91,7 +105,7 @@ export const SettingsModal: Component<SettingsModalProps> = (props) => {
               </div>
             </Stack>
             <hr class="h-px border-0 bg-stone-800" />
-            <Stack
+            {/* <Stack
               direction="flex-row"
               class="w-full items-center justify-between"
             >
@@ -99,15 +113,53 @@ export const SettingsModal: Component<SettingsModalProps> = (props) => {
               <div class="h-20 w-28 rounded-xl bg-stone-600" />
             </Stack>
             <hr class="h-px border-0 bg-stone-800" />
+            */}
             <Stack
               direction="flex-row"
               class="w-full items-center justify-between"
             >
               <h2 class="text-sm">Alarm</h2>
               <Stack direction="flex-row" class="gap-2">
-                <div class="aspect-square h-12 rounded-lg bg-stone-600" />
-                <div class="aspect-square h-12 rounded-lg bg-stone-600" />
-                <div class="aspect-square h-12 rounded-lg bg-stone-600" />
+                <For each={ALARMS}>
+                  {(opt) => (
+                    <label
+                      class="flex aspect-square h-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-xl border border-stone-600 transition-colors hover:opacity-90"
+                      classList={{
+                        "bg-stone-50 text-stone-900": sound.value === opt.value,
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        class="absolute -z-[1] opacity-0"
+                        value={opt.value}
+                        checked={sound.value === opt.value}
+                        onChange={() => updateSound(opt)}
+                        onClick={() => {
+                          alarmAudio.src = opt.url;
+                          alarmAudio.play();
+                        }}
+                      />
+                      <Switch>
+                        <Match when={opt.value === "bells"}>
+                          <TbBell class="h-4 w-4" />
+                        </Match>
+                        <Match when={opt.value === "arp"}>
+                          {/* This icon is from different icon set */}
+                          <Piano
+                            class="h-4 w-4 fill-stone-50"
+                            classList={{
+                              "fill-stone-900": sound.value === opt.value,
+                            }}
+                          />
+                        </Match>
+                        <Match when={opt.value === "cosmo"}>
+                          <TbAtom class="h-4 w-4" />
+                        </Match>
+                      </Switch>
+                      <span class="text-[10px] font-medium">{opt.value}</span>
+                    </label>
+                  )}
+                </For>
               </Stack>
             </Stack>
           </Stack>
