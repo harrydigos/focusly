@@ -6,6 +6,9 @@ module.exports = {
       fontFamily: {
         lexend: ["var(--primary-font)"],
       },
+      colors: {
+        bgColor: "var(--bg-color)",
+      },
     },
   },
   plugins: [
