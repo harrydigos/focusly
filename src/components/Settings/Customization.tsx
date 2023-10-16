@@ -18,7 +18,6 @@ export const Customization: Component = () => {
       </Stack>
       <PanelColor />
       <hr class="h-px border-0 bg-stone-800" />
-      {/* TODO: Background-video/spaces options */}
       <Alarm />
     </Stack>
   );
