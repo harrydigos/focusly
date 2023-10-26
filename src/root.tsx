@@ -13,6 +13,7 @@ import {
 } from "solid-start";
 import "./root.css";
 import { useAssets } from "solid-js/web";
+import { YoutubeProvider } from "./providers";
 
 export default function Root() {
   useAssets(() => (
@@ -40,9 +41,11 @@ export default function Root() {
       <Body class="bg-black font-lexend text-white">
         <Suspense>
           <ErrorBoundary>
-            <Routes>
-              <FileRoutes />
-            </Routes>
+            <YoutubeProvider>
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </YoutubeProvider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />
