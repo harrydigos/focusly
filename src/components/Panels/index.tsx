@@ -6,7 +6,7 @@ import { NoteControl } from "~/components/NoteControl";
 import { Notes } from "~/components/Note";
 import { YoutubePlayer } from "~/components/Youtube";
 import { Timer } from "~/components/Timer";
-import { usePanelContext, YoutubeProvider } from "~/providers";
+import { usePanelContext } from "~/providers";
 
 export const Panels: Component = () => {
   const {
@@ -46,9 +46,7 @@ export const Panels: Component = () => {
       <Todos />
       <NoteControl />
       <Notes />
-      <YoutubeProvider>
-        <YoutubePlayer />
-      </YoutubeProvider>
+      <YoutubePlayer />
       <Timer />
     </>
   );
