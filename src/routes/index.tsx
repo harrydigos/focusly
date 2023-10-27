@@ -23,6 +23,10 @@ const SpacesModal = lazy(() =>
   import("~/components/Spaces").then((m) => ({ default: m.SpacesModal }))
 );
 
+const YoutubeProvider = lazy(() =>
+  import("~/providers").then((m) => ({ default: m.YoutubeProvider }))
+);
+
 export default function App() {
   const [isMounted, setIsMounted] = createSignal(false);
   const [openSettings, setOpenSettings] = createSignal(false);
@@ -43,10 +47,15 @@ export default function App() {
       <Show when={isMounted()}>
         <PanelProvider>
           <Suspense>
-            <Panels />
-            <Menu />
-            <SettingsModal isOpen={openSettings} setIsOpen={setOpenSettings} />
-            <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
+            <YoutubeProvider>
+              <Panels />
+              <Menu />
+              <SettingsModal
+                isOpen={openSettings}
+                setIsOpen={setOpenSettings}
+              />
+              <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
+            </YoutubeProvider>
           </Suspense>
         </PanelProvider>
       </Show>
