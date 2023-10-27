@@ -97,8 +97,8 @@ export const Draggable: Component<DraggableProps> = (props) => {
       }}
       class="absolute"
       classList={{
-        "cursor-default": props.disabled,
-        "cursor-grab": !isDragging() && !props.disabled,
+        "cursor-default": props.disabled || props.tab.isLocked,
+        "cursor-grab": !isDragging() && !props.disabled && !props.tab.isLocked,
         "cursor-grabbing": isDragging(),
       }}
       style={{
