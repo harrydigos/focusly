@@ -16,6 +16,9 @@ import {
   initialTodos,
 } from "~/config";
 import { Note, Tab, Todos } from "~/types";
+import { ErrorBoundary } from "solid-start";
+import { Button } from "~/design/Button";
+import { Stack } from "~/design/Stack";
 
 export interface PanelContextProps {
   todos: Tab & Todos;
@@ -73,25 +76,27 @@ export const PanelProvider: Component<{
   };
 
   return (
-    <PanelContext.Provider
-      value={{
-        todos,
-        setTodos,
-        noteControl,
-        setNoteControl,
-        notes,
-        setNotes,
-        music,
-        setMusic,
-        timer,
-        setTimer,
-        isLocked,
-        getBiggestZ,
-        toggleLock,
-      }}
-    >
-      {props.children}
-    </PanelContext.Provider>
+    <ErrorBoundary fallback={() => <PanelErrorFallback />}>
+      <PanelContext.Provider
+        value={{
+          todos,
+          setTodos,
+          noteControl,
+          setNoteControl,
+          notes,
+          setNotes,
+          music,
+          setMusic,
+          timer,
+          setTimer,
+          isLocked,
+          getBiggestZ,
+          toggleLock,
+        }}
+      >
+        {props.children}
+      </PanelContext.Provider>
+    </ErrorBoundary>
   );
 };
 
@@ -103,4 +108,36 @@ export const usePanelContext = () => {
     );
   }
   return context;
+};
+
+const PanelErrorFallback: Component = () => {
+  return (
+    <div class="fixed inset-0 z-[2147483646] bg-black/50 backdrop-blur-sm backdrop-filter">
+      <Stack
+        direction="flex-row"
+        class="h-full w-full items-center justify-center"
+      >
+        <Stack
+          direction="flex-col"
+          class="mx-2 w-96 items-center gap-6 rounded-3xl border border-stone-200 border-opacity-10 bg-stone-900 bg-opacity-90 p-6 backdrop-blur-xl backdrop-filter"
+        >
+          <Stack direction="flex-col" class="items-center gap-2">
+            <h2 class="text-xl font-semibold text-stone-50">Focusly update!</h2>
+            <p class="text-center text-sm font-normal text-stone-300">
+              Focusly has been updated with new features and bug fixes to make
+              your experience better.
+            </p>
+          </Stack>
+          <Button
+            onClick={() => {
+              window.localStorage.clear();
+              window.location.reload();
+            }}
+          >
+            Update
+          </Button>
+        </Stack>
+      </Stack>
+    </div>
+  );
 };
