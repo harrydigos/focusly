@@ -1,8 +1,8 @@
 import { TbPlanet, TbSettings } from "solid-icons/tb";
 import { Suspense, createSignal, lazy, Show, onMount } from "solid-js";
+import { A } from "solid-start";
 import { Toaster } from "solid-toast";
 import { Background } from "~/components/Background";
-import { ConstructionMessage } from "~/components/ConstructionMessage";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
 import { PanelProvider } from "~/providers";
@@ -39,7 +39,6 @@ export default function App() {
         }}
       />
       <Background />
-      <ConstructionMessage />
       <Show when={isMounted()}>
         <PanelProvider>
           <Suspense>
@@ -50,7 +49,7 @@ export default function App() {
           </Suspense>
         </PanelProvider>
       </Show>
-      <Stack direction="flex-col" class="absolute bottom-4 right-4 gap-2">
+      <Stack direction="flex-col" class="absolute bottom-4 left-4 gap-2">
         <Button
           variant="secondary"
           class="h-10 w-10"
@@ -66,6 +65,13 @@ export default function App() {
           <TbSettings class="h-5 w-5" />
         </Button>
       </Stack>
+      <p class="absolute bottom-0 right-0 rounded-tl-xl leading-none font-medium px-2 py-1.5 w-fit select-none bg-stone-900 text-xs text-white">
+        <span class="text-[10px]">by{" "}</span>
+        <A href="https://twitter.com/harry_digos" target="blank" class="hover:underline">
+          @harry_digos
+        </A>
+      </p>
     </main>
   );
 }
+
