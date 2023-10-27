@@ -15,7 +15,7 @@ import {
   initialTimer,
   initialTodos,
 } from "~/config";
-import { Note, Tab, Timer, Todos } from "~/types";
+import { Note, Tab, Todos } from "~/types";
 
 export interface PanelContextProps {
   todos: Tab & Todos;
@@ -26,8 +26,8 @@ export interface PanelContextProps {
   setNotes: SetStoreFunction<Note[]>;
   music: Tab;
   setMusic: SetStoreFunction<Tab>;
-  timer: Timer;
-  setTimer: SetStoreFunction<Timer>;
+  timer: Tab;
+  setTimer: SetStoreFunction<Tab>;
   isLocked: Accessor<boolean>;
   getBiggestZ: () => number;
   toggleLock: () => void;

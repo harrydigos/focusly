@@ -9,6 +9,7 @@ import {
 } from "solid-js";
 
 import { Draggable } from "~/components/Draggable";
+import { INIT_TIMER } from "~/config/timer";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
@@ -29,22 +30,23 @@ const displayTime = (time: number) => {
 };
 
 export const Timer: Component = () => {
-  const { timer, setTimer } = usePanelContext();
+  const { timer: timerTab, setTimer: setTimerTab } = usePanelContext();
+  const [timer, setTimer] = createSignal(INIT_TIMER);
   const [isRunning, setIsRunning] = createSignal(false);
   const timerWorker = new Worker(new URL("./timer.worker.ts", import.meta.url));
   const { sound } = useAlarmSound();
 
   createEffect(() => {
-    if (timer.currentTime === 0) {
+    if (timer().currentTime === 0) {
       new Audio(sound.url).play();
     }
 
     if (window.Worker) {
       timerWorker.postMessage({
         isRunning: isRunning(),
-        currentTime: timer.currentTime,
-        currentPomo: timer.currentPomo,
-        isOnBreak: timer.isOnBreak,
+        currentTime: timer().currentTime,
+        currentPomo: timer().currentPomo,
+        isOnBreak: timer().isOnBreak,
       });
     }
   });
@@ -55,9 +57,11 @@ export const Timer: Component = () => {
       const pomo = e.data.currentPomo;
       const isBreak = e.data.isOnBreak;
 
-      setTimer("currentTime", time);
-      if (typeof pomo !== "undefined") setTimer("currentPomo", pomo);
-      if (typeof isBreak !== "undefined") setTimer("isOnBreak", isBreak);
+      setTimer((prev) => ({
+        currentTime: time,
+        currentPomo: typeof pomo !== "undefined" ? pomo : prev.currentPomo,
+        isOnBreak: typeof isBreak !== "undefined" ? isBreak : prev.isOnBreak,
+      }));
 
       document.title = `${"Focusly"}${
         isRunning() ? ` | ${displayTime(time)}` : ""
@@ -69,17 +73,13 @@ export const Timer: Component = () => {
 
   const resetTimer = () => {
     setIsRunning(false);
-    setTimer((prev) => ({
-      ...prev,
-      currentTime: 25 * 60,
-      currentPomo: 0,
-      isOnBreak: false,
-    }));
+    setTimer(INIT_TIMER);
+    document.title = "Focusly";
   };
 
   return (
-    <Show when={timer.isOpen}>
-      <Draggable tab={timer} setTab={setTimer}>
+    <Show when={timerTab.isOpen}>
+      <Draggable tab={timerTab} setTab={setTimerTab}>
         <GlassBox
           direction="flex-col"
           class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
@@ -93,17 +93,17 @@ export const Timer: Component = () => {
                     <div
                       class="aspect-square h-2 rounded-full"
                       classList={{
-                        "bg-white": timer.currentPomo >= i,
-                        "bg-stone-600": timer.currentPomo < i,
+                        "bg-white": timer().currentPomo >= i,
+                        "bg-stone-600": timer().currentPomo < i,
                       }}
                     />
                   )}
                 </For>
               </Stack>
             </Stack>
-            <Show when={timer.isOnBreak}>
+            <Show when={timer().isOnBreak}>
               <div class="inline-flex select-none items-center rounded-lg border border-transparent bg-stone-900 px-2.5 py-0.5 text-xs text-white">
-                {(timer.currentPomo + 1) % 4 ? "Short Break" : "Long Break"}
+                {(timer().currentPomo + 1) % 4 ? "Short Break" : "Long Break"}
               </div>
             </Show>
           </Stack>
@@ -111,7 +111,7 @@ export const Timer: Component = () => {
             direction="flex-row"
             class="items-center justify-between text-4xl font-semibold"
           >
-            <div class="select-none">{displayTime(timer.currentTime)}</div>
+            <div class="select-none">{displayTime(timer().currentTime)}</div>
             <Stack direction="flex-row" class="gap-2">
               <Button
                 variant="outline"
