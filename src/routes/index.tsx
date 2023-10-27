@@ -4,6 +4,7 @@ import { Toaster } from "solid-toast";
 import { Background } from "~/components/Background";
 import { ConstructionMessage } from "~/components/ConstructionMessage";
 import { Button } from "~/design/Button";
+import { Stack } from "~/design/Stack";
 import { PanelProvider } from "~/providers";
 
 const Menu = lazy(() =>
@@ -49,22 +50,22 @@ export default function App() {
           </Suspense>
         </PanelProvider>
       </Show>
-      <Button
-        variant="secondary"
-        onClick={() => setOpenSpaces(true)}
-        class="absolute bottom-16 right-4"
-      >
-        <TbPlanet class="h-4 w-4" />
-        Spaces
-      </Button>
-      <Button
-        variant="secondary"
-        onClick={() => setOpenSettings(true)}
-        class="absolute bottom-4 right-4"
-      >
-        <TbSettings class="h-4 w-4" />
-        Settings
-      </Button>
+      <Stack direction="flex-col" class="absolute bottom-4 right-4 gap-2">
+        <Button
+          variant="secondary"
+          class="h-10 w-10"
+          onClick={() => setOpenSpaces(true)}
+        >
+          <TbPlanet class="h-5 w-5" />
+        </Button>
+        <Button
+          variant="secondary"
+          class="h-10 w-10"
+          onClick={() => setOpenSettings(true)}
+        >
+          <TbSettings class="h-5 w-5" />
+        </Button>
+      </Stack>
     </main>
   );
 }
