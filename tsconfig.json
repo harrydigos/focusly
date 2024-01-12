@@ -7,9 +7,12 @@
     "moduleResolution": "node",
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
+    "allowJs": true,
+    "noEmit": true,
     "strict": true,
-    "types": ["solid-start/env"],
+    "types": ["vinxi/client"],
     "baseUrl": "./",
+    "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"]
     }
