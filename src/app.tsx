@@ -1,9 +1,10 @@
-
 // @refresh reload
 import { MetaProvider, Title } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start";
-import { Suspense } from "solid-js";
+import { ErrorBoundary, Suspense } from "solid-js";
+import { Toaster } from "solid-toast";
+
 import "./app.css";
 
 export default function App() {
@@ -11,10 +12,18 @@ export default function App() {
     <Router
       root={(props) => (
         <MetaProvider>
-          <Title>SolidStart - Basic</Title>
-          <a href="/">Index</a>
-          <a href="/about">About</a>
-          <Suspense>{props.children}</Suspense>
+          <Title>Focusly</Title>
+          <Suspense fallback={'Loading...'}>
+            <ErrorBoundary fallback={""}>
+              <Toaster
+                position="top-right"
+                containerStyle={{
+                  "z-index": "2147483647",
+                }}
+              />
+              {props.children}
+            </ErrorBoundary>
+          </Suspense>
         </MetaProvider>
       )}
     >

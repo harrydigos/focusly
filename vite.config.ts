@@ -1,8 +1,12 @@
 import { defineConfig } from "@solidjs/start/config";
-// import vercel from "solid-start-vercel";
-
-// export default defineConfig({});
 
 export default defineConfig({
-  // plugins: [solid({ adapter: vercel({}) })],
+  start: {
+    middleware: "./src/middleware.ts",
+    // TODO: add SSR support
+    ssr: false,
+    server: {
+      preset: "vercel",
+    },
+  },
 });
