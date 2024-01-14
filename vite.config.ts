@@ -9,4 +9,7 @@ export default defineConfig({
       preset: "vercel",
     },
   },
+  optimizeDeps: {
+    exclude: ["./src/components/Timer/timer.worker.ts"],
+  },
 });
