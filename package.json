@@ -21,12 +21,10 @@
     "postcss": "^8.4.21",
     "prettier": "2.8.8",
     "prettier-plugin-tailwindcss": "^0.4.0",
-    "solid-start-vercel": "^0.2.26",
     "tailwindcss": "^3.2.4",
     "tailwindcss-animate": "^1.0.6",
-    "typescript": "^5.1.6",
-    "vite": "^4.1.4"
-  },
+    "typescript": "^5.1.6"
+ },
   "dependencies": {
     "@ark-ui/solid": "^0.8.1",
     "@klass/core": "^1.2.0",
