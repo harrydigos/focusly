@@ -1,6 +1,6 @@
 import { mount, StartClient } from "@solidjs/start/client";
-// import { inject } from "@vercel/analytics";
+import { inject } from "@vercel/analytics";
 
-// inject();
+inject();
 
 mount(() => <StartClient />, document.getElementById("app"));

@@ -1,27 +1,3 @@
-// import { redirect } from "solid-start";
-// import {
-//   StartServer,
-//   createHandler,
-//   renderAsync,
-// } from "solid-start/entry-server";
-
-// export default createHandler(
-//   ({ forward }) => {
-//     return async (event) => {
-//       const pathname = new URL(event.request.url).pathname;
-//
-//       /* Redirect all routes to "/" */
-//
-//       if (pathname === "/") {
-//         return forward(event);
-//       }
-//
-//       return redirect("/");
-//     };
-//   },
-//   renderAsync((event) => <StartServer event={event} />)
-// );
-
 import { createHandler } from "@solidjs/start/entry";
 import { StartServer } from "@solidjs/start/server";
 
@@ -36,7 +12,6 @@ export default createHandler(() => (
             content="width=device-width, initial-scale=1, maximum-scale=1"
           />
           <link rel="icon" href="/favicon.ico" />
-
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"
@@ -49,7 +24,7 @@ export default createHandler(() => (
           />
           {assets}
         </head>
-        <body>
+        <body class="bg-black font-lexend text-white">
           <div id="app">{children}</div>
           {scripts}
         </body>
