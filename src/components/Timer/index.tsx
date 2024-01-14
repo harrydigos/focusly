@@ -6,6 +6,7 @@ import {
   createEffect,
   createSignal,
   onCleanup,
+  onMount,
 } from "solid-js";
 
 import { Draggable } from "~/components/Draggable";
@@ -33,15 +34,20 @@ export const Timer: Component = () => {
   const { timer: timerTab, setTimer: setTimerTab } = usePanelContext();
   const [timer, setTimer] = createSignal(INIT_TIMER);
   const [isRunning, setIsRunning] = createSignal(false);
-  const timerWorker = new Worker(new URL("./timer.worker.ts", import.meta.url));
   const { sound } = useAlarmSound();
+
+  let timerWorker: Worker | undefined;
+
+  onMount(() => {
+    timerWorker = new Worker(new URL("timer.worker.ts", import.meta.url));
+  });
 
   createEffect(() => {
     if (timer().currentTime === 0) {
       new Audio(sound.url).play();
     }
 
-    if (window.Worker) {
+    if (window.Worker && timerWorker) {
       timerWorker.postMessage({
         isRunning: isRunning(),
         currentTime: timer().currentTime,
@@ -52,10 +58,12 @@ export const Timer: Component = () => {
   });
 
   createEffect(() => {
-    timerWorker.onmessage = (e: MessageEvent<WorkerReceiveMsg>) => {
-      const time = e.data.currentTime;
-      const pomo = e.data.currentPomo;
-      const isBreak = e.data.isOnBreak;
+    if (!timerWorker) return;
+
+    const onReceiveMessage = ({ data }: MessageEvent<WorkerReceiveMsg>) => {
+      const time = data.currentTime;
+      const pomo = data.currentPomo;
+      const isBreak = data.isOnBreak;
 
       setTimer((prev) => ({
         currentTime: time,
@@ -67,9 +75,10 @@ export const Timer: Component = () => {
         isRunning() ? ` | ${displayTime(time)}` : ""
       }`;
     };
-  });
 
-  onCleanup(() => timerWorker.terminate());
+    timerWorker.onmessage = onReceiveMessage;
+  });
+  onCleanup(() => timerWorker?.terminate());
 
   const resetTimer = () => {
     setIsRunning(false);

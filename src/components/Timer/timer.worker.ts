@@ -1,9 +1,9 @@
-import { Timer } from "~/types";
+// import { Timer } from "~/types";
 
-type WorkerMessage = Pick<
-  Timer,
-  "currentTime" | "currentPomo" | "isOnBreak"
-> & { isRunning: boolean };
+// type WorkerMessage = Pick<
+//   Timer,
+//   "currentTime" | "currentPomo" | "isOnBreak"
+// > & { isRunning: boolean };
 
 let timerId: number;
 
@@ -12,7 +12,8 @@ const resetTimer = () => {
   timerId = 0;
 };
 
-onmessage = (e: MessageEvent<WorkerMessage>) => {
+// onmessage = (e: MessageEvent<WorkerMessage>) => {
+onmessage = (e) => {
   let time = e.data.currentTime;
   const pomo = e.data.currentPomo;
 
@@ -39,6 +40,9 @@ onmessage = (e: MessageEvent<WorkerMessage>) => {
   if (!e.data.isRunning) {
     resetTimer();
   } else if (e.data.isRunning && !timerId) {
-    timerId = setInterval(() => postMessage({ currentTime: --time }), 1000);
+    timerId = setInterval(
+      () => postMessage({ currentTime: --time }),
+      1000
+    ) as unknown as number;
   }
 };
