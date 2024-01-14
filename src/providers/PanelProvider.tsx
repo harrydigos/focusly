@@ -16,7 +16,7 @@ import {
   initialTodos,
 } from "~/config";
 import { Note, Tab, Todos } from "~/types";
-import { ErrorBoundary } from "solid-start";
+import { ErrorBoundary } from "solid-js";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
 
