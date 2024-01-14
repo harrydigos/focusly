@@ -1,6 +1,4 @@
 import { Component } from "solid-js";
-import spiritedAwayTrainVideo from "/videos/spirited_away_train.mp4";
-import spiritedAwayTrainImage from "/images/spirited_away_train.png";
 
 export const SpiritedAwayTrain: Component = () => {
   return (
@@ -10,10 +8,10 @@ export const SpiritedAwayTrain: Component = () => {
       loop
       class="absolute inset-0 h-full w-full object-cover"
       playsinline
-      poster={spiritedAwayTrainImage}
+      poster={"/images/spirited_away_train.png"}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <source src={spiritedAwayTrainVideo} type="video/mp4" />
+      <source src={"/videos/spirited_away_train.mp4"} type="video/mp4" />
     </video>
   );
 };

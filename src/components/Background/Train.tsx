@@ -1,6 +1,4 @@
 import { Component } from "solid-js";
-import trainVideo from "/videos/train.mp4";
-import trainImage from "/images/train.png";
 
 export const Train: Component = () => {
   return (
@@ -10,10 +8,10 @@ export const Train: Component = () => {
       loop
       class="absolute inset-0 h-full w-full object-cover"
       playsinline
-      poster={trainImage}
+      poster={"/images/train.png"}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <source src={trainVideo} type="video/mp4" />
+      <source src={"/videos/train.mp4"} type="video/mp4" />
     </video>
   );
 };

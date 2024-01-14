@@ -1,6 +1,4 @@
 import { Component } from "solid-js";
-import lofiGirlVideo from "/videos/lofi_girl.mp4";
-import lofiGirlImage from "/images/lofi_girl.png";
 
 export const LofiGirl: Component = () => {
   return (
@@ -10,10 +8,10 @@ export const LofiGirl: Component = () => {
       loop
       class="absolute inset-0 h-full w-full object-cover"
       playsinline
-      poster={lofiGirlImage}
+      poster={"/images/lofi_girl.png"}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <source src={lofiGirlVideo} type="video/mp4" />
+      <source src={'/videos/lofi_girl.mp4'} type="video/mp4" />
     </video>
   );
 };
