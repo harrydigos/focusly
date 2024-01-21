@@ -1,7 +1,7 @@
 import { DialogBackdrop, DialogContainer, DialogContent } from "@ark-ui/solid";
 import { Accessor, Component, JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
-import { Motion, Presence } from "@motionone/solid";
+import { Motion, Presence } from "solid-motionone";
 
 interface ModalProps {
   isOpen: Accessor<boolean>;
