@@ -1,7 +1,8 @@
 import { TbPlanet, TbSettings } from "solid-icons/tb";
-import { Suspense, createSignal, lazy, Show, onMount } from "solid-js";
+import { createSignal } from "solid-js";
 import { getRequestEvent, isServer } from "solid-js/web";
 import { parseCookies } from "vinxi/server";
+import { clientOnly } from "@solidjs/start";
 import { Background } from "~/components/Background";
 import { YoutubeProvider } from "~/providers";
 import { Button } from "~/design/Button";
@@ -9,19 +10,19 @@ import { Stack } from "~/design/Stack";
 import { PanelProvider } from "~/providers";
 import { Space, useSpace } from "~/stores/spaces";
 
-const Menu = lazy(() =>
+const Menu = clientOnly(() =>
   import("~/components/Menu").then((m) => ({ default: m.Menu }))
 );
 
-const Panels = lazy(() =>
+const Panels = clientOnly(() =>
   import("~/components/Panels").then((m) => ({ default: m.Panels }))
 );
 
-const SettingsModal = lazy(() =>
+const SettingsModal = clientOnly(() =>
   import("~/components/Settings").then((m) => ({ default: m.SettingsModal }))
 );
 
-const SpacesModal = lazy(() =>
+const SpacesModal = clientOnly(() =>
   import("~/components/Spaces").then((m) => ({ default: m.SpacesModal }))
 );
 
@@ -39,7 +40,6 @@ const getSpaceCookie = (): Space => {
 };
 
 export default function Home() {
-  const [isMounted, setIsMounted] = createSignal(false);
   const [openSettings, setOpenSettings] = createSignal(false);
   const [openSpaces, setOpenSpaces] = createSignal(false);
   const { setSpace } = useSpace();
@@ -48,26 +48,17 @@ export default function Home() {
     setSpace(getSpaceCookie());
   }
 
-  onMount(() => setIsMounted(true));
-
   return (
     <main class="screen">
       <Background />
-      <Show when={isMounted()}>
-        <YoutubeProvider>
-          <PanelProvider>
-            <Suspense>
-              <Panels />
-              <Menu />
-              <SettingsModal
-                isOpen={openSettings}
-                setIsOpen={setOpenSettings}
-              />
-              <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
-            </Suspense>
-          </PanelProvider>
-        </YoutubeProvider>
-      </Show>
+      <YoutubeProvider>
+        <PanelProvider>
+          <Panels />
+          <Menu />
+          <SettingsModal isOpen={openSettings} setIsOpen={setOpenSettings} />
+          <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
+        </PanelProvider>
+      </YoutubeProvider>
 
       <Stack direction="flex-col" class="absolute bottom-4 left-4 gap-2">
         <Button
