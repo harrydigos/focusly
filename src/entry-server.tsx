@@ -6,6 +6,7 @@ export default createHandler(() => (
     document={({ assets, children, scripts }) => (
       <html lang="en">
         <head>
+          <title>Focusly</title>
           <meta charset="utf-8" />
           <meta
             name="viewport"
@@ -32,45 +33,3 @@ export default createHandler(() => (
     )}
   />
 ));
-
-// @refresh reload
-// import { Suspense } from "solid-js";
-// import {
-//   Body,
-//   ErrorBoundary,
-//   FileRoutes,
-//   Head,
-//   Html,
-//   Meta,
-//   Routes,
-//   Scripts,
-//   Title,
-// } from "solid-start";
-// import "./root.css";
-// import { useAssets } from "solid-js/web";
-// import { YoutubeProvider } from "./providers";
-//
-// export default function Root() {
-//   return (
-//     <Html lang="en">
-//       <Head>
-//         <Title>Focusly</Title>
-//         <Meta charset="utf-8" />
-//         <Meta />
-//       </Head>
-//
-//       <Body class="bg-black font-lexend text-white">
-//         <Suspense>
-//           <ErrorBoundary>
-//             <YoutubeProvider>
-//               <Routes>
-//                 <FileRoutes />
-//               </Routes>
-//             </YoutubeProvider>
-//           </ErrorBoundary>
-//         </Suspense>
-//         <Scripts />
-//       </Body>
-//     </Html>
-//   );
-// }
