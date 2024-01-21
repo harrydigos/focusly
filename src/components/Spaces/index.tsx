@@ -5,7 +5,7 @@ import { TbCheck, TbX } from "solid-icons/tb";
 import { Button } from "~/design/Button";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
-import { SPACES, useSpace } from "~/stores/spaces";
+import { SPACES, setSpace, space as currentSpace } from "~/utils";
 
 interface SpacesModalProps {
   isOpen: Accessor<boolean>;
@@ -13,8 +13,6 @@ interface SpacesModalProps {
 }
 
 export const SpacesModal: Component<SpacesModalProps> = (props) => {
-  const { space, updateSpace } = useSpace();
-
   return (
     <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
       <Modal isOpen={props.isOpen}>
@@ -34,18 +32,18 @@ export const SpacesModal: Component<SpacesModalProps> = (props) => {
           </Stack>
           <div class="grid grid-cols-2 gap-4">
             <For each={SPACES}>
-              {(s) => (
+              {(space) => (
                 <div class="relative">
                   <img
-                    src={`images/${s.value}.png`}
+                    src={`images/${space}.png`}
                     class="object-fit rounded-xl"
                     classList={{
-                      "border-2 border-stone-50": s.value === space.value,
-                      "border-2 border-transparent": s.value !== space.value,
+                      "border-2 border-stone-50": space === currentSpace(),
+                      "border-2 border-transparent": space !== currentSpace(),
                     }}
-                    onClick={() => updateSpace(s)}
+                    onClick={() => setSpace(space)}
                   />
-                  <Show when={s.value === space.value}>
+                  <Show when={space === currentSpace()}>
                     <TbCheck class="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 stroke-stone-50/75" />
                   </Show>
                 </div>
