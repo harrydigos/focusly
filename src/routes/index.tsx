@@ -27,6 +27,8 @@ const SpacesModal = clientOnly(() =>
 );
 
 const getSpaceCookie = (): Space => {
+  "use server";
+
   const event = getRequestEvent();
 
   if (!event) {
