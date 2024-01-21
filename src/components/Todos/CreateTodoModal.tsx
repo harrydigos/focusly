@@ -50,7 +50,10 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
   };
 
   return (
-    <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
+    <Dialog
+      open={props.isOpen()}
+      onOpenChange={({ open }) => props.setIsOpen(open)}
+    >
       <Modal isOpen={props.isOpen}>
         <Form onSubmit={handleSubmit}>
           <Field

@@ -5,7 +5,7 @@ import { TbCheck, TbX } from "solid-icons/tb";
 import { Button } from "~/design/Button";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
-import { SPACES, setSpace, space as currentSpace } from "~/utils";
+import { SPACES, useSpace } from "~/stores/spaces";
 
 interface SpacesModalProps {
   isOpen: Accessor<boolean>;
@@ -13,8 +13,13 @@ interface SpacesModalProps {
 }
 
 export const SpacesModal: Component<SpacesModalProps> = (props) => {
+  const { space: currentSpace, setSpace } = useSpace();
+
   return (
-    <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
+    <Dialog
+      open={props.isOpen()}
+      onOpenChange={({ open }) => props.setIsOpen(open)}
+    >
       <Modal isOpen={props.isOpen}>
         <Stack direction="flex-col" class="gap-4">
           <Stack

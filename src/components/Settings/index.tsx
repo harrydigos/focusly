@@ -17,7 +17,10 @@ interface SettingsModalProps {
 
 export const SettingsModal: Component<SettingsModalProps> = (props) => {
   return (
-    <Dialog open={props.isOpen()} onClose={() => props.setIsOpen(false)}>
+    <Dialog
+      open={props.isOpen()}
+      onOpenChange={({ open }) => props.setIsOpen(open)}
+    >
       <Modal isOpen={props.isOpen}>
         <Stack direction="flex-col" class="gap-4">
           <Stack

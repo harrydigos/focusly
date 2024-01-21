@@ -6,12 +6,7 @@ import {
   createMemo,
   createSignal,
 } from "solid-js";
-import {
-  Checkbox,
-  CheckboxLabel,
-  CheckboxInput,
-  CheckboxControl,
-} from "@ark-ui/solid";
+import { Checkbox, CheckboxLabel, CheckboxControl } from "@ark-ui/solid";
 import {
   TbCheck,
   TbEdit,
@@ -159,7 +154,7 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
 
   return (
     <div
-      use:sortable
+      use: sortable
       classList={{
         "opacity-30": sortable.isActiveDraggable,
         "transition-transform cursor-grabbing": !!ctx?.[0].active.draggable,
@@ -189,7 +184,6 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
           checked={props.todo.completed}
           onChange={toggleTodo}
         >
-          <CheckboxInput />
           <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
             {props.todo.completed && <TbCheck size={16} class="stroke-white" />}
           </CheckboxControl>

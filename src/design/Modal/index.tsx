@@ -1,4 +1,4 @@
-import { DialogBackdrop, DialogContainer, DialogContent } from "@ark-ui/solid";
+import { DialogBackdrop, DialogContent, DialogPositioner } from "@ark-ui/solid";
 import { Accessor, Component, JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Motion, Presence } from "solid-motionone";
@@ -56,11 +56,11 @@ export const Modal: Component<ModalProps> = (props) => {
                 duration: 0.3,
               }}
             >
-              <DialogContainer class="flex h-full w-full items-center justify-center">
+              <DialogPositioner class="flex h-full w-full items-center justify-center">
                 <DialogContent class="mx-2 flex w-96 flex-col rounded-3xl border border-stone-200 border-opacity-10 bg-stone-900 bg-opacity-90 p-6 text-white backdrop-blur-xl backdrop-filter">
                   {props.children}
                 </DialogContent>
-              </DialogContainer>
+              </DialogPositioner>
             </Motion.div>
           </Motion.div>
         </Show>
