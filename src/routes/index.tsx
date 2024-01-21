@@ -7,7 +7,7 @@ import { YoutubeProvider } from "~/providers";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
 import { PanelProvider } from "~/providers";
-import { Space, setSpace } from "~/utils";
+import { Space, useSpace } from "~/stores/spaces";
 
 const Menu = lazy(() =>
   import("~/components/Menu").then((m) => ({ default: m.Menu }))
@@ -42,6 +42,7 @@ export default function Home() {
   const [isMounted, setIsMounted] = createSignal(false);
   const [openSettings, setOpenSettings] = createSignal(false);
   const [openSpaces, setOpenSpaces] = createSignal(false);
+  const { setSpace } = useSpace();
 
   if (isServer) {
     setSpace(getSpaceCookie());
@@ -66,24 +67,24 @@ export default function Home() {
             </Suspense>
           </PanelProvider>
         </YoutubeProvider>
-
-        <Stack direction="flex-col" class="absolute bottom-4 left-4 gap-2">
-          <Button
-            variant="secondary"
-            class="h-10 w-10"
-            onClick={() => setOpenSpaces(true)}
-          >
-            <TbPlanet class="h-5 w-5" />
-          </Button>
-          <Button
-            variant="secondary"
-            class="h-10 w-10"
-            onClick={() => setOpenSettings(true)}
-          >
-            <TbSettings class="h-5 w-5" />
-          </Button>
-        </Stack>
       </Show>
+
+      <Stack direction="flex-col" class="absolute bottom-4 left-4 gap-2">
+        <Button
+          variant="secondary"
+          class="h-10 w-10"
+          onClick={() => setOpenSpaces(true)}
+        >
+          <TbPlanet class="h-5 w-5" />
+        </Button>
+        <Button
+          variant="secondary"
+          class="h-10 w-10"
+          onClick={() => setOpenSettings(true)}
+        >
+          <TbSettings class="h-5 w-5" />
+        </Button>
+      </Stack>
 
       <p class="absolute bottom-0 right-0 w-fit select-none rounded-tl-xl bg-stone-900 px-2 py-1.5 text-xs font-medium leading-none text-white">
         <span class="text-[10px]">by </span>

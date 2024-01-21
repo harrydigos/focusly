@@ -12,7 +12,7 @@ export type Space = (typeof SPACES)[number];
 
 const SPACE_COOKIE_KEY = "focusly_space";
 
-export const [space, setSpace] = makePersisted(
+const [space, setSpace] = makePersisted(
   // eslint-disable-next-line solid/reactivity
   createSignal<Space>("lofi_girl"),
   {
@@ -20,3 +20,8 @@ export const [space, setSpace] = makePersisted(
     name: SPACE_COOKIE_KEY,
   } as any
 );
+
+export const useSpace = () => ({
+  space,
+  setSpace,
+});

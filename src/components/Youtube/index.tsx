@@ -69,8 +69,9 @@ export const YoutubePlayer: Component = () => {
               <Slider
                 min={0}
                 max={100}
-                value={volume()}
-                onChange={({ value }) => setVolume(value)}
+                step={1}
+                value={[volume()]}
+                onValueChange={({ value }) => setVolume(value[0])}
                 class="w-24"
               >
                 <SliderControl class="relative flex h-6 w-full items-center">

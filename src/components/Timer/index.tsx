@@ -71,9 +71,8 @@ export const Timer: Component = () => {
         isOnBreak: typeof isBreak !== "undefined" ? isBreak : prev.isOnBreak,
       }));
 
-      document.title = `${"Focusly"}${
-        isRunning() ? ` | ${displayTime(time)}` : ""
-      }`;
+      document.title = `${"Focusly"}${isRunning() ? ` | ${displayTime(time)}` : ""
+        }`;
     };
 
     timerWorker.onmessage = onReceiveMessage;

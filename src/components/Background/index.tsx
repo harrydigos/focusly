@@ -1,5 +1,5 @@
 import { Component, Match, Switch } from "solid-js";
-import { space } from "~/utils";
+import { useSpace } from "~/stores/spaces";
 
 import { SpiritedAwayTrain } from "./SpiritedAwayTrain";
 import { LofiGirl } from "./LofiGirl";
@@ -7,6 +7,8 @@ import { LofiGirlBalcony } from "./LofiGirlBalcony";
 import { Train } from "./Train";
 
 export const Background: Component = () => {
+  const { space } = useSpace();
+
   return (
     <Switch>
       <Match when={space() === "lofi_girl"}>
