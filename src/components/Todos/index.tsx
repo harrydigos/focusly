@@ -23,6 +23,8 @@ import {
   SortableProvider,
   useDragDropContext,
 } from "@thisbeyond/solid-dnd";
+import toast from "solid-toast";
+import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
@@ -31,10 +33,9 @@ import { Stack } from "~/design/Stack";
 import { GlassBox } from "~/design/GlassBox";
 import { usePanelContext } from "~/providers";
 import { Todo } from "~/types";
+import { ToastStyle } from "~/utils";
 
 import { CreateTodoModal } from "./CreateTodoModal";
-import toast from "solid-toast";
-import { ToastStyle } from "~/utils";
 
 export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
@@ -123,6 +124,8 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
   const [isEditing, setIsEditing] = createSignal(false);
   let el: HTMLInputElement | undefined;
 
+  const winSize = useWindowSize();
+
   createEffect(() => {
     if (isEditing()) {
       el?.focus();
@@ -152,11 +155,13 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
     setTodos("todosList", todoIndex(), "value", () => value);
   };
 
+  const canSeeGrip = createMemo(() => winSize.width > 640 && todos.todosList.length > 1)
+
   return (
     <div
       use: sortable
       classList={{
-        "opacity-30": sortable.isActiveDraggable,
+        "opacity-30": sortable.isActiveDraggable && canSeeGrip(),
         "transition-transform cursor-grabbing": !!ctx?.[0].active.draggable,
         "cursor-grab": !ctx?.[0].active.draggable,
       }}
@@ -165,18 +170,20 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
         direction="flex-row"
         class="group relative justify-between px-6 py-0.5"
       >
-        {/* Both Shows are needed, cuz to reorder, you need to place the cursor above another TodoRow */}
-        <Show when={ctx?.[0].active.draggable?.id === props.todo.id}>
-          <TbGripVertical
-            size={16}
-            class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/80"
-          />
-        </Show>
-        <Show when={!ctx?.[0].active.draggable}>
-          <TbGripVertical
-            size={16}
-            class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/40 opacity-0 group-hover:opacity-100"
-          />
+        <Show when={canSeeGrip()}>
+          {/* Both Shows are needed, cuz to reorder, you need to place the cursor above another TodoRow */}
+          <Show when={ctx?.[0].active.draggable?.id === props.todo.id}>
+            <TbGripVertical
+              size={16}
+              class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/80"
+            />
+          </Show>
+          <Show when={!ctx?.[0].active.draggable}>
+            <TbGripVertical
+              size={16}
+              class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/40 opacity-0 group-hover:opacity-100"
+            />
+          </Show>
         </Show>
 
         <Checkbox
