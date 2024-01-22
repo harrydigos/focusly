@@ -22,6 +22,8 @@ import {
   SortableProvider,
   useDragDropContext,
 } from "@thisbeyond/solid-dnd";
+import toast from "solid-toast";
+import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
@@ -30,7 +32,6 @@ import { Stack } from "~/design/Stack";
 import { Note } from "~/types";
 import { usePanelContext } from "~/providers";
 import { ToastStyle } from "~/utils";
-import toast from "solid-toast";
 
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
@@ -134,6 +135,8 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
   const ctx = useDragDropContext();
   const { notes, setNotes, getBiggestZ } = usePanelContext();
 
+  const winSize = useWindowSize();
+
   const toggleNote = () => {
     setNotes(props.index(), "position", "z", () => getBiggestZ() + 1);
     setNotes(props.index(), "isOpen", (prev) => !prev);
@@ -175,28 +178,32 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
     };
   });
 
+  const canSeeGrip = createMemo(() => winSize.width > 640 && notes.length > 1)
+
   return (
     <div
-      use:sortable
+      use: sortable
       class="group relative px-6 py-0.5"
       classList={{
-        "opacity-30": sortable.isActiveDraggable,
+        "opacity-30": sortable.isActiveDraggable && canSeeGrip(),
         "transition-transform cursor-grabbing": !!ctx?.[0].active.draggable,
         "cursor-grab": !ctx?.[0].active.draggable,
       }}
     >
-      {/* Both Shows are needed, cuz to reorder, you need to place the cursor above another TodoRow */}
-      <Show when={ctx?.[0].active.draggable?.id === props.note.id}>
-        <TbGripVertical
-          size={16}
-          class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/80"
-        />
-      </Show>
-      <Show when={!ctx?.[0].active.draggable}>
-        <TbGripVertical
-          size={16}
-          class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/40 opacity-0 group-hover:opacity-100"
-        />
+      <Show when={canSeeGrip()}>
+        {/* Both Shows are needed, cuz to reorder, you need to place the cursor above another Note */}
+        <Show when={ctx?.[0].active.draggable?.id === props.note.id}>
+          <TbGripVertical
+            size={16}
+            class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/80"
+          />
+        </Show>
+        <Show when={!ctx?.[0].active.draggable}>
+          <TbGripVertical
+            size={16}
+            class="absolute left-1 top-1/2 -translate-y-1/2 stroke-white/40 opacity-0 group-hover:opacity-100"
+          />
+        </Show>
       </Show>
       <Stack
         direction="flex-row"

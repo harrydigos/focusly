@@ -16,7 +16,7 @@ export const initialTodos: Tab & Todos = {
     },
     {
       id: (Date.now() + 1).toString(),
-      value: "Drag me to reorder me",
+      value: "Drag me to reorder (Desktop)",
       completed: false,
     },
   ],
