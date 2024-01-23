@@ -22,7 +22,13 @@ export const StickyNote: Component<{ note: Note; index: Accessor<number> }> = (
   const [disableDrag, setDisableDrag] = createSignal(false);
 
   return (
-    <AnimatePanel from={noteControl.position} to={props.note.position}>
+    <AnimatePanel
+      from={{
+        x: noteControl.position.x + 24,
+        y: noteControl.position.y, // ignore this for now
+      }}
+      to={props.note.position}
+    >
       <Show when={props.note.isOpen}>
         <Draggable
           tab={props.note}

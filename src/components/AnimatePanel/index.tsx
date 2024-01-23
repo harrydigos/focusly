@@ -1,5 +1,5 @@
 import { useWindowSize } from "@solid-primitives/resize-observer";
-import { Component, JSX, mergeProps, splitProps } from "solid-js";
+import { Component, JSX, createMemo, splitProps } from "solid-js";
 import { Transition } from "solid-transition-group";
 import { Position } from "~/types";
 
@@ -19,53 +19,47 @@ export const AnimatePanel: Component<AnimatePanelProps> = (props) => {
 
   const winSize = useWindowSize();
 
-  const position = mergeProps(
-    {
-      from: {
-        x: winSize.width / 2,
-        y: -86,
+  const position = createMemo(() => {
+    const from = local.from ?? {
+      x: winSize.width / 2,
+      y: 0,
+    };
+
+    return {
+      from,
+      to: local.to,
+    };
+  });
+
+  const getAnimations = ({ width, height }: DOMRect) => {
+    return [
+      {
+        transform: `translate3d(${position().from.x - width / 2}px, ${position().from.y - height / 2
+          }px, 0px) scale(0)`,
       },
-    },
-    local
-  );
+      {
+        transform: `translate3d(${position().to.x}px, ${position().to.y
+          }px, 0px) scale(1)`,
+      },
+    ];
+  };
+
+  const onEnter = (el: Element, done: () => void) => {
+    const a = el.animate(getAnimations(el.getBoundingClientRect()), {
+      duration: 200,
+    });
+    a.finished.then(done);
+  };
+
+  const onExit = (el: Element, done: () => void) => {
+    const a = el.animate(getAnimations(el.getBoundingClientRect()).reverse(), {
+      duration: 200,
+    });
+    a.finished.then(done);
+  };
 
   return (
-    <Transition
-      appear
-      mode="outin"
-      onEnter={(el, done) => {
-        const a = el.animate(
-          [
-            {
-              transform: `translate3d(${position.from.x}px, ${position.from.y}px, 0px)`,
-            },
-            {
-              transform: `translate3d(${position.to.x}px, ${position.to.y}px, 0px)`,
-            },
-          ],
-          {
-            duration: 200,
-          }
-        );
-        a.finished.then(done);
-      }}
-      onExit={(el, done) => {
-        const a = el.animate(
-          [
-            {
-              transform: `translate3d(${position.to.x}px, ${position.to.y}px, 0px) scale(1)`,
-            },
-            {
-              transform: `translate3d(${position.from.x}px, ${position.from.y}px, 0px) scale(0.5)`,
-            },
-          ],
-          {
-            duration: 200,
-          }
-        );
-        a.finished.then(done);
-      }}
-    >
+    <Transition appear mode="outin" onEnter={onEnter} onExit={onExit}>
       {rest.children}
     </Transition>
   );
