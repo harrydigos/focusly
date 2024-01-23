@@ -79,7 +79,7 @@ export const NoteControl: Component = () => {
   };
 
   return (
-    <AnimatePanel position={noteControl.position}>
+    <AnimatePanel to={noteControl.position}>
       <Show when={noteControl.isOpen}>
         <Draggable tab={noteControl} setTab={setNoteControl} disabled={reorder()}>
           <GlassBox

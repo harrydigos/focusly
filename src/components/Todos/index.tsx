@@ -63,7 +63,7 @@ export const Todos: Component = () => {
   };
 
   return (
-    <AnimatePanel position={todos.position}>
+    <AnimatePanel to={todos.position}>
       <Show when={todos.isOpen}>
         <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
           <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />

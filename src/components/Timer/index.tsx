@@ -87,7 +87,7 @@ export const Timer: Component = () => {
   };
 
   return (
-    <AnimatePanel position={timerTab.position}>
+    <AnimatePanel to={timerTab.position}>
       <Show when={timerTab.isOpen}>
         <Draggable tab={timerTab} setTab={setTimerTab}>
           <GlassBox

@@ -1,32 +1,46 @@
 import { useWindowSize } from "@solid-primitives/resize-observer";
-import { Component, JSX } from "solid-js";
+import { Component, JSX, mergeProps, splitProps } from "solid-js";
 import { Transition } from "solid-transition-group";
 import { Position } from "~/types";
 
+type AnimatePosition = Omit<Position, "z">;
+
 type AnimatePanelProps = {
   children: JSX.Element;
-  position: Position;
+  /**
+   * @default Menu position (top center)
+   */
+  from?: AnimatePosition;
+  to: AnimatePosition;
 };
 
 export const AnimatePanel: Component<AnimatePanelProps> = (props) => {
+  const [local, rest] = splitProps(props, ["from", "to"]);
+
   const winSize = useWindowSize();
+
+  const position = mergeProps(
+    {
+      from: {
+        x: winSize.width / 2,
+        y: -86,
+      },
+    },
+    local
+  );
 
   return (
     <Transition
       appear
       mode="outin"
       onEnter={(el, done) => {
-        const initialPosition = winSize.width / 2; //+ Number() / 2;
-        console.log({ initialPosition });
         const a = el.animate(
           [
             {
-              transform: `translate3d(${initialPosition}px, -100px, 0px)`,
-              scale: 0.5,
+              transform: `translate3d(${position.from.x}px, ${position.from.y}px, 0px)`,
             },
             {
-              transform: `translate3d(${props.position.x}px, ${props.position.y}px, 0px)`,
-              scale: 1,
+              transform: `translate3d(${position.to.x}px, ${position.to.y}px, 0px)`,
             },
           ],
           {
@@ -36,16 +50,13 @@ export const AnimatePanel: Component<AnimatePanelProps> = (props) => {
         a.finished.then(done);
       }}
       onExit={(el, done) => {
-        const initialPosition = winSize.width / 2; //+ Number() / 2;
         const a = el.animate(
           [
             {
-              transform: `translate3d(${props.position.x}px, ${props.position.y}px, 0px)`,
-              scale: 1,
+              transform: `translate3d(${position.to.x}px, ${position.to.y}px, 0px) scale(1)`,
             },
             {
-              transform: `translate3d(${initialPosition}px, -86px, 0px)`,
-              scale: 0.5,
+              transform: `translate3d(${position.from.x}px, ${position.from.y}px, 0px) scale(0.5)`,
             },
           ],
           {
@@ -55,7 +66,7 @@ export const AnimatePanel: Component<AnimatePanelProps> = (props) => {
         a.finished.then(done);
       }}
     >
-      {props.children}
+      {rest.children}
     </Transition>
   );
 };

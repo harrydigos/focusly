@@ -31,7 +31,7 @@ export const YoutubePlayer: Component = () => {
   const { volume, setVolume, isMuted, toggleMute } = useYoutubeContext();
 
   return (
-    <AnimatePanel position={music.position}>
+    <AnimatePanel to={music.position}>
       <Show when={music.isOpen}>
         <Draggable tab={music} setTab={setMusic}>
           <GlassBox
