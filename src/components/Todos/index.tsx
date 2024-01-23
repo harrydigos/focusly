@@ -26,6 +26,7 @@ import {
 import toast from "solid-toast";
 import { useWindowSize } from "@solid-primitives/resize-observer";
 
+import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
@@ -62,57 +63,60 @@ export const Todos: Component = () => {
   };
 
   return (
-    <Show when={todos.isOpen}>
-      <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
-        <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
-        <GlassBox
-          direction="flex-col"
-          class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
-        >
-          <Stack
-            direction="flex-row"
-            class="select-none items-center justify-between px-6"
+    <AnimatePanel position={todos.position}>
+      <Show when={todos.isOpen}>
+        <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
+          <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+          <GlassBox
+            direction="flex-col"
+            class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
           >
-            <h1 class="text-xl font-semibold">Todos</h1>
-            <Button onClick={() => setIsOpen(true)}>
-              <TbPlus size={20} class="stroke-stone-900" />
-              New todo
-            </Button>
-          </Stack>
-          <DragDropProvider
-            onDragEnd={onDragEnd}
-            collisionDetector={closestCenter}
-          >
-            <DragDropSensors />
             <Stack
-              direction="flex-col"
-              class="overflow-y-auto"
-              onMouseEnter={() => setReorder(true)}
-              onMouseLeave={() => setReorder(false)}
+              direction="flex-row"
+              class="select-none items-center justify-between px-6"
             >
-              <SortableProvider ids={ids()}>
-                <For
-                  each={todos.todosList}
-                  fallback={
-                    <span class="select-none text-center text-sm text-stone-200">
-                      No todos yet. Add one by clicking the button above.
-                    </span>
-                  }
-                >
-                  {(todo) => <TodoRow todo={todo} />}
-                </For>
-              </SortableProvider>
+              <h1 class="text-xl font-semibold">Todos</h1>
+              <Button onClick={() => setIsOpen(true)}>
+                <TbPlus size={20} class="stroke-stone-900" />
+                New todo
+              </Button>
             </Stack>
+            <DragDropProvider
+              onDragEnd={onDragEnd}
+              collisionDetector={closestCenter}
+            >
+              <DragDropSensors />
+              <Stack
+                direction="flex-col"
+                class="overflow-y-auto"
+                onMouseEnter={() => setReorder(true)}
+                onMouseLeave={() => setReorder(false)}
+              >
+                <SortableProvider ids={ids()}>
+                  <For
+                    each={todos.todosList}
+                    fallback={
+                      <span class="select-none text-center text-sm text-stone-200">
+                        No todos yet. Add one by clicking the button above.
+                      </span>
+                    }
+                  >
+                    {(todo) => <TodoRow todo={todo} />}
+                  </For>
+                </SortableProvider>
+              </Stack>
 
-            {/* This is necessary */}
-            <DragOverlay>
-              <div class="hidden" />
-            </DragOverlay>
-          </DragDropProvider>
-        </GlassBox>
-      </Draggable>
-    </Show>
+              {/* This is necessary */}
+              <DragOverlay>
+                <div class="hidden" />
+              </DragOverlay>
+            </DragDropProvider>
+          </GlassBox>
+        </Draggable>
+      </Show>
+    </AnimatePanel>
   );
+
 };
 
 const TodoRow: Component<{ todo: Todo }> = (props) => {
