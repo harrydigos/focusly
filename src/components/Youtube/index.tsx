@@ -19,7 +19,11 @@ import {
   SliderTrack,
 } from "@ark-ui/solid";
 
-import { usePanelContext, useYoutubeContext } from "~/providers";
+import {
+  useCursorPositionContext,
+  usePanelContext,
+  useYoutubeContext,
+} from "~/providers";
 import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
@@ -28,10 +32,11 @@ import { Stack } from "~/design/Stack";
 
 export const YoutubePlayer: Component = () => {
   const { music, setMusic } = usePanelContext();
+  const { cursorPosition } = useCursorPositionContext();
   const { volume, setVolume, isMuted, toggleMute } = useYoutubeContext();
 
   return (
-    <AnimatePanel to={music.position}>
+    <AnimatePanel from={cursorPosition()} to={music.position}>
       <Show when={music.isOpen}>
         <Draggable tab={music} setTab={setMusic}>
           <GlassBox

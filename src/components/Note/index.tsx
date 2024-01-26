@@ -4,7 +4,7 @@ import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
 import { Textarea } from "~/design/Textarea";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { Note } from "~/types";
 
 export const Notes: Component = () => {
@@ -15,20 +15,16 @@ export const Notes: Component = () => {
   );
 };
 
-export const StickyNote: Component<{ note: Note; index: Accessor<number> }> = (
-  props
-) => {
-  const { setNotes, noteControl } = usePanelContext();
+export const StickyNote: Component<{
+  note: Note;
+  index: Accessor<number>;
+}> = (props) => {
+  const { setNotes } = usePanelContext();
+  const { cursorPosition } = useCursorPositionContext();
   const [disableDrag, setDisableDrag] = createSignal(false);
 
   return (
-    <AnimatePanel
-      from={{
-        x: noteControl.position.x + 24,
-        y: noteControl.position.y, // ignore this for now
-      }}
-      to={props.note.position}
-    >
+    <AnimatePanel from={cursorPosition()} to={props.note.position}>
       <Show when={props.note.isOpen}>
         <Draggable
           tab={props.note}

@@ -31,12 +31,13 @@ import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
 import { Note } from "~/types";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { ToastStyle } from "~/utils";
 
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
     usePanelContext();
+  const { cursorPosition } = useCursorPositionContext()
 
   const [reorder, setReorder] = createSignal(false);
   const ids = () => notes.map((t) => t.id);
@@ -79,7 +80,7 @@ export const NoteControl: Component = () => {
   };
 
   return (
-    <AnimatePanel to={noteControl.position}>
+    <AnimatePanel from={cursorPosition()} to={noteControl.position}>
       <Show when={noteControl.isOpen}>
         <Draggable tab={noteControl} setTab={setNoteControl} disabled={reorder()}>
           <GlassBox

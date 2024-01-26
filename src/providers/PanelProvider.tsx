@@ -5,6 +5,7 @@ import {
   createContext,
   createMemo,
   useContext,
+  ErrorBoundary,
 } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
@@ -15,10 +16,9 @@ import {
   initialTimer,
   initialTodos,
 } from "~/config";
-import { Note, Tab, Todos } from "~/types";
-import { ErrorBoundary } from "solid-js";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
+import { Note, Tab, Todos } from "~/types";
 
 export interface PanelContextProps {
   todos: Tab & Todos;

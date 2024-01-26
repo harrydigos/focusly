@@ -32,7 +32,7 @@ import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
 import { GlassBox } from "~/design/GlassBox";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 import { ToastStyle } from "~/utils";
 
@@ -40,6 +40,7 @@ import { CreateTodoModal } from "./CreateTodoModal";
 
 export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
+  const { cursorPosition } = useCursorPositionContext();
   const [isOpen, setIsOpen] = createSignal(false);
 
   const [reorder, setReorder] = createSignal(false);
@@ -63,7 +64,7 @@ export const Todos: Component = () => {
   };
 
   return (
-    <AnimatePanel to={todos.position}>
+    <AnimatePanel from={cursorPosition()} to={todos.position}>
       <Show when={todos.isOpen}>
         <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
           <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />

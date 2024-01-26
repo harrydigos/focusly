@@ -15,7 +15,7 @@ import { INIT_TIMER } from "~/config/timer";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { useAlarmSound } from "~/stores";
 import { Timer as TimerType } from "~/types";
 
@@ -33,6 +33,7 @@ const displayTime = (time: number) => {
 
 export const Timer: Component = () => {
   const { timer: timerTab, setTimer: setTimerTab } = usePanelContext();
+  const { cursorPosition } = useCursorPositionContext();
   const [timer, setTimer] = createSignal(INIT_TIMER);
   const [isRunning, setIsRunning] = createSignal(false);
   const { sound } = useAlarmSound();
@@ -87,7 +88,7 @@ export const Timer: Component = () => {
   };
 
   return (
-    <AnimatePanel to={timerTab.position}>
+    <AnimatePanel from={cursorPosition()} to={timerTab.position}>
       <Show when={timerTab.isOpen}>
         <Draggable tab={timerTab} setTab={setTimerTab}>
           <GlassBox
