@@ -26,12 +26,13 @@ import {
 import toast from "solid-toast";
 import { useWindowSize } from "@solid-primitives/resize-observer";
 
+import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
 import { GlassBox } from "~/design/GlassBox";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 import { ToastStyle } from "~/utils";
 
@@ -39,7 +40,9 @@ import { CreateTodoModal } from "./CreateTodoModal";
 
 export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
+  const { cursorPosition } = useCursorPositionContext();
   const [isOpen, setIsOpen] = createSignal(false);
+  const windowSize = useWindowSize();
 
   const [reorder, setReorder] = createSignal(false);
   const ids = () => todos.todosList.map((t) => t.id);
@@ -61,58 +64,66 @@ export const Todos: Component = () => {
     }
   };
 
-  return (
-    <Show when={todos.isOpen}>
-      <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
-        <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
-        <GlassBox
-          direction="flex-col"
-          class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
-        >
-          <Stack
-            direction="flex-row"
-            class="select-none items-center justify-between px-6"
-          >
-            <h1 class="text-xl font-semibold">Todos</h1>
-            <Button onClick={() => setIsOpen(true)}>
-              <TbPlus size={20} class="stroke-stone-900" />
-              New todo
-            </Button>
-          </Stack>
-          <DragDropProvider
-            onDragEnd={onDragEnd}
-            collisionDetector={closestCenter}
-          >
-            <DragDropSensors />
-            <Stack
-              direction="flex-col"
-              class="overflow-y-auto"
-              onMouseEnter={() => setReorder(true)}
-              onMouseLeave={() => setReorder(false)}
-            >
-              <SortableProvider ids={ids()}>
-                <For
-                  each={todos.todosList}
-                  fallback={
-                    <span class="select-none text-center text-sm text-stone-200">
-                      No todos yet. Add one by clicking the button above.
-                    </span>
-                  }
-                >
-                  {(todo) => <TodoRow todo={todo} />}
-                </For>
-              </SortableProvider>
-            </Stack>
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  }
 
-            {/* This is necessary */}
-            <DragOverlay>
-              <div class="hidden" />
-            </DragOverlay>
-          </DragDropProvider>
-        </GlassBox>
-      </Draggable>
-    </Show>
+  return (
+    <AnimatePanel from={cursorPosition() ?? initialPosition} to={todos.position}>
+      <Show when={todos.isOpen}>
+        <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
+          <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+          <GlassBox
+            direction="flex-col"
+            class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
+          >
+            <Stack
+              direction="flex-row"
+              class="select-none items-center justify-between px-6"
+            >
+              <h1 class="text-xl font-semibold">Todos</h1>
+              <Button onClick={() => setIsOpen(true)}>
+                <TbPlus size={20} class="stroke-stone-900" />
+                New todo
+              </Button>
+            </Stack>
+            <DragDropProvider
+              onDragEnd={onDragEnd}
+              collisionDetector={closestCenter}
+            >
+              <DragDropSensors />
+              <Stack
+                direction="flex-col"
+                class="overflow-y-auto"
+                onMouseEnter={() => setReorder(true)}
+                onMouseLeave={() => setReorder(false)}
+              >
+                <SortableProvider ids={ids()}>
+                  <For
+                    each={todos.todosList}
+                    fallback={
+                      <span class="select-none text-center text-sm text-stone-200">
+                        No todos yet. Add one by clicking the button above.
+                      </span>
+                    }
+                  >
+                    {(todo) => <TodoRow todo={todo} />}
+                  </For>
+                </SortableProvider>
+              </Stack>
+
+              {/* This is necessary */}
+              <DragOverlay>
+                <div class="hidden" />
+              </DragOverlay>
+            </DragDropProvider>
+          </GlassBox>
+        </Draggable>
+      </Show>
+    </AnimatePanel>
   );
+
 };
 
 const TodoRow: Component<{ todo: Todo }> = (props) => {

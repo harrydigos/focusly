@@ -20,7 +20,7 @@ export const Menu: Component = () => {
   } = usePanelContext();
 
   return (
-    <header class="mt-4 flex w-full justify-center">
+    <header class="absolute left-0 top-0 z-[1px] mt-4 flex w-full justify-center">
       <GlassBox
         direction="flex-row"
         class="w-fit gap-1"
@@ -64,7 +64,7 @@ const MenuItem: Component<MenuItemProps> = (props) => {
       }}
     >
       <MenuIcon icon={menuIcons[props.key]} />
-      <div class="select-none hidden sm:block text-sm font-medium capitalize group-hover:opacity-75">
+      <div class="hidden select-none text-sm font-medium capitalize group-hover:opacity-75 sm:block">
         {props.key}
       </div>
     </button>

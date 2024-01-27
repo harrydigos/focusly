@@ -25,17 +25,20 @@ import {
 import toast from "solid-toast";
 import { useWindowSize } from "@solid-primitives/resize-observer";
 
+import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
 import { Note } from "~/types";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { ToastStyle } from "~/utils";
 
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
     usePanelContext();
+  const { cursorPosition } = useCursorPositionContext()
+  const windowSize = useWindowSize();
 
   const [reorder, setReorder] = createSignal(false);
   const ids = () => notes.map((t) => t.id);
@@ -77,55 +80,62 @@ export const NoteControl: Component = () => {
     });
   };
 
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  }
+
   return (
-    <Show when={noteControl.isOpen}>
-      <Draggable tab={noteControl} setTab={setNoteControl} disabled={reorder()}>
-        <GlassBox
-          direction="flex-col"
-          class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
-        >
-          <Stack
-            direction="flex-row"
-            class="select-none items-center justify-between px-6"
+    <AnimatePanel from={cursorPosition() ?? initialPosition} to={noteControl.position}>
+      <Show when={noteControl.isOpen}>
+        <Draggable tab={noteControl} setTab={setNoteControl} disabled={reorder()}>
+          <GlassBox
+            direction="flex-col"
+            class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
           >
-            <h1 class="text-xl font-semibold">Notes</h1>
-            <Button onClick={createNote}>
-              <TbPlus size={20} class="stroke-stone-900" />
-              New note
-            </Button>
-          </Stack>
-          <DragDropProvider
-            onDragEnd={onDragEnd}
-            collisionDetector={closestCenter}
-          >
-            <DragDropSensors />
             <Stack
-              direction="flex-col"
-              class="overflow-y-auto py-1"
-              onMouseEnter={() => setReorder(true)}
-              onMouseLeave={() => setReorder(false)}
+              direction="flex-row"
+              class="select-none items-center justify-between px-6"
             >
-              <SortableProvider ids={ids()}>
-                <For
-                  each={notes}
-                  fallback={
-                    <span class="select-none text-center text-sm text-stone-200">
-                      No notes yet. Add one by clicking the button above.
-                    </span>
-                  }
-                >
-                  {(note, i) => <NoteRow note={note} index={i} />}
-                </For>
-              </SortableProvider>
+              <h1 class="text-xl font-semibold">Notes</h1>
+              <Button onClick={createNote}>
+                <TbPlus size={20} class="stroke-stone-900" />
+                New note
+              </Button>
             </Stack>
-            {/* This is necessary */}
-            <DragOverlay>
-              <div class="hidden" />
-            </DragOverlay>
-          </DragDropProvider>
-        </GlassBox>
-      </Draggable>
-    </Show>
+            <DragDropProvider
+              onDragEnd={onDragEnd}
+              collisionDetector={closestCenter}
+            >
+              <DragDropSensors />
+              <Stack
+                direction="flex-col"
+                class="overflow-y-auto py-1"
+                onMouseEnter={() => setReorder(true)}
+                onMouseLeave={() => setReorder(false)}
+              >
+                <SortableProvider ids={ids()}>
+                  <For
+                    each={notes}
+                    fallback={
+                      <span class="select-none text-center text-sm text-stone-200">
+                        No notes yet. Add one by clicking the button above.
+                      </span>
+                    }
+                  >
+                    {(note, i) => <NoteRow note={note} index={i} />}
+                  </For>
+                </SortableProvider>
+              </Stack>
+              {/* This is necessary */}
+              <DragOverlay>
+                <div class="hidden" />
+              </DragOverlay>
+            </DragDropProvider>
+          </GlassBox>
+        </Draggable>
+      </Show>
+    </AnimatePanel>
   );
 };
 

@@ -8,13 +8,15 @@ import {
   onCleanup,
   onMount,
 } from "solid-js";
+import { useWindowSize } from "@solid-primitives/resize-observer";
 
+import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { INIT_TIMER } from "~/config/timer";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
-import { usePanelContext } from "~/providers";
+import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { useAlarmSound } from "~/stores";
 import { Timer as TimerType } from "~/types";
 
@@ -32,9 +34,11 @@ const displayTime = (time: number) => {
 
 export const Timer: Component = () => {
   const { timer: timerTab, setTimer: setTimerTab } = usePanelContext();
+  const { cursorPosition } = useCursorPositionContext();
   const [timer, setTimer] = createSignal(INIT_TIMER);
   const [isRunning, setIsRunning] = createSignal(false);
   const { sound } = useAlarmSound();
+  const windowSize = useWindowSize();
 
   let timerWorker: Worker | undefined;
 
@@ -85,60 +89,70 @@ export const Timer: Component = () => {
     document.title = "Focusly";
   };
 
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  };
+
   return (
-    <Show when={timerTab.isOpen}>
-      <Draggable tab={timerTab} setTab={setTimerTab}>
-        <GlassBox
-          direction="flex-col"
-          class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
-        >
-          <Stack direction="flex-row" class="items-center justify-between">
-            <Stack direction="flex-row" class="items-center gap-4">
-              <h1 class="select-none text-xl font-semibold">Timer</h1>
-              <Stack direction="flex-row" class="gap-1 self-center">
-                <For each={[0, 1, 2, 3]}>
-                  {(i) => (
-                    <div
-                      class="aspect-square h-2 rounded-full"
-                      classList={{
-                        "bg-white": timer().currentPomo >= i,
-                        "bg-stone-600": timer().currentPomo < i,
-                      }}
-                    />
-                  )}
-                </For>
+    <AnimatePanel
+      from={cursorPosition() ?? initialPosition}
+      to={timerTab.position}
+    >
+      <Show when={timerTab.isOpen}>
+        <Draggable tab={timerTab} setTab={setTimerTab}>
+          <GlassBox
+            direction="flex-col"
+            class="max-h-[500px] w-[340px] gap-4 sm:w-[440px]"
+          >
+            <Stack direction="flex-row" class="items-center justify-between">
+              <Stack direction="flex-row" class="items-center gap-4">
+                <h1 class="select-none text-xl font-semibold">Timer</h1>
+                <Stack direction="flex-row" class="gap-1 self-center">
+                  <For each={[0, 1, 2, 3]}>
+                    {(i) => (
+                      <div
+                        class="aspect-square h-2 rounded-full"
+                        classList={{
+                          "bg-white": timer().currentPomo >= i,
+                          "bg-stone-600": timer().currentPomo < i,
+                        }}
+                      />
+                    )}
+                  </For>
+                </Stack>
+              </Stack>
+              <Show when={timer().isOnBreak}>
+                <div class="inline-flex select-none items-center rounded-lg border border-transparent bg-stone-900 px-2.5 py-0.5 text-xs text-white">
+                  {(timer().currentPomo + 1) % 4 ? "Short Break" : "Long Break"}
+                </div>
+              </Show>
+            </Stack>
+            <Stack
+              direction="flex-row"
+              class="items-center justify-between text-4xl font-semibold"
+            >
+              <div class="select-none">{displayTime(timer().currentTime)}</div>
+              <Stack direction="flex-row" class="gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  style={{ height: "40px", width: "40px" }}
+                  onClick={resetTimer}
+                >
+                  <TbRotateClockwise />
+                </Button>
+                <Button
+                  class="w-[122px] select-none"
+                  onClick={() => setIsRunning((prev) => !prev)}
+                >
+                  {isRunning() ? "Pause" : "Start"}
+                </Button>
               </Stack>
             </Stack>
-            <Show when={timer().isOnBreak}>
-              <div class="inline-flex select-none items-center rounded-lg border border-transparent bg-stone-900 px-2.5 py-0.5 text-xs text-white">
-                {(timer().currentPomo + 1) % 4 ? "Short Break" : "Long Break"}
-              </div>
-            </Show>
-          </Stack>
-          <Stack
-            direction="flex-row"
-            class="items-center justify-between text-4xl font-semibold"
-          >
-            <div class="select-none">{displayTime(timer().currentTime)}</div>
-            <Stack direction="flex-row" class="gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                style={{ height: "40px", width: "40px" }}
-                onClick={resetTimer}
-              >
-                <TbRotateClockwise />
-              </Button>
-              <Button
-                class="w-[122px] select-none"
-                onClick={() => setIsRunning((prev) => !prev)}
-              >
-                {isRunning() ? "Pause" : "Start"}
-              </Button>
-            </Stack>
-          </Stack>
-        </GlassBox>
-      </Draggable>
-    </Show>
+          </GlassBox>
+        </Draggable>
+      </Show>
+    </AnimatePanel>
   );
 };
