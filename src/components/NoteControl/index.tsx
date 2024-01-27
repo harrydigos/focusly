@@ -38,6 +38,7 @@ export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
     usePanelContext();
   const { cursorPosition } = useCursorPositionContext()
+  const windowSize = useWindowSize();
 
   const [reorder, setReorder] = createSignal(false);
   const ids = () => notes.map((t) => t.id);
@@ -79,8 +80,13 @@ export const NoteControl: Component = () => {
     });
   };
 
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  }
+
   return (
-    <AnimatePanel from={cursorPosition()} to={noteControl.position}>
+    <AnimatePanel from={cursorPosition() ?? initialPosition} to={noteControl.position}>
       <Show when={noteControl.isOpen}>
         <Draggable tab={noteControl} setTab={setNoteControl} disabled={reorder()}>
           <GlassBox

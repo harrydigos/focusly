@@ -42,6 +42,7 @@ export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
   const { cursorPosition } = useCursorPositionContext();
   const [isOpen, setIsOpen] = createSignal(false);
+  const windowSize = useWindowSize();
 
   const [reorder, setReorder] = createSignal(false);
   const ids = () => todos.todosList.map((t) => t.id);
@@ -63,8 +64,13 @@ export const Todos: Component = () => {
     }
   };
 
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  }
+
   return (
-    <AnimatePanel from={cursorPosition()} to={todos.position}>
+    <AnimatePanel from={cursorPosition() ?? initialPosition} to={todos.position}>
       <Show when={todos.isOpen}>
         <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
           <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />

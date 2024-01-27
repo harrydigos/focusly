@@ -8,9 +8,7 @@ import {
   TbVolume2,
   TbVolume3,
 } from "solid-icons/tb";
-
 import PlayerStates from "youtube-player/dist/constants/PlayerStates";
-
 import {
   Slider,
   SliderControl,
@@ -18,6 +16,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from "@ark-ui/solid";
+import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import {
   useCursorPositionContext,
@@ -33,10 +32,19 @@ import { Stack } from "~/design/Stack";
 export const YoutubePlayer: Component = () => {
   const { music, setMusic } = usePanelContext();
   const { cursorPosition } = useCursorPositionContext();
+  const windowSize = useWindowSize();
   const { volume, setVolume, isMuted, toggleMute } = useYoutubeContext();
 
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  };
+
   return (
-    <AnimatePanel from={cursorPosition()} to={music.position}>
+    <AnimatePanel
+      from={cursorPosition() ?? initialPosition}
+      to={music.position}
+    >
       <Show when={music.isOpen}>
         <Draggable tab={music} setTab={setMusic}>
           <GlassBox

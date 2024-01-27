@@ -62,7 +62,7 @@ export const AnimatePanel: Component<AnimatePanelProps> = (props) => {
   };
 
   return (
-    <Transition mode="outin" onEnter={onEnter} onExit={onExit}>
+    <Transition appear mode="outin" onEnter={onEnter} onExit={onExit}>
       {rest.children}
     </Transition>
   );

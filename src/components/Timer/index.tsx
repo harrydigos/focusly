@@ -8,6 +8,7 @@ import {
   onCleanup,
   onMount,
 } from "solid-js";
+import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
@@ -37,6 +38,7 @@ export const Timer: Component = () => {
   const [timer, setTimer] = createSignal(INIT_TIMER);
   const [isRunning, setIsRunning] = createSignal(false);
   const { sound } = useAlarmSound();
+  const windowSize = useWindowSize();
 
   let timerWorker: Worker | undefined;
 
@@ -87,8 +89,16 @@ export const Timer: Component = () => {
     document.title = "Focusly";
   };
 
+  const initialPosition = {
+    x: windowSize.width / 2,
+    y: 40,
+  };
+
   return (
-    <AnimatePanel from={cursorPosition()} to={timerTab.position}>
+    <AnimatePanel
+      from={cursorPosition() ?? initialPosition}
+      to={timerTab.position}
+    >
       <Show when={timerTab.isOpen}>
         <Draggable tab={timerTab} setTab={setTimerTab}>
           <GlassBox

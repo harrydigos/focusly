@@ -4,10 +4,8 @@ import { getRequestEvent, isServer } from "solid-js/web";
 import { parseCookies } from "vinxi/server";
 import { clientOnly } from "@solidjs/start";
 import { Background } from "~/components/Background";
-import { YoutubeProvider } from "~/providers";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
-import { PanelProvider } from "~/providers";
 import { Space, useSpace } from "~/stores/spaces";
 
 const Menu = clientOnly(() =>
@@ -53,14 +51,11 @@ export default function Home() {
   return (
     <main class="screen">
       <Background />
-      <YoutubeProvider>
-        <PanelProvider>
-          <Panels />
-          <Menu />
-          <SettingsModal isOpen={openSettings} setIsOpen={setOpenSettings} />
-          <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
-        </PanelProvider>
-      </YoutubeProvider>
+
+      <Panels />
+      <Menu />
+      <SettingsModal isOpen={openSettings} setIsOpen={setOpenSettings} />
+      <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
 
       <Stack direction="flex-col" class="absolute bottom-4 left-4 gap-2">
         <Button

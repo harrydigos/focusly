@@ -76,7 +76,12 @@ export const PanelProvider: Component<{
   };
 
   return (
-    <ErrorBoundary fallback={() => <PanelErrorFallback />}>
+    <ErrorBoundary
+      fallback={(err) => {
+        console.error(err);
+        return <PanelErrorFallback />;
+      }}
+    >
       <PanelContext.Provider
         value={{
           todos,

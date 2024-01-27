@@ -11,7 +11,7 @@ import {
 import { Position } from "~/types";
 
 export interface CursorPositionContextProps {
-  cursorPosition: Accessor<Omit<Position, "z">>;
+  cursorPosition: Accessor<Omit<Position, "z"> | undefined>;
 }
 
 export const CursorPositionContext =
@@ -20,7 +20,8 @@ export const CursorPositionContext =
 export const CursorPositionProvider: Component<{
   children: JSX.Element;
 }> = (props) => {
-  const [cursorPosition, setCursorPosition] = createSignal({ x: 0, y: 0 });
+  const [cursorPosition, setCursorPosition] =
+    createSignal<Omit<Position, "z">>();
 
   const onMouseMove = (e: MouseEvent) => {
     setCursorPosition({ x: e.clientX, y: e.clientY });

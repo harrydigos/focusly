@@ -1,4 +1,5 @@
 import { Accessor, Component, For, Show, createSignal } from "solid-js";
+import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
@@ -15,16 +16,28 @@ export const Notes: Component = () => {
   );
 };
 
-export const StickyNote: Component<{
+const StickyNote: Component<{
   note: Note;
   index: Accessor<number>;
 }> = (props) => {
-  const { setNotes } = usePanelContext();
+  const { setNotes, noteControl } = usePanelContext();
   const { cursorPosition } = useCursorPositionContext();
+  const windowSize = useWindowSize();
   const [disableDrag, setDisableDrag] = createSignal(false);
 
+  const getInitialPosition = () => {
+    const isOpen = noteControl.isOpen;
+    return {
+      x: isOpen ? noteControl.position.x : windowSize.width / 2,
+      y: isOpen ? noteControl.position.y : 40,
+    };
+  };
+
   return (
-    <AnimatePanel from={cursorPosition()} to={props.note.position}>
+    <AnimatePanel
+      from={cursorPosition() ?? getInitialPosition()}
+      to={props.note.position}
+    >
       <Show when={props.note.isOpen}>
         <Draggable
           tab={props.note}
