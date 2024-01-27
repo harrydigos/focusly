@@ -42,13 +42,22 @@ export const PanelProvider: Component<{
   children: JSX.Element;
 }> = (props) => {
   /* eslint-disable solid/reactivity */
-  const [todos, setTodos] = makePersisted(createStore(initialTodos));
+  const [todos, setTodos] = makePersisted(createStore(initialTodos), {
+    name: "todos",
+  });
   const [noteControl, setNoteControl] = makePersisted(
-    createStore(initialNoteControl)
+    createStore(initialNoteControl),
+    { name: "noteControl" }
   );
-  const [notes, setNotes] = makePersisted(createStore(initialNotes));
-  const [music, setMusic] = makePersisted(createStore(initialMusic));
-  const [timer, setTimer] = makePersisted(createStore(initialTimer));
+  const [notes, setNotes] = makePersisted(createStore(initialNotes), {
+    name: "notes",
+  });
+  const [music, setMusic] = makePersisted(createStore(initialMusic), {
+    name: "music",
+  });
+  const [timer, setTimer] = makePersisted(createStore(initialTimer), {
+    name: "timer",
+  });
 
   const isLocked = createMemo(() => todos.isLocked);
 
@@ -77,8 +86,8 @@ export const PanelProvider: Component<{
 
   return (
     <ErrorBoundary
-      fallback={(err) => {
-        console.error(err);
+      fallback={() => {
+        // TODO: Handle error better
         return <PanelErrorFallback />;
       }}
     >

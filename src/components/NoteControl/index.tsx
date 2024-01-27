@@ -37,7 +37,7 @@ import { ToastStyle } from "~/utils";
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
     usePanelContext();
-  const { cursorPosition } = useCursorPositionContext()
+  const { cursorPosition } = useCursorPositionContext();
   const windowSize = useWindowSize();
 
   const [reorder, setReorder] = createSignal(false);
@@ -83,12 +83,19 @@ export const NoteControl: Component = () => {
   const initialPosition = {
     x: windowSize.width / 2,
     y: 40,
-  }
+  };
 
   return (
-    <AnimatePanel from={cursorPosition() ?? initialPosition} to={noteControl.position}>
+    <AnimatePanel
+      from={cursorPosition() ?? initialPosition}
+      to={noteControl.position}
+    >
       <Show when={noteControl.isOpen}>
-        <Draggable tab={noteControl} setTab={setNoteControl} disabled={reorder()}>
+        <Draggable
+          tab={noteControl}
+          setTab={setNoteControl}
+          disabled={reorder()}
+        >
           <GlassBox
             direction="flex-col"
             class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
@@ -103,11 +110,13 @@ export const NoteControl: Component = () => {
                 New note
               </Button>
             </Stack>
+
             <DragDropProvider
               onDragEnd={onDragEnd}
               collisionDetector={closestCenter}
             >
               <DragDropSensors />
+
               <Stack
                 direction="flex-col"
                 class="overflow-y-auto py-1"
@@ -127,6 +136,7 @@ export const NoteControl: Component = () => {
                   </For>
                 </SortableProvider>
               </Stack>
+
               {/* This is necessary */}
               <DragOverlay>
                 <div class="hidden" />
@@ -188,7 +198,7 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
     };
   });
 
-  const canSeeGrip = createMemo(() => winSize.width > 640 && notes.length > 1)
+  const canSeeGrip = createMemo(() => winSize.width > 640 && notes.length > 1);
 
   return (
     <div

@@ -28,10 +28,12 @@ type DraggableProps = {
 >;
 
 export const Draggable: Component<DraggableProps> = (props) => {
-  const screenBounds = useScreenBounds();
   const { getBiggestZ } = usePanelContext();
-
   const { draggable } = createDraggable(); // use:draggable
+  const screenBounds = createElementBounds(document.body, {
+    trackScroll: false,
+    trackMutation: false,
+  });
   const [target, setTarget] = createSignal<HTMLElement>();
   const bounds = createElementBounds(target);
   const [isDragging, setIsDragging] = createSignal(false);
@@ -53,6 +55,8 @@ export const Draggable: Component<DraggableProps> = (props) => {
 
     if (isOutOfBoundsBottom) {
       const newPosY = Math.floor(screenBounds.height! - bounds.height!);
+      if (newPosY < 1) return;
+
       if (props.setTab) {
         props.setTab("position", "y", newPosY);
       } else {
@@ -64,7 +68,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
   return (
     <div
       ref={setTarget}
-      use:draggable={{
+      use: draggable={{
         bounds: "body",
         onDragStart: () => {
           setIsDragging(true);

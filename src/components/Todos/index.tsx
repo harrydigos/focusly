@@ -123,7 +123,6 @@ export const Todos: Component = () => {
       </Show>
     </AnimatePanel>
   );
-
 };
 
 const TodoRow: Component<{ todo: Todo }> = (props) => {
