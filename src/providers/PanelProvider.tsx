@@ -9,6 +9,8 @@ import {
 } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
+import { useWindowSize } from "@solid-primitives/resize-observer";
+
 import {
   initialMusic,
   initialNoteControl,
@@ -34,30 +36,46 @@ export interface PanelContextProps {
   isLocked: Accessor<boolean>;
   getBiggestZ: () => number;
   toggleLock: () => void;
+  // eslint-disable-next-line no-unused-vars
+  resetAll: (pos: { x: number } | undefined) => void;
 }
 
 export const PanelContext = createContext<PanelContextProps>();
 
+const storeValues = {
+  todos: initialTodos,
+  noteControl: initialNoteControl,
+  notes: initialNotes,
+  music: initialMusic,
+  timer: initialTimer,
+};
+
+type StoreKey = keyof typeof storeValues;
+type StoreReturn<T extends StoreKey> = ReturnType<(typeof storeValues)[T]>;
+
+const createPersistedStore = <T extends StoreKey>(name: T) => {
+  const windowSize = useWindowSize();
+  const isMobile = windowSize.width <= 640;
+  const pxFromCenter = isMobile ? 170 : 220;
+  const initialX = windowSize.width / 2 - pxFromCenter;
+
+  const [store, setStore] = createStore(
+    storeValues[name]({ x: initialX }) as StoreReturn<T>
+  );
+
+  return makePersisted([store, setStore], {
+    name,
+  });
+};
+
 export const PanelProvider: Component<{
   children: JSX.Element;
 }> = (props) => {
-  /* eslint-disable solid/reactivity */
-  const [todos, setTodos] = makePersisted(createStore(initialTodos), {
-    name: "todos",
-  });
-  const [noteControl, setNoteControl] = makePersisted(
-    createStore(initialNoteControl),
-    { name: "noteControl" }
-  );
-  const [notes, setNotes] = makePersisted(createStore(initialNotes), {
-    name: "notes",
-  });
-  const [music, setMusic] = makePersisted(createStore(initialMusic), {
-    name: "music",
-  });
-  const [timer, setTimer] = makePersisted(createStore(initialTimer), {
-    name: "timer",
-  });
+  const [todos, setTodos] = createPersistedStore("todos");
+  const [noteControl, setNoteControl] = createPersistedStore("noteControl");
+  const [notes, setNotes] = createPersistedStore("notes");
+  const [music, setMusic] = createPersistedStore("music");
+  const [timer, setTimer] = createPersistedStore("timer");
 
   const isLocked = createMemo(() => todos.isLocked);
 
@@ -84,6 +102,14 @@ export const PanelProvider: Component<{
     setTimer("isLocked", isLocked);
   };
 
+  const resetAll = (pos?: { x: number }) => {
+    setTodos(initialTodos(pos));
+    setNoteControl(initialNoteControl(pos));
+    setNotes(initialNotes(pos));
+    setMusic(initialMusic(pos));
+    setTimer(initialTimer(pos));
+  };
+
   return (
     <ErrorBoundary
       fallback={() => {
@@ -106,6 +132,7 @@ export const PanelProvider: Component<{
           isLocked,
           getBiggestZ,
           toggleLock,
+          resetAll,
         }}
       >
         {props.children}

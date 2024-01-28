@@ -10,10 +10,6 @@ import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
 import { useSpace } from "~/stores";
 
-const Menu = clientOnly(() =>
-  import("~/components/Menu").then((m) => ({ default: m.Menu }))
-);
-
 const Panels = clientOnly(() =>
   import("~/components/Panels").then((m) => ({ default: m.Panels }))
 );
@@ -55,7 +51,6 @@ export default function Home() {
       <Background />
 
       <Panels />
-      <Menu />
       <SettingsModal isOpen={openSettings} setIsOpen={setOpenSettings} />
       <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
 

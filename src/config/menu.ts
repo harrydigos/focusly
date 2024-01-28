@@ -1,8 +1,8 @@
 import { Note, Tab, Todos } from "~/types";
 
-export const initialTodos: Tab & Todos = {
+export const initialTodos = (pos?: { x: number }): Tab & Todos => ({
   position: {
-    x: 0,
+    x: pos?.x ?? 0,
     y: 256,
     z: 0,
   },
@@ -20,24 +20,24 @@ export const initialTodos: Tab & Todos = {
       completed: false,
     },
   ],
-};
+});
 
-export const initialNoteControl: Tab = {
+export const initialNoteControl = (pos?: { x: number }): Tab => ({
   position: {
-    x: 0,
+    x: pos?.x ?? 0,
     y: 80,
     z: 0,
   },
   isOpen: true,
   isLocked: false,
-};
+});
 
-export const initialNotes: Note[] = [
+export const initialNotes = (pos?: { x: number }): Note[] => [
   {
     id: Date.now().toString(),
     value: "Example note",
     position: {
-      x: 8,
+      x: pos?.x ?? 0,
       y: 80,
       z: 0,
     },
@@ -46,22 +46,22 @@ export const initialNotes: Note[] = [
   },
 ];
 
-export const initialMusic: Tab = {
+export const initialMusic = (pos?: { x: number }): Tab => ({
   position: {
-    x: 0,
+    x: pos?.x ?? 0,
     y: 437,
     z: 0,
   },
   isOpen: true,
   isLocked: false,
-};
+});
 
-export const initialTimer: Tab = {
+export const initialTimer = (pos?: { x: number }): Tab => ({
   position: {
-    x: 0,
+    x: pos?.x ?? 0,
     y: 566,
     z: 0,
   },
   isOpen: true,
   isLocked: false,
-};
+});

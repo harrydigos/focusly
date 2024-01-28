@@ -10,24 +10,30 @@ export interface SettingsContextProps {
   bgColor: BgColor;
   // eslint-disable-next-line no-unused-vars
   updateBgColor: (value: BgColor) => void;
+  resetAll: () => void;
 }
 
 export const SettingsContext = createContext<SettingsContextProps>();
+
+const initialAlarmSound = (): Alarm => ({
+  value: "bells",
+  url: "bells.wav",
+});
+
+const initialBgColor = (): BgColor => ({
+  value: "stone",
+  class: "bg-stone-950",
+});
 
 export const SettingsProvider: Component<{
   children: JSX.Element;
 }> = (props) => {
   const [alarmSound, setAlarmSound] = makePersisted(
     // eslint-disable-next-line solid/reactivity
-    createStore<Alarm>(
-      {
-        value: "bells",
-        url: "bells.wav",
-      },
-      {
-        name: "alarm-sound",
-      }
-    )
+    createStore<Alarm>(initialAlarmSound()),
+    {
+      name: "alarm-sound",
+    }
   );
 
   const updateSound = (value: Alarm) => {
@@ -36,15 +42,10 @@ export const SettingsProvider: Component<{
 
   const [bgColor, setBgColor] = makePersisted(
     // eslint-disable-next-line solid/reactivity
-    createStore<BgColor>(
-      {
-        value: "stone",
-        class: "bg-stone-950",
-      },
-      {
-        name: "bg-color",
-      }
-    )
+    createStore<BgColor>(initialBgColor()),
+    {
+      name: "bg-color",
+    }
   );
 
   const updateBgColor = (value: BgColor) => {
@@ -54,6 +55,11 @@ export const SettingsProvider: Component<{
     }
   };
 
+  const resetAll = () => {
+    setAlarmSound(initialAlarmSound());
+    setBgColor(initialBgColor());
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -61,6 +67,7 @@ export const SettingsProvider: Component<{
         updateAlarmSound: updateSound,
         bgColor,
         updateBgColor: updateBgColor,
+        resetAll,
       }}
     >
       {props.children}
