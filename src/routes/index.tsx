@@ -3,10 +3,12 @@ import { createSignal } from "solid-js";
 import { getRequestEvent, isServer } from "solid-js/web";
 import { parseCookies } from "vinxi/server";
 import { clientOnly } from "@solidjs/start";
+
 import { Background } from "~/components/Background";
+import { Space } from "~/config";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
-import { Space, useSpace } from "~/stores/spaces";
+import { useSpace } from "~/stores";
 
 const Menu = clientOnly(() =>
   import("~/components/Menu").then((m) => ({ default: m.Menu }))

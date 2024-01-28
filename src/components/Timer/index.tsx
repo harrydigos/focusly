@@ -12,12 +12,15 @@ import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
-import { INIT_TIMER } from "~/config/timer";
+import { INIT_TIMER } from "~/config";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
-import { useCursorPositionContext, usePanelContext } from "~/providers";
-import { useAlarmSound } from "~/stores";
+import {
+  useCursorPositionContext,
+  usePanelContext,
+  useSettingsContext,
+} from "~/providers";
 import { Timer as TimerType } from "~/types";
 
 type WorkerReceiveMsg = Pick<TimerType, "currentTime"> &
@@ -37,7 +40,7 @@ export const Timer: Component = () => {
   const { cursorPosition } = useCursorPositionContext();
   const [timer, setTimer] = createSignal(INIT_TIMER);
   const [isRunning, setIsRunning] = createSignal(false);
-  const { sound } = useAlarmSound();
+  const { alarmSound: sound } = useSettingsContext();
   const windowSize = useWindowSize();
 
   let timerWorker: Worker | undefined;

@@ -1,5 +1,5 @@
 import { Component, Match, Switch } from "solid-js";
-import { useSpace } from "~/stores/spaces";
+import { useSpace } from "~/stores";
 
 import { SpiritedAwayTrain } from "./SpiritedAwayTrain";
 import { LofiGirl } from "./LofiGirl";

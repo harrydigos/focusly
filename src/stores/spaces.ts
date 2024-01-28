@@ -1,14 +1,7 @@
 import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { createSignal } from "solid-js";
 
-export const SPACES = [
-  "lofi_girl",
-  "spirited_away_train",
-  "lofi_girl_balcony",
-  "train",
-] as const;
-
-export type Space = (typeof SPACES)[number];
+import { Space } from "~/config";
 
 const SPACE_COOKIE_KEY = "focusly_space";
 
