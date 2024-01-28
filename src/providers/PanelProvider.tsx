@@ -79,7 +79,7 @@ export const PanelProvider: Component<{
       return isLocked;
     });
     setNoteControl("isLocked", isLocked);
-    setNotes(notes.map((note) => ({ ...note, isLocked })));
+    notes.forEach((_, i) => setNotes(i, "isLocked", isLocked));
     setMusic("isLocked", isLocked);
     setTimer("isLocked", isLocked);
   };
