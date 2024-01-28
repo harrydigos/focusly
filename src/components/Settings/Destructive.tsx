@@ -1,13 +1,25 @@
+import { useWindowSize } from "@solid-primitives/resize-observer";
 import { TbAlertCircle } from "solid-icons/tb";
 import { Component } from "solid-js";
 
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
+import { usePanelContext, useSettingsContext } from "~/providers";
 
 export const Destructive: Component = () => {
+  const { resetAll: resetPanels } = usePanelContext();
+  const { resetAll: resetSettings } = useSettingsContext();
+
+  const winSize = useWindowSize();
+
   const reset = () => {
-    localStorage.clear();
-    window.location.reload();
+    const isMobile = winSize.width <= 640;
+    const pxFromCenter = isMobile ? 170 : 220;
+
+    resetPanels({
+      x: winSize.width / 2 - pxFromCenter,
+    });
+    resetSettings();
   };
 
   return (
