@@ -1,11 +1,12 @@
 import { Component, splitProps } from "solid-js";
-import { classNames } from "~/utils";
+
 import { Stack, StackProps } from "~/design/Stack";
-import { useBgColor } from "~/stores";
+import { useSettingsContext } from "~/providers";
+import { classNames } from "~/utils";
 
 export const GlassBox: Component<StackProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "direction"]);
-  const { color } = useBgColor();
+  const { bgColor: color } = useSettingsContext();
 
   return (
     <Stack

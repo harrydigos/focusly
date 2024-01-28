@@ -1,9 +1,10 @@
 import { Component, For, Match, Show, Switch } from "solid-js";
 import { TbAtom, TbBell, TbBrush, TbCheck } from "solid-icons/tb";
 
+import { ALARMS, BG_COLORS } from "~/config";
 import { Stack } from "~/design/Stack";
 import { Piano } from "~/design/icons";
-import { ALARMS, BG_COLORS, useAlarmSound, useBgColor } from "~/stores";
+import { useSettingsContext } from "~/providers";
 import { classNames } from "~/utils";
 
 export const Customization: Component = () => {
@@ -24,7 +25,7 @@ export const Customization: Component = () => {
 };
 
 const PanelColor: Component = () => {
-  const { color, updateBgColor } = useBgColor();
+  const { bgColor: color, updateBgColor } = useSettingsContext();
 
   return (
     <Stack
@@ -64,7 +65,7 @@ const PanelColor: Component = () => {
 };
 
 const Alarm: Component = () => {
-  const { sound, updateSound } = useAlarmSound();
+  const { alarmSound: sound, updateAlarmSound: updateSound } = useSettingsContext();
   const alarmAudio = new Audio();
 
   return (

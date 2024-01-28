@@ -2,10 +2,11 @@ import { Accessor, Component, For, Setter, Show } from "solid-js";
 import { Dialog } from "@ark-ui/solid";
 import { TbCheck, TbX } from "solid-icons/tb";
 
+import { SPACES } from "~/config";
 import { Button } from "~/design/Button";
 import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
-import { SPACES, useSpace } from "~/stores/spaces";
+import { useSpace } from "~/stores";
 
 interface SpacesModalProps {
   isOpen: Accessor<boolean>;
