@@ -5,10 +5,12 @@ import { Component } from "solid-js";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
 import { usePanelContext, useSettingsContext } from "~/providers";
+import { useSpace } from "~/stores";
 
 export const Destructive: Component = () => {
   const { resetAll: resetPanels } = usePanelContext();
   const { resetAll: resetSettings } = useSettingsContext();
+  const { setSpace } = useSpace();
 
   const winSize = useWindowSize();
 
@@ -20,6 +22,7 @@ export const Destructive: Component = () => {
       x: winSize.width / 2 - pxFromCenter,
     });
     resetSettings();
+    setSpace(() => "lofi_girl");
   };
 
   return (
