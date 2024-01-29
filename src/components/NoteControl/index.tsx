@@ -63,7 +63,7 @@ export const NoteControl: Component = () => {
   const createNote = () => {
     const newNote: Note = {
       id: Date.now().toString(),
-      value: "New note",
+      value: "",
       isOpen: true,
       isLocked: noteControl.isLocked,
       position: {
@@ -186,9 +186,7 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
       const lines = props.note.value.split(/\n/g);
       const firstWrittenLine = lines.findIndex((l) => l.length > 0);
       return {
-        title: lines[firstWrittenLine]?.includes(" ")
-          ? "New note"
-          : lines[firstWrittenLine],
+        title: lines[firstWrittenLine],
         text: lines.slice(firstWrittenLine + 1).join("\n"),
       };
     }
@@ -232,8 +230,12 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
       >
         <Stack direction="flex-col">
           <Stack direction="flex-row" class="items-center gap-2">
-            <h2 class="max-w-[205px] truncate text-sm sm:max-w-[300px]">
-              {noteValue().title}
+            <h2 class="max-w-[205px] truncate text-sm sm:max-w-[300px]"
+              classList={{
+                "text-stone-500": !noteValue().title,
+              }}
+            >
+              {noteValue().title || 'Empty note'}
             </h2>
             <Show
               when={props.note.isOpen}
