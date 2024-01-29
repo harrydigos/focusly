@@ -48,8 +48,9 @@ const StickyNote: Component<{
           <GlassBox direction="flex-col" class="h-[250px] max-h-[500px]">
             <Textarea
               isTransparent
-              class="aspect-square h-full w-full resize-none"
+              class="aspect-square h-full w-full resize-none placeholder:text-stone-400"
               value={props.note.value}
+              placeholder="Click inside to start typing..."
               onInput={(e) => {
                 setNotes(props.index(), "value", e.currentTarget.value);
               }}
