@@ -196,17 +196,16 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
           </Show>
         </Show>
 
-        <Checkbox
-          class="flex cursor-pointer flex-row gap-2"
-          checked={props.todo.completed}
-          onChange={toggleTodo}
-        >
-          <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
-            {props.todo.completed && <TbCheck size={16} class="stroke-white" />}
-          </CheckboxControl>
-          <Show
-            when={isEditing()}
-            fallback={
+        <Stack direction="flex-row" class="cursor-pointer gap-2">
+          <Checkbox
+            class="flex flex-row gap-2 cursor-pointer"
+            checked={props.todo.completed}
+            onChange={toggleTodo}
+          >
+            <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
+              {props.todo.completed && <TbCheck size={16} class="stroke-white" />}
+            </CheckboxControl>
+            <Show when={!isEditing()}>
               <CheckboxLabel
                 class="flex h-full min-h-[32px] max-w-[190px] select-none items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
                 classList={{
@@ -215,8 +214,10 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
               >
                 {props.todo.value}
               </CheckboxLabel>
-            }
-          >
+            </Show>
+          </Checkbox>
+
+          <Show when={isEditing()}>
             <Input
               ref={el}
               class="h-8 sm:w-[280px]"
@@ -232,7 +233,8 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
               }}
             />
           </Show>
-        </Checkbox>
+        </Stack>
+
         <Stack direction="flex-row" class="gap-1">
           <Show when={!isEditing()}>
             <Button
