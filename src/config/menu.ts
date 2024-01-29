@@ -35,6 +35,7 @@ export const initialNoteControl = (pos?: { x: number }): Tab => ({
 export const initialNotes = (pos?: { x: number }): Note[] => [
   {
     id: Date.now().toString(),
+    updatedAt: new Date().toISOString(),
     value: "Example note",
     position: {
       x: pos?.x ?? 0,

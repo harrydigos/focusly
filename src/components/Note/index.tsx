@@ -60,9 +60,9 @@ const StickyNote: Component<{
                 const lines = e.currentTarget.value.split(/[\n\s]/g);
                 const hasLetters = lines.some((line) => line.length > 0);
                 if (!hasLetters) {
-                  setNotes(props.index(), "value", "New note");
+                  setNotes(props.index(), "value", "");
                 }
-                setNotes(props.index(), "id", Date.now().toString()); // use updated_at
+                setNotes(props.index(), "updatedAt", new Date().toISOString());
               }}
               spellcheck={false}
               onKeyDown={(e) => {

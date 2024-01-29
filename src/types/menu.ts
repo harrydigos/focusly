@@ -24,6 +24,7 @@ export interface Todo {
 
 export interface Note extends Tab {
   id: string;
+  updatedAt: string;
   value: string;
 }
 

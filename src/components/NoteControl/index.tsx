@@ -63,6 +63,7 @@ export const NoteControl: Component = () => {
   const createNote = () => {
     const newNote: Note = {
       id: Date.now().toString(),
+      updatedAt: new Date().toISOString(),
       value: "",
       isOpen: true,
       isLocked: noteControl.isLocked,
@@ -171,7 +172,7 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
   };
 
   const updatedAt = createMemo(() => {
-    const date = new Date(parseInt(props.note.id));
+    const date = new Date(props.note.updatedAt);
     return new Intl.DateTimeFormat("en-UK", {
       weekday: "short",
       day: "numeric",
