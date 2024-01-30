@@ -1,6 +1,6 @@
 import { IconTypes } from "solid-icons";
-import { TbAlarm, TbListCheck, TbMusic, TbNote } from "solid-icons/tb";
-import { Component } from "solid-js";
+import { TbAlarm, TbListCheck, TbLock, TbMusic, TbNote } from "solid-icons/tb";
+import { Component, Show } from "solid-js";
 import { SetStoreFunction } from "solid-js/store";
 
 import { GlassBox } from "~/design/GlassBox";
@@ -31,6 +31,15 @@ export const Menu: Component = () => {
         <MenuItem key="music" tab={music} setTab={setMusic} />
         <MenuItem key="timer" tab={timer} setTab={setTimer} />
       </GlassBox>
+
+      <Show when={todos.isLocked}>
+        <GlassBox
+          direction="flex-row"
+          class="absolute top-14 rounded-full p-0.5"
+        >
+          <TbLock class="h-4 w-4 stroke-white" />
+        </GlassBox>
+      </Show>
     </header>
   );
 };
