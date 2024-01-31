@@ -1,9 +1,11 @@
 import { Accessor, Component, For, Show, createSignal } from "solid-js";
 import { useWindowSize } from "@solid-primitives/resize-observer";
+import { TbGripHorizontal } from "solid-icons/tb";
 
 import { AnimatePanel } from "~/components/AnimatePanel";
 import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
+import { Stack } from "~/design/Stack";
 import { Textarea } from "~/design/Textarea";
 import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { Note } from "~/types";
@@ -45,10 +47,22 @@ const StickyNote: Component<{
           index={props.index}
           disabled={disableDrag()}
         >
-          <GlassBox direction="flex-col" class="h-[250px] max-h-[500px]">
+          <GlassBox
+            direction="flex-col"
+            class="relative h-[250px] max-h-[500px]"
+            style={{
+              padding: 0,
+            }}
+          >
+            <Stack
+              direction="flex-row"
+              class="absolute inset-0 h-6 w-full items-center justify-center rounded-t-full backdrop-blur"
+            >
+              <TbGripHorizontal size={16} class="stroke-white/80" />
+            </Stack>
             <Textarea
               isTransparent
-              class="aspect-square h-full w-full resize-none placeholder:text-stone-400"
+              class="aspect-square h-full w-full resize-none p-4 pt-8 placeholder:text-stone-400"
               value={props.note.value}
               placeholder="Click inside to start typing..."
               onInput={(e) => {
