@@ -38,8 +38,8 @@ export const initialNotes = (pos?: { x: number }): Note[] => [
     updatedAt: new Date().toISOString(),
     value: "Example note",
     position: {
-      x: pos?.x ?? 0,
-      y: 80,
+      x: 0,
+      y: 0,
       z: 0,
     },
     isOpen: false,

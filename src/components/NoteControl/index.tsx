@@ -34,6 +34,19 @@ import { Note } from "~/types";
 import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { ToastStyle } from "~/utils";
 
+const findPositionToPlace = (notes: Note[]) => {
+  const position = {
+    x: 0, y: 0
+  }
+
+  while (notes.some(n => n.position.x === position.x && n.position.y === position.y)) {
+    position.x += 20
+    position.y += 20
+  }
+
+  return position
+}
+
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
     usePanelContext();
@@ -60,7 +73,10 @@ export const NoteControl: Component = () => {
     }
   };
 
+
   const createNote = () => {
+    const pos = findPositionToPlace(notes)
+
     const newNote: Note = {
       id: Date.now().toString(),
       updatedAt: new Date().toISOString(),
@@ -68,8 +84,8 @@ export const NoteControl: Component = () => {
       isOpen: true,
       isLocked: noteControl.isLocked,
       position: {
-        x: noteControl.position.x,
-        y: noteControl.position.y,
+        x: pos.x,
+        y: pos.y,
         z: getBiggestZ() + 1,
       },
     };
