@@ -1,7 +1,7 @@
 export const ALARMS = [
-  { value: "bells", url: "bells.wav" },
-  { value: "arp", url: "arp.wav" },
-  { value: "cosmo", url: "cosmo.wav" },
+  { value: "bells", url: "sounds/bells.wav" },
+  { value: "arp", url: "sounds/arp.wav" },
+  { value: "cosmo", url: "sounds/cosmo.wav" },
 ] as const;
 
 export type Alarm = (typeof ALARMS)[number];
