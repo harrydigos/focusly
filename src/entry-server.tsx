@@ -13,16 +13,21 @@ export default createHandler(() => (
             content="width=device-width, initial-scale=1, maximum-scale=1"
           />
           <link rel="icon" href="/favicon.ico" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossorigin=""
-          />
-          <link
+            rel="preload"
             href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap"
-            rel="stylesheet"
+            as="style"
+            // @ts-ignore
+            // eslint-disable-next-line solid/event-handlers
+            onload="this.onload=null;this.rel='stylesheet'"
           />
+          <noscript>
+            <link
+              href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap"
+              rel="stylesheet"
+              type="text/css"
+            />
+          </noscript>
 
           <link
             rel="apple-touch-icon"
