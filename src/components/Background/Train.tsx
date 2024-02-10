@@ -10,6 +10,7 @@ export const Train: Component = () => {
       playsinline
       poster={"/images/train.png"}
       onContextMenu={(e) => e.preventDefault()}
+      preload="auto"
     >
       <source src={"/videos/train.mp4"} type="video/mp4" />
     </video>

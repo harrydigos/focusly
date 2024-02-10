@@ -10,6 +10,7 @@ export const LofiGirlBalcony: Component = () => {
       playsinline
       poster={"/images/lofi_girl_balcony.png"}
       onContextMenu={(e) => e.preventDefault()}
+      preload="auto"
     >
       <source src={"/videos/lofi_girl_balcony.mp4"} type="video/mp4" />
     </video>
