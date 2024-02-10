@@ -9,13 +9,7 @@ import {
   TbVolume3,
 } from "solid-icons/tb";
 import PlayerStates from "youtube-player/dist/constants/PlayerStates";
-import {
-  Slider,
-  SliderControl,
-  SliderRange,
-  SliderThumb,
-  SliderTrack,
-} from "@ark-ui/solid";
+import { Slider } from "@kobalte/core";
 import { useWindowSize } from "@solid-primitives/resize-observer";
 
 import {
@@ -81,21 +75,19 @@ export const YoutubePlayer: Component = () => {
                     </Show>
                   </Show>
                 </Button>
-                <Slider
-                  min={0}
-                  max={100}
-                  step={1}
+                <Slider.Root
                   value={[volume()]}
-                  onValueChange={({ value }) => setVolume(value[0])}
-                  class="w-24"
+                  onChange={setVolume}
+                  step={1}
+                  class="relative flex h-6 w-24 select-none items-center"
                 >
-                  <SliderControl class="relative flex h-6 w-full items-center">
-                    <SliderTrack class="h-1 w-full rounded-full bg-stone-900">
-                      <SliderRange class="h-1 rounded-full bg-white" />
-                    </SliderTrack>
-                    <SliderThumb class="h-3 w-3 rounded-full bg-white" />
-                  </SliderControl>
-                </Slider>
+                  <Slider.Track class="relative h-1.5 w-full rounded-full bg-stone-900">
+                    <Slider.Fill class="absolute h-full rounded-full bg-white" />
+                    <Slider.Thumb class="-top-[3px] h-3 w-3 rounded-full bg-white hover:ring hover:ring-white/30 focus-visible:outline-none focus-visible:ring focus-visible:ring-white/30">
+                      <Slider.Input />
+                    </Slider.Thumb>
+                  </Slider.Track>
+                </Slider.Root>
               </Stack>
             </Stack>
           </GlassBox>

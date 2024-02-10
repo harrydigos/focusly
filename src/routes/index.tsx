@@ -1,10 +1,12 @@
-import { TbPlanet, TbSettings } from "solid-icons/tb";
+import { TbSettings } from "solid-icons/tb";
 import { createSignal } from "solid-js";
 import { getRequestEvent, isServer } from "solid-js/web";
 import { parseCookies } from "vinxi/server";
 import { clientOnly } from "@solidjs/start";
 
 import { Background } from "~/components/Background";
+import { SettingsDialog } from "~/components/Settings";
+import { SpacesDialog } from "~/components/Spaces";
 import { Space } from "~/config";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
@@ -12,14 +14,6 @@ import { useSpace } from "~/stores";
 
 const Panels = clientOnly(() =>
   import("~/components/Panels").then((m) => ({ default: m.Panels }))
-);
-
-const SettingsModal = clientOnly(() =>
-  import("~/components/Settings").then((m) => ({ default: m.SettingsModal }))
-);
-
-const SpacesModal = clientOnly(() =>
-  import("~/components/Spaces").then((m) => ({ default: m.SpacesModal }))
 );
 
 const getSpaceCookie = (): Space => {
@@ -38,8 +32,6 @@ const getSpaceCookie = (): Space => {
 };
 
 export default function Home() {
-  const [openSettings, setOpenSettings] = createSignal(false);
-  const [openSpaces, setOpenSpaces] = createSignal(false);
   const { setSpace } = useSpace();
 
   if (isServer) {
@@ -51,36 +43,26 @@ export default function Home() {
       <Background />
 
       <Panels />
-      <SettingsModal isOpen={openSettings} setIsOpen={setOpenSettings} />
-      <SpacesModal isOpen={openSpaces} setIsOpen={setOpenSpaces} />
 
       <Stack direction="flex-col" class="absolute bottom-4 left-4 gap-2">
-        <Button
-          variant="secondary"
-          class="h-10 w-10"
-          onClick={() => setOpenSpaces(true)}
-        >
-          <TbPlanet class="h-5 w-5" />
-        </Button>
-        <Button
-          variant="secondary"
-          class="h-10 w-10"
-          onClick={() => setOpenSettings(true)}
-        >
-          <TbSettings class="h-5 w-5" />
-        </Button>
+        <SpacesDialog />
+        <SettingsDialog />
       </Stack>
 
-      <p class="absolute bottom-0 right-0 w-fit select-none rounded-tl-xl bg-stone-900 px-2 py-1.5 text-xs font-medium leading-none text-white">
-        <span class="text-[10px]">by </span>
-        <a
-          href="https://twitter.com/harry_digos"
-          target="blank"
-          class="hover:underline"
-        >
-          @harry_digos
-        </a>
-      </p>
+      <Signature />
     </main>
   );
 }
+
+const Signature = () => (
+  <p class="absolute bottom-0 right-0 w-fit select-none rounded-tl-xl bg-stone-900 px-2 py-1.5 text-xs font-medium leading-none text-white">
+    <span class="text-[10px]">by </span>
+    <a
+      href="https://twitter.com/harry_digos"
+      target="blank"
+      class="hover:underline"
+    >
+      @harry_digos
+    </a>
+  </p>
+);

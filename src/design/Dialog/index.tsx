@@ -1,9 +1,9 @@
-import { DialogBackdrop, DialogContent, DialogPositioner } from "@ark-ui/solid";
+import { Dialog as KobalteDialog } from "@kobalte/core";
 import { Accessor, Component, JSX, Show, children, untrack } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Transition } from "solid-transition-group";
 
-interface ModalProps {
+interface DialogProps {
   isOpen: Accessor<boolean>;
   children: JSX.Element;
 }
@@ -24,7 +24,7 @@ const dialogAnim = () => [
   },
 ];
 
-export const Modal: Component<ModalProps> = (props) => {
+export const Dialog: Component<DialogProps> = (props) => {
   return (
     <>
       {untrack(() => {
@@ -45,8 +45,8 @@ export const Modal: Component<ModalProps> = (props) => {
               }}
             >
               <Show when={props.isOpen()}>
-                {/* Max zIndex ends in 47, Modal ends in 46 to display Toasts in front */}
-                <DialogBackdrop
+                {/* Max zIndex ends in 47, Dialog ends in 46 to display Toasts in front */}
+                <KobalteDialog.Overlay
                   class="fixed inset-0 bg-black/50 backdrop-blur-sm backdrop-filter"
                   style={{
                     "z-index": 2147483646,
@@ -70,16 +70,16 @@ export const Modal: Component<ModalProps> = (props) => {
               }}
             >
               <Show when={props.isOpen()}>
-                <DialogPositioner
+                <div
                   class="fixed inset-0 flex h-full w-full items-center justify-center"
                   style={{
                     "z-index": 2147483646,
                   }}
                 >
-                  <DialogContent class="mx-2 flex w-96 flex-col rounded-3xl border border-stone-200 border-opacity-10 bg-stone-900 bg-opacity-90 p-6 text-white backdrop-blur-xl backdrop-filter">
+                  <KobalteDialog.Content class="mx-2 flex w-96 flex-col rounded-3xl border border-stone-200 border-opacity-10 bg-stone-900 bg-opacity-90 p-6 text-white backdrop-blur-xl backdrop-filter">
                     {props.children}
-                  </DialogContent>
-                </DialogPositioner>
+                  </KobalteDialog.Content>
+                </div>
               </Show>
             </Transition>
           </>

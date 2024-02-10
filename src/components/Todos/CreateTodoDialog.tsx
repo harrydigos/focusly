@@ -1,4 +1,4 @@
-import { Dialog } from "@ark-ui/solid";
+import { Dialog as KobalteDialog } from "@kobalte/core";
 import {
   SubmitHandler,
   createForm,
@@ -6,12 +6,13 @@ import {
   required,
   reset,
 } from "@modular-forms/solid";
-import { Accessor, Component, Setter } from "solid-js";
+import { TbPlus } from "solid-icons/tb";
+import { Component, createSignal } from "solid-js";
 import toast from "solid-toast";
 
 import { Button } from "~/design/Button";
+import { Dialog } from "~/design/Dialog";
 import { Input } from "~/design/Input";
-import { Modal } from "~/design/Modal";
 import { Stack } from "~/design/Stack";
 import { usePanelContext } from "~/providers";
 import { Todo } from "~/types";
@@ -21,12 +22,8 @@ type TodoForm = {
   todo: string;
 };
 
-interface CreateTodoModalProps {
-  isOpen: Accessor<boolean>;
-  setIsOpen: Setter<boolean>;
-}
-
-export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
+export const CreateTodoDialog: Component = () => {
+  const [isOpen, setIsOpen] = createSignal(false);
   const { setTodos } = usePanelContext();
   const [form, { Form, Field }] = createForm<TodoForm>({
     initialValues: {
@@ -50,11 +47,15 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
   };
 
   return (
-    <Dialog
-      open={props.isOpen()}
-      onOpenChange={({ open }) => props.setIsOpen(open)}
+    <KobalteDialog.Root
+      open={isOpen()}
+      onOpenChange={(open) => setIsOpen(open)}
     >
-      <Modal isOpen={props.isOpen}>
+      <Button onClick={() => setIsOpen(true)}>
+        <TbPlus size={20} class="stroke-stone-900" />
+        New todo
+      </Button>
+      <Dialog isOpen={isOpen}>
         <Form onSubmit={handleSubmit}>
           <Field
             name={"todo"}
@@ -89,7 +90,7 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
                   <Button
                     variant="outline"
                     class="w-full"
-                    onClick={() => props.setIsOpen(false)}
+                    onClick={() => setIsOpen(false)}
                   >
                     Close
                   </Button>
@@ -101,7 +102,7 @@ export const CreateTodoModal: Component<CreateTodoModalProps> = (props) => {
             )}
           </Field>
         </Form>
-      </Modal>
-    </Dialog>
+      </Dialog>
+    </KobalteDialog.Root>
   );
 };

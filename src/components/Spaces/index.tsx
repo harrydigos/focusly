@@ -1,27 +1,30 @@
-import { Accessor, Component, For, Setter, Show } from "solid-js";
-import { Dialog } from "@ark-ui/solid";
-import { TbCheck, TbX } from "solid-icons/tb";
+import { Dialog as KobalteDialog } from "@kobalte/core";
+import { Component, For, Show, createSignal } from "solid-js";
+import { TbCheck, TbPlanet, TbX } from "solid-icons/tb";
 
 import { SPACES } from "~/config";
 import { Button } from "~/design/Button";
-import { Modal } from "~/design/Modal";
+import { Dialog } from "~/design/Dialog";
 import { Stack } from "~/design/Stack";
 import { useSpace } from "~/stores";
 
-interface SpacesModalProps {
-  isOpen: Accessor<boolean>;
-  setIsOpen: Setter<boolean>;
-}
-
-export const SpacesModal: Component<SpacesModalProps> = (props) => {
+export const SpacesDialog: Component = () => {
   const { space: currentSpace, setSpace } = useSpace();
+  const [isOpen, setIsOpen] = createSignal(false);
 
   return (
-    <Dialog
-      open={props.isOpen()}
-      onOpenChange={({ open }) => props.setIsOpen(open)}
+    <KobalteDialog.Root
+      open={isOpen()}
+      onOpenChange={(open) => setIsOpen(open)}
     >
-      <Modal isOpen={props.isOpen}>
+      <Button
+        variant="secondary"
+        class="h-10 w-10"
+        onClick={() => setIsOpen(true)}
+      >
+        <TbPlanet class="h-5 w-5" />
+      </Button>
+      <Dialog isOpen={isOpen}>
         <Stack direction="flex-col" class="gap-4">
           <Stack
             direction="flex-row"
@@ -31,7 +34,7 @@ export const SpacesModal: Component<SpacesModalProps> = (props) => {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => props.setIsOpen(false)}
+              onClick={() => setIsOpen(false)}
             >
               <TbX class="h-4 w-4" />
             </Button>
@@ -57,7 +60,7 @@ export const SpacesModal: Component<SpacesModalProps> = (props) => {
             </For>
           </div>
         </Stack>
-      </Modal>
-    </Dialog>
+      </Dialog>
+    </KobalteDialog.Root>
   );
 };

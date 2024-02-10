@@ -6,14 +6,8 @@ import {
   createMemo,
   createSignal,
 } from "solid-js";
-import { Checkbox, CheckboxLabel, CheckboxControl } from "@ark-ui/solid";
-import {
-  TbCheck,
-  TbEdit,
-  TbGripVertical,
-  TbPlus,
-  TbTrash,
-} from "solid-icons/tb";
+import { Checkbox } from "@kobalte/core";
+import { TbCheck, TbEdit, TbGripVertical, TbTrash } from "solid-icons/tb";
 import {
   closestCenter,
   createSortable,
@@ -36,12 +30,11 @@ import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 import { ToastStyle } from "~/utils";
 
-import { CreateTodoModal } from "./CreateTodoModal";
+import { CreateTodoDialog } from "./CreateTodoDialog";
 
 export const Todos: Component = () => {
   const { todos, setTodos } = usePanelContext();
   const { cursorPosition } = useCursorPositionContext();
-  const [isOpen, setIsOpen] = createSignal(false);
   const windowSize = useWindowSize();
 
   const [reorder, setReorder] = createSignal(false);
@@ -67,13 +60,15 @@ export const Todos: Component = () => {
   const initialPosition = {
     x: windowSize.width / 2,
     y: 40,
-  }
+  };
 
   return (
-    <AnimatePanel from={cursorPosition() ?? initialPosition} to={todos.position}>
+    <AnimatePanel
+      from={cursorPosition() ?? initialPosition}
+      to={todos.position}
+    >
       <Show when={todos.isOpen}>
         <Draggable tab={todos} setTab={setTodos} disabled={reorder()}>
-          <CreateTodoModal isOpen={isOpen} setIsOpen={setIsOpen} />
           <GlassBox
             direction="flex-col"
             class="max-h-[500px] w-[340px] gap-4 px-0 sm:w-[440px]"
@@ -83,10 +78,7 @@ export const Todos: Component = () => {
               class="select-none items-center justify-between px-6"
             >
               <h1 class="text-xl font-semibold">Todos</h1>
-              <Button onClick={() => setIsOpen(true)}>
-                <TbPlus size={20} class="stroke-stone-900" />
-                New todo
-              </Button>
+              <CreateTodoDialog />
             </Stack>
             <DragDropProvider
               onDragEnd={onDragEnd}
@@ -165,11 +157,14 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
     setTodos("todosList", todoIndex(), "value", () => value);
   };
 
-  const canSeeGrip = createMemo(() => winSize.width > 640 && todos.todosList.length > 1)
+  const canSeeGrip = createMemo(
+    () => winSize.width > 640 && todos.todosList.length > 1
+  );
 
   return (
     <div
-      use: sortable
+      // @prettier-ignore
+      use:sortable
       classList={{
         "opacity-30": sortable.isActiveDraggable && canSeeGrip(),
         "transition-transform cursor-grabbing": !!ctx?.[0].active.draggable,
@@ -197,25 +192,28 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
         </Show>
 
         <Stack direction="flex-row" class="cursor-pointer gap-2">
-          <Checkbox
-            class="flex flex-row gap-2 cursor-pointer"
+          <Checkbox.Root
+            class="flex cursor-pointer flex-row gap-2"
             checked={props.todo.completed}
             onChange={toggleTodo}
           >
-            <CheckboxControl class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
-              {props.todo.completed && <TbCheck size={16} class="stroke-white" />}
-            </CheckboxControl>
+            <Checkbox.Input />
+            <Checkbox.Control class="mt-2 h-4 w-4 rounded-[4px] bg-stone-900">
+              <Show when={props.todo.completed}>
+                <TbCheck size={16} class="stroke-white" />
+              </Show>
+            </Checkbox.Control>
             <Show when={!isEditing()}>
-              <CheckboxLabel
+              <Checkbox.Label
                 class="flex h-full min-h-[32px] max-w-[190px] select-none items-center overflow-hidden break-words text-sm sm:max-w-[280px]"
                 classList={{
                   "line-through opacity-50": props.todo.completed,
                 }}
               >
                 {props.todo.value}
-              </CheckboxLabel>
+              </Checkbox.Label>
             </Show>
-          </Checkbox>
+          </Checkbox.Root>
 
           <Show when={isEditing()}>
             <Input

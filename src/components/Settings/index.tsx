@@ -1,27 +1,31 @@
-import { Accessor, Component, Setter } from "solid-js";
-import { Dialog } from "@ark-ui/solid";
-import { TbX } from "solid-icons/tb";
+import { Dialog as KobalteDialog } from "@kobalte/core";
+import { Component, createSignal } from "solid-js";
+import { TbSettings, TbX } from "solid-icons/tb";
 
 import { Button } from "~/design/Button";
-import { Modal } from "~/design/Modal";
+import { Dialog } from "~/design/Dialog";
 import { Stack } from "~/design/Stack";
 
 import { General } from "./General";
 import { Customization } from "./Customization";
 import { Destructive } from "./Destructive";
 
-interface SettingsModalProps {
-  isOpen: Accessor<boolean>;
-  setIsOpen: Setter<boolean>;
-}
+export const SettingsDialog: Component = () => {
+  const [isOpen, setIsOpen] = createSignal(false);
 
-export const SettingsModal: Component<SettingsModalProps> = (props) => {
   return (
-    <Dialog
-      open={props.isOpen()}
-      onOpenChange={({ open }) => props.setIsOpen(open)}
+    <KobalteDialog.Root
+      open={isOpen()}
+      onOpenChange={(open) => setIsOpen(open)}
     >
-      <Modal isOpen={props.isOpen}>
+      <Button
+        variant="secondary"
+        class="h-10 w-10"
+        onClick={() => setIsOpen(true)}
+      >
+        <TbSettings class="h-5 w-5" />
+      </Button>
+      <Dialog isOpen={isOpen}>
         <Stack direction="flex-col" class="gap-4">
           <Stack
             direction="flex-row"
@@ -31,7 +35,7 @@ export const SettingsModal: Component<SettingsModalProps> = (props) => {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => props.setIsOpen(false)}
+              onClick={() => setIsOpen(false)}
             >
               <TbX class="h-4 w-4" />
             </Button>
@@ -40,7 +44,7 @@ export const SettingsModal: Component<SettingsModalProps> = (props) => {
           <Customization />
           <Destructive />
         </Stack>
-      </Modal>
-    </Dialog>
+      </Dialog>
+    </KobalteDialog.Root>
   );
 };
