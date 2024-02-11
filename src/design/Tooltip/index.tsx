@@ -20,7 +20,9 @@ export const Tooltip: Component<TooltipProps> = (props) => {
 
   return (
     <KobalteTooltip.Root {...rest}>
-      <KobalteTooltip.Trigger>{local.children}</KobalteTooltip.Trigger>
+      <KobalteTooltip.Trigger class="inline-flex">
+        {local.children}
+      </KobalteTooltip.Trigger>
       <KobalteTooltip.Portal>
         <KobalteTooltip.Content
           class="rounded-lg border border-stone-700 bg-stone-900 px-2 py-1.5 text-xs font-normal text-stone-50 drop-shadow-md"

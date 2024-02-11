@@ -16,6 +16,7 @@ import { INIT_TIMER } from "~/config";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
+import { Tooltip } from "~/design/Tooltip";
 import {
   useCursorPositionContext,
   usePanelContext,
@@ -78,8 +79,9 @@ export const Timer: Component = () => {
         isOnBreak: typeof isBreak !== "undefined" ? isBreak : prev.isOnBreak,
       }));
 
-      document.title = `${"Focusly"}${isRunning() ? ` | ${displayTime(time)}` : ""
-        }`;
+      document.title = `${"Focusly"}${
+        isRunning() ? ` | ${displayTime(time)}` : ""
+      }`;
     };
 
     timerWorker.onmessage = onReceiveMessage;
@@ -137,14 +139,22 @@ export const Timer: Component = () => {
             >
               <div class="select-none">{displayTime(timer().currentTime)}</div>
               <Stack direction="flex-row" class="gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  style={{ height: "40px", width: "40px" }}
-                  onClick={resetTimer}
+                <Tooltip
+                  description="Reset"
+                  gutter={2}
+                  arrowSize={16}
+                  placement="left"
                 >
-                  <TbRotateClockwise />
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    classList={{ "h-10 w-10": true }}
+                    style={{ height: "40px", width: "40px" }}
+                    onClick={resetTimer}
+                  >
+                    <TbRotateClockwise />
+                  </Button>
+                </Tooltip>
                 <Button
                   class="w-[122px] select-none"
                   onClick={() => setIsRunning((prev) => !prev)}
