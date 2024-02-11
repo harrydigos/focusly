@@ -7,7 +7,7 @@ import {
   reset,
 } from "@modular-forms/solid";
 import { TbPlus } from "solid-icons/tb";
-import { Component, createSignal } from "solid-js";
+import { Component, createEffect, createSignal, onMount } from "solid-js";
 import toast from "solid-toast";
 
 import { Button } from "~/design/Button";
@@ -25,10 +25,17 @@ type TodoForm = {
 export const CreateTodoDialog: Component = () => {
   const [isOpen, setIsOpen] = createSignal(false);
   const { setTodos } = usePanelContext();
+  const [inputRef, setInputRef] = createSignal<HTMLElement | null>(null);
   const [form, { Form, Field }] = createForm<TodoForm>({
     initialValues: {
       todo: "",
     },
+  });
+
+  createEffect(() => {
+    if (isOpen()) {
+      inputRef()?.focus();
+    }
   });
 
   const handleSubmit: SubmitHandler<TodoForm> = (values) => {
@@ -71,7 +78,7 @@ export const CreateTodoDialog: Component = () => {
                   <Stack direction="flex-row">
                     <Input
                       {...fieldProps}
-                      autofocus={true}
+                      ref={setInputRef}
                       spellcheck={false}
                       placeholder="e.g. Pretend you are studying"
                       autocomplete="off"
