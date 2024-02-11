@@ -1,5 +1,3 @@
-import { TbSettings } from "solid-icons/tb";
-import { createSignal } from "solid-js";
 import { getRequestEvent, isServer } from "solid-js/web";
 import { parseCookies } from "vinxi/server";
 import { clientOnly } from "@solidjs/start";
@@ -8,7 +6,6 @@ import { Background } from "~/components/Background";
 import { SettingsDialog } from "~/components/Settings";
 import { SpacesDialog } from "~/components/Spaces";
 import { Space } from "~/config";
-import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
 import { useSpace } from "~/stores";
 
