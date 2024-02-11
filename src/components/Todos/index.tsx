@@ -26,6 +26,7 @@ import { Button } from "~/design/Button";
 import { Input } from "~/design/Input";
 import { Stack } from "~/design/Stack";
 import { GlassBox } from "~/design/GlassBox";
+import { Tooltip } from "~/design/Tooltip";
 import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { Todo } from "~/types";
 import { ToastStyle } from "~/utils";
@@ -235,17 +236,31 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
 
         <Stack direction="flex-row" class="gap-1">
           <Show when={!isEditing()}>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsEditing(true)}
+            <Tooltip
+              description="Edit"
+              placement="left"
+              gutter={2}
+              arrowSize={16}
             >
-              <TbEdit size={20} />
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsEditing(true)}
+              >
+                <TbEdit size={20} />
+              </Button>
+            </Tooltip>
           </Show>
-          <Button variant="ghost" size="icon" onClick={deleteTodo}>
-            <TbTrash size={20} class="stroke-red-500" />
-          </Button>
+          <Tooltip
+            description="Delete"
+            placement="right"
+            gutter={2}
+            arrowSize={16}
+          >
+            <Button variant="ghost" size="icon" onClick={deleteTodo}>
+              <TbTrash size={20} class="stroke-red-500" />
+            </Button>
+          </Tooltip>
         </Stack>
       </Stack>
     </div>

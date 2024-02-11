@@ -8,6 +8,9 @@ export default defineConfig({
       preset: "vercel",
     },
   },
+  ssr: {
+    noExternal: ["@kobalte/core"],
+  },
   optimizeDeps: {
     exclude: ["./src/components/Timer/timer.worker.ts"],
   },
