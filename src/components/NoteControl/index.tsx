@@ -30,6 +30,7 @@ import { Draggable } from "~/components/Draggable";
 import { Button } from "~/design/Button";
 import { GlassBox } from "~/design/GlassBox";
 import { Stack } from "~/design/Stack";
+import { Tooltip } from "~/design/Tooltip";
 import { Note } from "~/types";
 import { useCursorPositionContext, usePanelContext } from "~/providers";
 import { ToastStyle } from "~/utils";
@@ -242,7 +243,7 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
       </Show>
       <Stack
         direction="flex-row"
-        class="cursor-pointer select-none items-center justify-between gap-1 rounded-lg border border-transparent bg-stone-900/50 p-2 text-white hover:bg-stone-800/50"
+        class="cursor-pointer group select-none items-center justify-between gap-1 rounded-lg border border-transparent bg-stone-900/50 p-2 text-white hover:bg-stone-800/50"
         onClick={toggleNote}
       >
         <Stack direction="flex-col">
@@ -271,9 +272,13 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
             </div>
           </Stack>
         </Stack>
+        <Tooltip description='Delete' arrowSize={16} gutter={-4} placement="right">
         <Button
           variant="ghost"
           size="icon"
+          style={{
+            "background-color": 'transparent'
+          }}
           onClick={(e: MouseEvent) => {
             e.stopPropagation();
             deleteNote();
@@ -281,6 +286,7 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
         >
           <TbTrash size={20} class="stroke-red-500" />
         </Button>
+        </Tooltip>
       </Stack>
     </div>
   );

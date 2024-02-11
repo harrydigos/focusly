@@ -22,6 +22,7 @@ import { Draggable } from "~/components/Draggable";
 import { GlassBox } from "~/design/GlassBox";
 import { Button } from "~/design/Button";
 import { Stack } from "~/design/Stack";
+import { Tooltip } from "~/design/Tooltip";
 
 export const YoutubePlayer: Component = () => {
   const { music, setMusic } = usePanelContext();
@@ -114,14 +115,18 @@ const PlayButton: Component = () => {
           playerState() === PlayerStates.PAUSED
         }
       >
-        <Button size="icon" onClick={() => player()?.playVideo()}>
-          <TbPlayerPlayFilled />
-        </Button>
+        <Tooltip description="Play" gutter={4} arrowSize={12} openDelay={1000}>
+          <Button size="icon" onClick={() => player()?.playVideo()}>
+            <TbPlayerPlayFilled />
+          </Button>
+        </Tooltip>
       </Match>
       <Match when={playerState() === PlayerStates.PLAYING}>
-        <Button size="icon" onClick={() => player()?.pauseVideo()}>
-          <TbPlayerPauseFilled />
-        </Button>
+        <Tooltip description="Pause" gutter={4} arrowSize={12} openDelay={1000}>
+          <Button size="icon" onClick={() => player()?.pauseVideo()}>
+            <TbPlayerPauseFilled />
+          </Button>
+        </Tooltip>
       </Match>
     </Switch>
   );

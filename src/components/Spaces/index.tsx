@@ -6,6 +6,7 @@ import { SPACES } from "~/config";
 import { Button } from "~/design/Button";
 import { Dialog } from "~/design/Dialog";
 import { Stack } from "~/design/Stack";
+import { Tooltip } from "~/design/Tooltip";
 import { useSpace } from "~/stores";
 
 export const SpacesDialog: Component = () => {
@@ -17,13 +18,16 @@ export const SpacesDialog: Component = () => {
       open={isOpen()}
       onOpenChange={(open) => setIsOpen(open)}
     >
-      <Button
-        variant="secondary"
-        class="h-10 w-10"
-        onClick={() => setIsOpen(true)}
-      >
-        <TbPlanet class="h-5 w-5" />
-      </Button>
+      <Tooltip description="Spaces" gutter={4} arrowSize={16} placement="right">
+        <Button
+          variant="secondary"
+          class="h-10 w-10"
+          onClick={() => setIsOpen(true)}
+        >
+          <TbPlanet class="h-5 w-5" />
+        </Button>
+      </Tooltip>
+
       <Dialog isOpen={isOpen}>
         <Stack direction="flex-col" class="gap-4">
           <Stack

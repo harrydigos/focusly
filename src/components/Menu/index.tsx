@@ -1,9 +1,11 @@
+import { Button } from "@kobalte/core";
 import { IconTypes } from "solid-icons";
 import { TbAlarm, TbListCheck, TbLock, TbMusic, TbNote } from "solid-icons/tb";
 import { Component, Show } from "solid-js";
 import { SetStoreFunction } from "solid-js/store";
 
 import { GlassBox } from "~/design/GlassBox";
+import { Tooltip } from "~/design/Tooltip";
 import { usePanelContext } from "~/providers";
 import { MenuKey, Tab } from "~/types";
 
@@ -61,22 +63,27 @@ const MenuItem: Component<MenuItemProps> = (props) => {
   const { getBiggestZ } = usePanelContext();
 
   return (
-    <button
-      type="button"
-      class="group inline-flex w-fit transform-gpu items-center gap-1 rounded-full border border-transparent p-2 text-white ring-transparent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95"
-      classList={{
-        "bg-stone-900/30 hover:border-white/30": props.tab.isOpen,
-      }}
-      onClick={() => {
-        props.setTab("isOpen", (prev) => !prev);
-        props.setTab("position", "z", () => getBiggestZ() + 1);
-      }}
+    <Tooltip
+      description={<p class="capitalize">{props.key}</p>}
+      gutter={4}
+      arrowSize={16}
+      openDelay={0}
+      animate={false}
     >
-      <MenuIcon icon={menuIcons[props.key]} />
-      <div class="hidden select-none text-sm font-medium capitalize group-hover:opacity-75 sm:block">
-        {props.key}
-      </div>
-    </button>
+      <Button.Root
+        type="button"
+        class="group inline-flex w-fit transform-gpu items-center gap-1 rounded-full border border-transparent p-2 text-white ring-transparent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95"
+        classList={{
+          "bg-stone-900/30 hover:border-white/30": props.tab.isOpen,
+        }}
+        onClick={() => {
+          props.setTab("isOpen", (prev) => !prev);
+          props.setTab("position", "z", () => getBiggestZ() + 1);
+        }}
+      >
+        <MenuIcon icon={menuIcons[props.key]} />
+      </Button.Root>
+    </Tooltip>
   );
 };
 
