@@ -52,14 +52,22 @@ export default function Home() {
 }
 
 const Signature = () => (
-  <p class="absolute bottom-0 right-0 w-fit select-none rounded-tl-xl bg-stone-900 px-2 py-1.5 text-xs font-medium leading-none text-white">
+  <p class="absolute bottom-0 right-0 w-fit select-none rounded-tl-xl bg-stone-900 px-2 py-1.5 text-xs leading-none text-white">
     <span class="text-[10px]">by </span>
     <a
-      href="https://twitter.com/harry_digos"
+      href="https://x.com/harry_digos"
       target="blank"
-      class="hover:underline"
+      class="font-medium hover:underline"
     >
       @harry_digos
+    </a>
+    {", "}
+    <a
+      href="https://github.com/harrydigos/focusly"
+      target="blank"
+      class="font-medium hover:underline"
+    >
+      source
     </a>
   </p>
 );
