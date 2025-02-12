@@ -52,7 +52,7 @@ export const Todos: Component = () => {
         setTodos("todosList", () =>
           updatedItems
             .map((id) => todos.todosList.find((t) => t.id === id)!)
-            .filter((t) => t !== null)
+            .filter((t) => t !== null),
         );
       }
     }
@@ -136,7 +136,7 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
   });
 
   const todoIndex = createMemo(() =>
-    todos.todosList.findIndex((t) => t.id === props.todo.id)
+    todos.todosList.findIndex((t) => t.id === props.todo.id),
   );
 
   const toggleTodo = () => {
@@ -159,7 +159,7 @@ const TodoRow: Component<{ todo: Todo }> = (props) => {
   };
 
   const canSeeGrip = createMemo(
-    () => winSize.width > 640 && todos.todosList.length > 1
+    () => winSize.width > 640 && todos.todosList.length > 1,
   );
 
   return (

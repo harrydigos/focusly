@@ -36,7 +36,7 @@ export interface PanelContextProps {
   isLocked: Accessor<boolean>;
   getBiggestZ: () => number;
   toggleLock: () => void;
-  // eslint-disable-next-line no-unused-vars
+
   resetAll: (pos: { x: number } | undefined) => void;
 }
 
@@ -60,7 +60,7 @@ const createPersistedStore = <T extends StoreKey>(name: T) => {
   const initialX = windowSize.width / 2 - pxFromCenter;
 
   const [store, setStore] = createStore(
-    storeValues[name]({ x: initialX }) as StoreReturn<T>
+    storeValues[name]({ x: initialX }) as StoreReturn<T>,
   );
 
   return makePersisted([store, setStore], {
@@ -145,7 +145,7 @@ export const usePanelContext = () => {
   const context = useContext(PanelContext);
   if (!context) {
     throw new Error(
-      "usePanelContext must be used within a PanelContextProvider"
+      "usePanelContext must be used within a PanelContextProvider",
     );
   }
   return context;

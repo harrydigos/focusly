@@ -5,10 +5,10 @@ import { Alarm, BgColor } from "~/config";
 
 export interface SettingsContextProps {
   alarmSound: Alarm;
-  // eslint-disable-next-line no-unused-vars
+
   updateAlarmSound: (value: Alarm) => void;
   bgColor: BgColor;
-  // eslint-disable-next-line no-unused-vars
+
   updateBgColor: (value: BgColor) => void;
   resetAll: () => void;
 }
@@ -33,7 +33,7 @@ export const SettingsProvider: Component<{
     createStore<Alarm>(initialAlarmSound()),
     {
       name: "alarm-sound",
-    }
+    },
   );
 
   const updateSound = (value: Alarm) => {
@@ -45,7 +45,7 @@ export const SettingsProvider: Component<{
     createStore<BgColor>(initialBgColor()),
     {
       name: "bg-color",
-    }
+    },
   );
 
   const updateBgColor = (value: BgColor) => {
@@ -79,7 +79,7 @@ export const useSettingsContext = () => {
   const context = useContext(SettingsContext);
   if (!context) {
     throw new Error(
-      "useSettingsContext must be used within a SettingsProvider"
+      "useSettingsContext must be used within a SettingsProvider",
     );
   }
   return context;

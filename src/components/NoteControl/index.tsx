@@ -37,16 +37,21 @@ import { ToastStyle } from "~/utils";
 
 const findPositionToPlace = (notes: Note[]) => {
   const position = {
-    x: 0, y: 0
+    x: 0,
+    y: 0,
+  };
+
+  while (
+    notes.some(
+      (n) => n.position.x === position.x && n.position.y === position.y,
+    )
+  ) {
+    position.x += 20;
+    position.y += 20;
   }
 
-  while (notes.some(n => n.position.x === position.x && n.position.y === position.y)) {
-    position.x += 20
-    position.y += 20
-  }
-
-  return position
-}
+  return position;
+};
 
 export const NoteControl: Component = () => {
   const { noteControl, setNoteControl, notes, setNotes, getBiggestZ } =
@@ -68,15 +73,14 @@ export const NoteControl: Component = () => {
         setNotes(() =>
           updatedItems
             .map((id) => notes.find((t) => t.id === id)!)
-            .filter((t) => t !== null)
+            .filter((t) => t !== null),
         );
       }
     }
   };
 
-
   const createNote = () => {
-    const pos = findPositionToPlace(notes)
+    const pos = findPositionToPlace(notes);
 
     const newNote: Note = {
       id: Date.now().toString(),
@@ -218,7 +222,7 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
 
   return (
     <div
-      use: sortable
+      use:sortable
       class="group relative px-6 py-0.5"
       classList={{
         "opacity-30": sortable.isActiveDraggable && canSeeGrip(),
@@ -248,12 +252,13 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
       >
         <Stack direction="flex-col">
           <Stack direction="flex-row" class="items-center gap-2">
-            <h2 class="max-w-[205px] truncate text-sm sm:max-w-[300px]"
+            <h2
+              class="max-w-[205px] truncate text-sm sm:max-w-[300px]"
               classList={{
                 "text-stone-500": !noteValue().title,
               }}
             >
-              {noteValue().title || 'Empty note'}
+              {noteValue().title || "Empty note"}
             </h2>
             <Show
               when={props.note.isOpen}
@@ -272,20 +277,25 @@ const NoteRow: Component<{ note: Note; index: Accessor<number> }> = (props) => {
             </div>
           </Stack>
         </Stack>
-        <Tooltip description='Delete' arrowSize={16} gutter={-4} placement="right">
-        <Button
-          variant="ghost"
-          size="icon"
-          style={{
-            "background-color": 'transparent'
-          }}
-          onClick={(e: MouseEvent) => {
-            e.stopPropagation();
-            deleteNote();
-          }}
+        <Tooltip
+          description="Delete"
+          arrowSize={16}
+          gutter={-4}
+          placement="right"
         >
-          <TbTrash size={20} class="stroke-red-500" />
-        </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            style={{
+              "background-color": "transparent",
+            }}
+            onClick={(e: MouseEvent) => {
+              e.stopPropagation();
+              deleteNote();
+            }}
+          >
+            <TbTrash size={20} class="stroke-red-500" />
+          </Button>
         </Tooltip>
       </Stack>
     </div>

@@ -11,7 +11,7 @@ const [space, setSpace] = makePersisted(
   {
     storage: cookieStorage,
     name: SPACE_COOKIE_KEY,
-  } as any
+  } as any,
 );
 
 export const useSpace = () => ({

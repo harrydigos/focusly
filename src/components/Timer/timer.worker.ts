@@ -42,7 +42,7 @@ onmessage = (e) => {
   } else if (e.data.isRunning && !timerId) {
     timerId = setInterval(
       () => postMessage({ currentTime: --time }),
-      1000
+      1000,
     ) as unknown as number;
   }
 };

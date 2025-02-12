@@ -13,7 +13,7 @@ export const Textarea: Component<TextareaProps> = (props) => {
     <textarea
       class={classNames(
         "flex min-h-[80px] w-full text-sm font-light text-white transition-all placeholder:text-stone-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-        local.class
+        local.class,
       )}
       classList={{
         ["rounded-xl border border-stone-600 bg-stone-900 px-3 py-2 focus-visible:border-stone-200 focus-visible:ring focus-visible:ring-white/30"]:

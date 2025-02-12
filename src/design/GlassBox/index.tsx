@@ -14,7 +14,7 @@ export const GlassBox: Component<StackProps> = (props) => {
       class={classNames(
         "rounded-3xl border border-stone-200 border-opacity-10 bg-opacity-50 p-6 shadow-md backdrop-blur-xl backdrop-filter",
         color.class,
-        local.class
+        local.class,
       )}
       {...others}
     />

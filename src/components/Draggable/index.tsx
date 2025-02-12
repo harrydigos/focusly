@@ -68,7 +68,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
   return (
     <div
       ref={setTarget}
-      use: draggable={{
+      use:draggable={{
         bounds: "body",
         onDragStart: () => {
           setIsDragging(true);
@@ -79,7 +79,7 @@ export const Draggable: Component<DraggableProps> = (props) => {
               props.index(),
               "position",
               "z",
-              () => getBiggestZ() + 1
+              () => getBiggestZ() + 1,
             );
           }
         },

@@ -10,7 +10,7 @@ interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: Component<ButtonProps> = (props) => {
   const newProps = mergeProps(
     { variant: "default", size: "default", type: "button" },
-    props
+    props,
   ) as ButtonProps;
   const [local, others] = splitProps(newProps, [
     "variant",
@@ -52,7 +52,7 @@ export const Button: Component<ButtonProps> = (props) => {
         styles,
         getVariantStyles(),
         getSizeStyles(),
-        local.class
+        local.class,
       )}
       {...others}
     >

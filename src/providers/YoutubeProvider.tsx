@@ -33,7 +33,7 @@ export const YoutubeProvider: Component<{
   const [isMuted, setIsMuted] = createSignal(false);
 
   const [playerState, setPlayerState] = createSignal<PlayerStates>(
-    PlayerStates.UNSTARTED
+    PlayerStates.UNSTARTED,
   );
 
   onMount(() => {
@@ -43,7 +43,7 @@ export const YoutubeProvider: Component<{
           disablekb: 1,
           origin: "https://www.focusly.space",
         },
-      })
+      }),
     );
 
     /* TODO: Give the option to select a space */

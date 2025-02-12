@@ -26,14 +26,15 @@ export const AnimatePanel: Component<AnimatePanelProps> = (props) => {
 
     const duration = Math.sqrt(
       Math.pow(centerFrom.x - centerTo.x, 2) +
-      Math.pow(centerFrom.y - centerTo.y, 2)
+        Math.pow(centerFrom.y - centerTo.y, 2),
     );
 
     return {
       animation: [
         {
-          transform: `translate3d(${position.from.x - width / 2}px, ${position.from.y - height / 2
-            }px, 0px) scale(0)`,
+          transform: `translate3d(${position.from.x - width / 2}px, ${
+            position.from.y - height / 2
+          }px, 0px) scale(0)`,
         },
         {
           transform: `translate3d(${position.to.x}px, ${position.to.y}px, 0px) scale(1)`,

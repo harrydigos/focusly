@@ -39,7 +39,7 @@ const PanelColor: Component = () => {
             <label
               class={classNames(
                 "relative aspect-square h-6 rounded-lg border transition-colors",
-                opt.class
+                opt.class,
               )}
               classList={{
                 "border-stone-50": color.value === opt.value,
@@ -65,7 +65,8 @@ const PanelColor: Component = () => {
 };
 
 const Alarm: Component = () => {
-  const { alarmSound: sound, updateAlarmSound: updateSound } = useSettingsContext();
+  const { alarmSound: sound, updateAlarmSound: updateSound } =
+    useSettingsContext();
   const alarmAudio = new Audio();
 
   return (

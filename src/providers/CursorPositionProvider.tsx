@@ -50,7 +50,7 @@ export const useCursorPositionContext = () => {
   const context = useContext(CursorPositionContext);
   if (!context) {
     throw new Error(
-      "useCursorPositionContext must be used within a CursorPositionProvider"
+      "useCursorPositionContext must be used within a CursorPositionProvider",
     );
   }
   return context;

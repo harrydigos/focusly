@@ -9,8 +9,8 @@ window.caches
   .open("video-pre-cache")
   .then((cache) =>
     Promise.all(
-      videoFileUrls.map((videoFileUrl) => fetchAndCache(videoFileUrl, cache))
-    )
+      videoFileUrls.map((videoFileUrl) => fetchAndCache(videoFileUrl, cache)),
+    ),
   );
 
 const fetchAndCache = (videoFileUrl, cache) => {

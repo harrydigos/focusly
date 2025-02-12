@@ -10,7 +10,7 @@ import { Stack } from "~/design/Stack";
 import { useSpace } from "~/stores";
 
 const Panels = clientOnly(() =>
-  import("~/components/Panels").then((m) => ({ default: m.Panels }))
+  import("~/components/Panels").then((m) => ({ default: m.Panels })),
 );
 
 const getSpaceCookie = (): Space => {

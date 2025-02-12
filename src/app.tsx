@@ -5,19 +5,19 @@ import { ErrorBoundary, Suspense } from "solid-js";
 import { Toaster } from "solid-toast";
 
 const SettingsProvider = clientOnly(() =>
-  import("~/providers").then((m) => ({ default: m.SettingsProvider }))
+  import("~/providers").then((m) => ({ default: m.SettingsProvider })),
 );
 
 const YoutubeProvider = clientOnly(() =>
-  import("~/providers").then((m) => ({ default: m.YoutubeProvider }))
+  import("~/providers").then((m) => ({ default: m.YoutubeProvider })),
 );
 
 const PanelProvider = clientOnly(() =>
-  import("~/providers").then((m) => ({ default: m.PanelProvider }))
+  import("~/providers").then((m) => ({ default: m.PanelProvider })),
 );
 
 const CursorPositionProvider = clientOnly(() =>
-  import("~/providers").then((m) => ({ default: m.CursorPositionProvider }))
+  import("~/providers").then((m) => ({ default: m.CursorPositionProvider })),
 );
 
 import "./app.css";

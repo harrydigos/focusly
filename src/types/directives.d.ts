@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import "solid-js";
 
 declare module "solid-js" {
